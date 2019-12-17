@@ -14,7 +14,8 @@
         android:orientation="vertical">
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/vpNoteImg"
-            android:layout_width="match_parent"
+            android:layout_gravity="center"
+            android:layout_width="300dp"
             android:layout_height="200dp"/>
         <LinearLayout
             android:id="@+id/guide_ll_point"
