@@ -1,0 +1,102 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.mob.sdk'
+android {
+    sourceSets{
+        main{
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+    signingConfigs {
+        config {
+            storeFile file('G:\\Android\\Test\\keystore\\keystore.jks')
+            storePassword '123456'
+            keyAlias = 'Test'
+            keyPassword '123456'
+        }
+    }
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "cn.edu.hebtu.software.test"
+        minSdkVersion 15
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        ndk {
+            //选择要添加的对应 cpu 类型的 .so 库。
+            abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64', 'mips', 'mips64'
+            // 还可以添加 'x86', 'x86_64', 'mips', 'mips64'
+        }
+
+        manifestPlaceholders = [
+                JPUSH_PKGNAME: applicationId,
+                JPUSH_APPKEY : "8a6de1e19ff318f09c8f77c7", //JPush 上注册的包名对应的 Appkey.
+                JPUSH_CHANNEL: "developer-default", //暂时填写默认值即可.
+        ]
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+MobSDK {
+    appKey "2d667ace6f010"
+    appSecret "49f6aef48d288b453960dab2fb3d24e9"
+
+    SMSSDK {
+        //默认使用GUI，若不使用GUI，通过以下开关关闭
+        gui false
+        //若使用GUI的自动填充验证码功能，需打开此设置
+        //autoSMS true
+    }
+}
+
+dependencies {
+    implementation 'cn.jiguang.sdk:jpush:3.3.9'
+    // 此处以JPush 3.3.9 版本为例。
+    implementation 'cn.jiguang.sdk:jcore:2.1.6'
+    // 此处以JCore 2.1.6 版本为例。
+
+    implementation 'com.squareup.okhttp3:okhttp:4.2.2'
+    implementation 'com.github.bumptech.glide:glide:4.10.0'
+    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.zhy.base:fileprovider:1.0.0'
+
+    implementation 'com.android.support:design:28.0.0'
+    implementation 'com.google.code.gson:gson:2.8.5'
+
+    //语录
+    implementation 'com.android.support:design:28.1.0'
+    implementation 'com.android.support:cardview-v7:28.1.0'
+    implementation 'com.android.support:cardview-v7:28'
+
+    implementation 'com.kevin:basedialog:1.0.2'
+
+    //时间轴
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support:recyclerview-v7:28.0.0'
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    implementation files('libs\\BaiduLBS_Android.jar')
+
+    //语录
+    implementation 'com.android.support:design:28.1.0'
+    implementation 'com.android.support:appcompat-v7:28.1.0'
+    implementation 'com.android.support:cardview-v7:28.1.0'
+    implementation 'com.android.support:cardview-v7:28'
+    implementation 'com.kevin:basedialog:1.0.2'
+    implementation 'com.github.bumptech.glide:glide:4.10.0'
+}

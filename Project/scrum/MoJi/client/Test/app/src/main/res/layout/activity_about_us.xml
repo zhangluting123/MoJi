@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout
+        android:background="@mipmap/userbg"
+        android:layout_width="match_parent"
+        android:layout_height="280dp"
+        android:orientation="vertical">
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/us_toolbar"
+            android:fitsSystemWindows="true"
+            android:clipToPadding="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            app:navigationIcon="@mipmap/back" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <View
+                android:layout_marginTop="40dp"
+                android:layout_width="match_parent"
+                android:layout_height="14dp"
+                android:background="@color/MyTheam_color"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <ImageView
+                    android:src="@mipmap/us"
+                    android:layout_marginLeft="50dp"
+                    android:layout_width="230dp"
+                    android:layout_height="180dp"/>
+                <View
+                    android:layout_width="16dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/MyTheam_color"
+                    android:layout_marginLeft="50dp"/>
+            </LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_margin="26dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_marginBottom="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:lineHeight="30dp"
+                android:textSize="16sp"
+                android:textColor="@color/MyTheam_color"
+                android:text="墨迹：笔墨书写足迹"/>
+
+            <TextView
+                android:layout_marginBottom="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lineHeight="30dp"
+                android:text="\u3000\u3000因为追梦的路上，每个人都会遇到孤独、迷茫、疲惫、懈怠。在一个人还没有抵挡梦想的彼岸，还没有实现约定的时候，需要的是振奋精神、继续前行。墨迹提供了一个安静、温暖、有力量的空间：记录足迹，激励自我。" />
+
+            <TextView
+                android:layout_marginBottom="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lineHeight="30dp"
+                android:text="\u3000\u3000墨迹是一款记录我们生活中的点点滴滴，记录我们走过的路，记录我们去过的地方，鼓励自己，砥砺前行，埋下希望的记录App。" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lineHeight="30dp"
+                android:text="\u3000\u3000墨迹App为每个真心发现生活，记录精彩时刻，珍藏点滴的同学提供灵活简约的记录平台。无论你是一名随心笔记的爱好者，还是热爱记录旅程的摄影爱好者等等，只要您有心记录，随处可墨迹。"/>
+        </LinearLayout>
+
+    </ScrollView>
+</LinearLayout>

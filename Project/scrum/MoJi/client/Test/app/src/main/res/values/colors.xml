@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#aa9999FF</color>
+    <color name="colorGray">#DDDDDD</color>
+    <color name="colorBtn">#FF4466</color>
+    <color name="alpha">#00ffffff</color>
+    <color name="MyTheam_color">#AA9999FF</color>
+    <color name="custom">#22000000</color>
+    <color name="colorNoteActivityBackground">#DCDCDC</color>
+    <color name="colorActionBarBackground">#9999FF</color>
+    <color name="colorNoteIssueButtonPressedBackground">#66CAFC</color>
+    <color name="colorNoteIssueButtonNormalBackground">#A0BFF2FF</color>
+    <color name="colorNoteEditTextHintColor">#60FFA500</color>
+    <color name="colorShowNoteCenterBackground">#A0DCDCDC</color>
+    <color name="colorShowNoteTitleBackground">#FFE4B5</color>
+    <color name="colorCommentTimeText">#C0C0C0</color>
+
+</resources>

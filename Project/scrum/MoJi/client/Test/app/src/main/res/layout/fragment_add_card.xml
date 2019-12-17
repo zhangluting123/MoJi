@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:gravity="center"
+        android:id="@+id/view_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:paddingBottom="20dp">
+
+        <LinearLayout
+            android:id="@+id/over"
+            android:layout_gravity="center"
+            android:layout_width="300dp"
+            android:layout_height="600dp"
+            android:background="@drawable/background"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_marginTop="10dp"
+                android:id="@+id/add"
+                android:layout_width="match_parent"
+                android:layout_height="200dp">
+            </ImageView>
+            <LinearLayout
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="4dp"
+                android:orientation="horizontal"
+                android:background="@drawable/border"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="right"
+                android:paddingBottom="1dp">
+                <RelativeLayout
+                    android:background="#f0f0f0"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:id="@+id/headportrait"
+                        android:layout_marginLeft="10dp"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:layout_marginBottom="4dp"
+                        android:src="@drawable/headportrait">
+                    </ImageView>
+                    <TextView
+                        android:id="@+id/place_and_time"
+                        android:paddingRight="10dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Place and Time" />
+                </RelativeLayout>
+            </LinearLayout>
+            <TextView
+                android:textSize="18dp"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Title" />
+            <TextView
+                android:id="@+id/content"
+                style="@style/TextAppearance.AppCompat.Body1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:textSize="16dp"
+                android:text="这是一张空白卡片，手指上滑为添加一张卡片，手指下滑则丢弃本张卡片" />
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>
