@@ -171,7 +171,9 @@ public class DropsDetailActivity extends AppCompatActivity implements ViewPager.
             @Override
             public void onClick(View v) {
                 String content = edtInsertComment.getText().toString().trim();
-                if(content != null && content != ""){
+                if(content.length() == 0){
+                    Toast.makeText(DropsDetailActivity.this, "评论内容不能为空", Toast.LENGTH_SHORT).show();
+                }else{
                     insertComment(content);
                 }
             }

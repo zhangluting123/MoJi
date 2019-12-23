@@ -41,7 +41,7 @@ import cn.edu.hebtu.software.test.R;
 public class QuotationFragment extends Fragment {
     private View view;
 
-    Link link = new Link(4);
+    Link link = null;
     private static ViewPager mViewPager;
     private static CardFragmentPagerAdapter mFragmentCardAdapter;
     private ShadowTransformer mFragmentCardShadowTransformer;
@@ -62,6 +62,7 @@ public class QuotationFragment extends Fragment {
         view = inflater.inflate(R.layout.quotation_layout, container, false);
         TextView title = getActivity().findViewById(R.id.toorbar_title);
         title.setText("语录");
+        link = new Link(4);
 
         // 上部滑动效果
         initView();

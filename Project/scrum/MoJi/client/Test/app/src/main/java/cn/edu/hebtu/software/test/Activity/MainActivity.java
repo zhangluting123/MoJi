@@ -373,6 +373,7 @@ public class MainActivity extends AppCompatActivity  {
                 exitTime=System.currentTimeMillis();
             }else{
                 flag = false;
+                ActivityManager.getInstance().exit();
                 this.finish();
             }
         }

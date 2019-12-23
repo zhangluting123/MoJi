@@ -172,7 +172,7 @@ public class ShowNoteActivity extends AppCompatActivity implements ViewPager.OnP
             for (int i = 0;i<note.getImgList().size();i++){
                 //new ImageView并设置图片资源
                 ImageView imageView = new ImageView(this);
-				imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 Glide.with(getApplicationContext()).load("http://" + ip + ":8080/MoJi/"+note.getImgList().get(i)).into(imageView);
 
                 //将ImageView加入到集合中

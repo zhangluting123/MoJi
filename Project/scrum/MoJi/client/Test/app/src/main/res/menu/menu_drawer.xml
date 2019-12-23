@@ -6,7 +6,7 @@
     <group>
         <item
             android:id="@+id/addNote"
-            android:title="添加便签"
+            android:title="添加足迹"
             tools:ignore="AppCompatResource"/>
 <!--        <item android:title="menu_title2"/>-->
     </group>

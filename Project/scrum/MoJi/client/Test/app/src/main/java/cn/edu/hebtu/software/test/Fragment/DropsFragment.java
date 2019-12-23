@@ -44,11 +44,15 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import cn.edu.hebtu.software.test.Adapter.MsgAdapter;
 import cn.edu.hebtu.software.test.Data.Note;
 import cn.edu.hebtu.software.test.DetailActivity.DropsDetailActivity;
@@ -145,8 +149,10 @@ public class DropsFragment extends Fragment {
         //不显示指南针
         baiduMap.setCompassEnable(false);
 
+
         //绑定adapter
         final ListView listView = view.findViewById(R.id.lv_msgs);
+
         msgAdapter = new MsgAdapter(view.getContext(),
                 noteList,
                 R.layout.msglist_item);
@@ -310,6 +316,7 @@ public class DropsFragment extends Fragment {
                         Type type = new TypeToken<List<Note>>() {
                         }.getType();
                         noteList = gson.fromJson(str, type);
+                        Collections.reverse(noteList);
                     }
                     in.close();
                     reader.close();

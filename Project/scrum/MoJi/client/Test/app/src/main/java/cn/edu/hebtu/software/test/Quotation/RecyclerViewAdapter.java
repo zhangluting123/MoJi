@@ -15,6 +15,7 @@ import java.util.List;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 import cn.edu.hebtu.software.test.R;
+import cn.edu.hebtu.software.test.Setting.MyApplication;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.myholder> {
 
@@ -53,8 +54,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onBindViewHolder(RecyclerViewAdapter.myholder holder,final int position) {
+        MyApplication data = (MyApplication)context.getApplicationContext();
+        String ip = data.getIp();
         //设置上部图片
-        Glide.with(context).load("http://192.168.137.1:8080/MoJi/"+lists.get(position).getImage()+"")
+        Glide.with(context).load("http://"+ip+":8080/MoJi/"+lists.get(position).getImage()+"")
                 .into(holder.imageView);
 
         if(position == pos){
