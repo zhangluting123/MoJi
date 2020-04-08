@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace代表唯一标识符 -->
+<mapper namespace="com.moji.mail.dao.MailMapper">
+	<resultMap type="com.moji.entity.Mail" id="mailMap">
+		<id property="mailId" column="mail_id"/>
+		<result property="acceptTime" column="acceptTime"/>
+		<result property="commentContent" column="comment_content"/>
+		<result property="otherName" column="otherName"/>
+		<result property="userId" column="userId"/>
+	</resultMap>
+	<!-- 查询消息通知 -->
+	<select id="queryMail" resultMap="mailMap">
+		select * from mail_msg where userId=#{userId}
+	</select>
+	<!-- 删除某一条消息通知 -->
+	<delete id="deleteMail">
+		delete from mail_msg where mail_id=#{mailId}
+	</delete>
+	<!-- 插入消息通知 -->
+	<insert id="insertMail">
+		insert into 
+		mail_msg(acceptTime,comment_content,otherName,userId) 
+		values 
+		(#{mail.acceptTime},#{mail.commentContent},#{mail.otherName},#{mail.userId})
+	</insert>
+</mapper>

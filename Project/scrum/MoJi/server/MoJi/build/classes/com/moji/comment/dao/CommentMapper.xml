@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace代表唯一标识符 -->
+<mapper namespace="com.moji.comment.dao.CommentMapper">
+	<resultMap type="com.moji.entity.Comment" id="commentMap">
+		<id property="id" column="comment_id"/>
+		<result property="noteId" column="note_id"/>
+		<result property="userId" column="comment_user_id"/>
+		<result property="commentContent" column="comment_content"/>
+		<result property="commentTime" column="comment_time"/>
+		<association property="user">
+			<id property="userId" column="user_id"/>
+			<result property="userHeadImg" column="avatar_path"/>
+			<result property="userName" column="user_name"/>
+			<result property="sex" column="sex"/>
+			<result property="signature" column="signature"/>
+			<result property="occupation" column="occupation"/>
+			<result property="password" column="password"/>
+			<result property="phone" column="phone"/>
+		</association>
+	</resultMap>
+	<!-- 对数据库comment_detail表进行操作 -->
+	<select id="showComment" resultMap="commentMap">
+		select * 
+		from comment_detail c
+		left join user_detail u
+		on c.comment_user_id=u.user_id
+		where c.note_id=#{noteId}
+	</select>
+	<!-- 新增评论 -->
+	<insert id="addComment">
+		insert into 
+		comment_detail(comment_id,note_id,comment_user_id,comment_content,comment_time) 
+		values 
+		(#{commentId},#{noteId},#{userId},#{content},#{time})
+	</insert>
+</mapper>

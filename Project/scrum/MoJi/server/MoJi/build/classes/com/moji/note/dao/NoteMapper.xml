@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace代表唯一标识符 -->
+<mapper namespace="com.moji.note.dao.NoteMapper">
+	<resultMap type="com.moji.entity.Note" id="noteMap">
+		<id property="noteId" column="note_id"/>
+		<result property="latitude" column="latitude"/>
+		<result property="longitude" column="longitude"/>
+		<result property="title" column="title"/>
+		<result property="content" column="content"/>
+		<result property="location" column="location"/>
+		<result property="time" column="time"/>
+		<result property="userId" column="user_id"/>
+		<result property="self" column="self"/>
+		<association property="user">
+			<id property="userId" column="user_id"/>
+			<result property="userHeadImg" column="avatar_path"/>
+			<result property="userName" column="user_name"/>
+			<result property="sex" column="sex"/>
+			<result property="signature" column="signature"/>
+			<result property="occupation" column="occupation"/>
+			<result property="password" column="password"/>
+			<result property="phone" column="phone"/>
+		</association>
+		<collection property="imgList" ofType="com.moji.entity.Img">
+			<id property="imgId" column="img_id"/>
+			<result property="imgPath" column="path"/>
+			<result property="noteId" column="noteId"/>
+		</collection>
+	</resultMap>
+	<!-- 查询指定便签的userId -->
+	<select id="queryUserId" resultMap="noteMap">
+		select * 
+		from note_detail n
+		left join user_detail u
+		on n.user_id=u.user_id
+		left join note_img i
+		on n.note_id=i.noteId
+		where n.note_id=#{noteId}
+	</select>
+	<!-- 查询公开note -->
+	<select id="queryVisualNote" resultMap="noteMap">
+		select * 
+		from note_detail n
+		left join user_detail u
+		on n.user_id=u.user_id
+		left join note_img i
+		on n.note_id=i.noteId
+		where n.self=0
+	</select>
+	<!-- 查询便签 -->
+	<select id="queryNote" resultMap="noteMap">
+		select * 
+		from note_detail n
+		left join user_detail u
+		on n.user_id=u.user_id
+		left join note_img i
+		on n.note_id=i.noteId
+		where n.user_id=#{userId}
+	</select>
+	<!-- 删除指定便签 -->
+	<delete id="deleteNote">
+		delete from note_detail where note_id=#{noteId};
+		delete from note_img where noteId=#{noteId};
+	</delete>
+	<!-- 从数据库搜索满足范围条件的note -->
+	<select id="findByRange" resultMap="noteMap">
+		select * 
+		from note_detail n
+		left join user_detail u
+		on n.user_id=u.user_id
+		left join note_img i
+		on n.note_id=i.noteId
+		where n.user_id=#{userId} and n.self=0 and (n.latitude between right and left) and (n.longitude between top and bottom)
+	</select>
+	<!-- 新增便签 -->
+	<insert id="addNote">
+		insert into 
+		note_detail(note_id,user_id,title,content,latitude,longitude,location,time,self) 
+		values 
+		(#{noteId},#{userId},#{title},#{content},#{latitude},#{longitude},#{location},#{time},#{self})
+	</insert>
+	<!-- 新增便签的图片 -->
+	<insert id="addNoteImg">
+		<foreach collection="imgs" item="img" separator=";">
+			insert into 
+			note_img(img_id,path,noteId) 
+			values 
+			(#{img.imgId},#{img.imgPath},#{img.noteId});
+		</foreach>
+	</insert>
+	<!-- 查询自己所在地是否已经存在标记 -->
+	<select id="checkNote" resultMap="noteMap">
+		select * 
+		from note_detail n
+		left join user_detail u
+		on n.user_id=u.user_id
+		left join note_img i
+		on n.note_id=i.noteId
+		where n.user_id=#{userId} and (n.latitude between right and left) and (n.longitude between top and bottom)
+	</select>
+	<!-- 更新已有的便签 -->
+	<update id="updateNote">
+		update note_detail 
+		set note_id=#{noteId},user_id=#{userId},title=#{title},content=#{content},latitude=#{latitude},longitude=#{longitude},location=#{location},time=#{time},self=#{self} 
+		where latitude=#{note.latitude} and longitude=#{note.longitude}
+	</update>
+	<!-- 按照noteid删除图片 -->
+	<delete id="deleteNoteImg">
+		delete from note_img where noteId=#{noteId}
+	</delete>
+</mapper>

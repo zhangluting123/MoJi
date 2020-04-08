@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace代表唯一标识符 -->
+<mapper namespace="com.moji.user.dao.UserMapper">
+	<resultMap type="com.moji.entity.Note" id="userMap">
+		<id property="userId" column="note_id"/>
+		<result property="userHeadImg" column="latitude"/>
+		<result property="userName" column="longitude"/>
+		<result property="sex" column="title"/>
+		<result property="signature" column="content"/>
+		<result property="occupation" column="location"/>
+		<result property="password" column="time"/>
+		<result property="phone" column="user_id"/>
+	</resultMap>
+	<!-- 根据ID值查询用户信息 -->
+	<select id="queryUser" resultMap="userMap">
+		select * from user_detail where user_id=#{userId}
+	</select>
+	<!-- 更新用户信息 -->
+	<update id="updateMsgOfUser">
+		update user_detail 
+		set avatar_path=#{user.userHeadImg},user_name=#{user.userName},sex=#{user.sex},signature=#{user.signature},occupation=#{user.occupation} 
+		where user_id=#{user.userId}
+	</update>
+	<!-- 更改个人信息不改头像 -->
+	<update id="updateMsgWithoutAvatar">
+		update user_detail 
+		set user_name=#{user.userName},sex=#{user.sex},signature=#{user.signature},occupation=#{user.occupation} 
+		where user_id=#{user.userId}
+	</update>
+	<!-- 用户登录 -->
+	<select id="loginUser" resultMap="userMap">
+		select * from user_detail where phone=#{phone} and password=#{password}
+	</select>
+	<!-- 查询该手机号是否已注册 -->
+	<select id="queryPhone" resultMap="userMap">
+		select * from user_detail where phone=#{phone}
+	</select>
+	<!-- 添加用户 -->
+	<insert id="addUsers">
+		insert into 
+		user_detail(user_id,user_name,password,phone) 
+		values (#{user.userId},#{user.userName},#{user.password},#{user.phone})
+	</insert>
+	<!-- 修改密码 -->
+	<update id="changeUserPwd">
+		update user_detail set password=#{newPwd} where user_id=#{userId}
+	</update>
+</mapper>
