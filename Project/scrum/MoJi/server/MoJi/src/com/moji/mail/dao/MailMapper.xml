@@ -22,6 +22,6 @@
 		insert into 
 		mail_msg(acceptTime,comment_content,otherName,userId) 
 		values 
-		(#{acceptTime},#{commentContent},#{otherName},#{userId})
+		(#{mail.acceptTime},#{mail.commentContent},#{mail.otherName},#{mail.userId})
 	</insert>
 </mapper>

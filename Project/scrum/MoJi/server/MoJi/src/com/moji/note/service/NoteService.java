@@ -89,7 +89,10 @@ public class NoteService {
 	 * @date 2019年12月14日
 	 */
 	public int deleteNote(String noteId) {
-		return this.noteMapper.deleteNote(noteId);
+		int i1 = this.noteMapper.deleteNote(noteId);
+		int i2 = this.noteMapper.deleteNoteImg(noteId);
+		int i3 = i1 + i2;
+		return i3;
 	}
 	
 	/**
@@ -114,10 +117,7 @@ public class NoteService {
 	public int addNote(List<Img> imgs, String id, String userId, String title, String content, double latitude, double longitude, String location, String time, int self) {
 		int i1 = this.noteMapper.addNote(id, userId, title, content, latitude, longitude, location, time, self);
 		int i2 = this.noteMapper.addNoteImg(imgs);
-		int i3 = 0;
-		if (i1 > 0 && i2 > 0) {
-			i3 = 1;
-		}
+		int i3 = i1 + i2;
 		return i3;
 	}
 
@@ -141,13 +141,9 @@ public class NoteService {
 	 */
 	public int updateNote(List<Img> imgs, Note note, String id, String userId, String title, String content, double latitude, double longitude, String location, String time, int self) {
 		int i1 = this.noteMapper.updateNote(note, id, userId, title, content, latitude, longitude, location, time, self);
-		int i2 = this.noteMapper.deleteNoteImg(id);
+		int i2 = this.noteMapper.deleteNoteImg(note.getNoteId());
 		int i3 = this.noteMapper.addNoteImg(imgs);
-		int i4 = 0;
-		if(i1 > 0 && i2 > 0 && i3 > 0) {
-			i4 = 1;
-		}
-		
+		int i4 = i1 + i2 + i3;
 		return i4;
 	}
 	

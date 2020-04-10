@@ -60,8 +60,7 @@
 	</select>
 	<!-- 删除指定便签 -->
 	<delete id="deleteNote">
-		delete from note_detail where note_id=#{noteId};
-		delete from note_img where noteId=#{noteId};
+		delete from note_detail where note_id=#{deleteNoteId}
 	</delete>
 	<!-- 从数据库搜索满足范围条件的note -->
 	<select id="findByRange" resultMap="noteMap">
@@ -71,22 +70,21 @@
 		on n.user_id=u.user_id
 		left join note_img i
 		on n.note_id=i.noteId
-		where n.user_id=#{userId} and n.self=0 and (n.latitude between right and left) and (n.longitude between top and bottom)
+		where (n.user_id=#{userId}) and (n.self=0) and (n.latitude between #{right} and #{left}) and (n.longitude between #{top} and #{bottom})
 	</select>
 	<!-- 新增便签 -->
 	<insert id="addNote">
 		insert into 
 		note_detail(note_id,user_id,title,content,latitude,longitude,location,time,self) 
-		values 
-		(#{noteId},#{userId},#{title},#{content},#{latitude},#{longitude},#{location},#{time},#{self})
+		values(#{noteId},#{userId},#{title},#{content},#{latitude},#{longitude},#{location},#{time},#{self})
 	</insert>
 	<!-- 新增便签的图片 -->
 	<insert id="addNoteImg">
-		<foreach collection="imgs" item="img" separator=";">
-			insert into 
-			note_img(img_id,path,noteId) 
-			values 
-			(#{img.imgId},#{img.imgPath},#{img.noteId});
+		insert into
+		note_img(img_id,path,noteId) 
+		values
+		<foreach collection="imgs" item="img" separator=",">
+			(#{img.imgId},#{img.imgPath},#{img.noteId})
 		</foreach>
 	</insert>
 	<!-- 查询自己所在地是否已经存在标记 -->
@@ -97,7 +95,7 @@
 		on n.user_id=u.user_id
 		left join note_img i
 		on n.note_id=i.noteId
-		where n.user_id=#{userId} and (n.latitude between right and left) and (n.longitude between top and bottom)
+		where (n.user_id=#{userId}) and (n.latitude between #{right} and #{left}) and (n.longitude between #{top} and #{bottom})
 	</select>
 	<!-- 更新已有的便签 -->
 	<update id="updateNote">
@@ -107,6 +105,6 @@
 	</update>
 	<!-- 按照noteid删除图片 -->
 	<delete id="deleteNoteImg">
-		delete from note_img where noteId=#{noteId}
+		delete from note_img where noteId=#{deleteNoteId}
 	</delete>
 </mapper>

@@ -3,14 +3,14 @@
 <!-- namespace代表唯一标识符 -->
 <mapper namespace="com.moji.user.dao.UserMapper">
 	<resultMap type="com.moji.entity.User" id="userMap">
-		<id property="userId" column="note_id"/>
-		<result property="userHeadImg" column="latitude"/>
-		<result property="userName" column="longitude"/>
-		<result property="sex" column="title"/>
-		<result property="signature" column="content"/>
-		<result property="occupation" column="location"/>
-		<result property="password" column="time"/>
-		<result property="phone" column="user_id"/>
+		<id property="userId" column="user_id"/>
+		<result property="userHeadImg" column="avatar_path"/>
+		<result property="userName" column="user_name"/>
+		<result property="sex" column="sex"/>
+		<result property="signature" column="signature"/>
+		<result property="occupation" column="occupation"/>
+		<result property="password" column="password"/>
+		<result property="phone" column="phone"/>
 	</resultMap>
 	<!-- 根据ID值查询用户信息 -->
 	<select id="queryUser" resultMap="userMap">
@@ -19,14 +19,14 @@
 	<!-- 更新用户信息 -->
 	<update id="updateMsgOfUser">
 		update user_detail 
-		set avatar_path=#{userHeadImg},user_name=#{userName},sex=#{sex},signature=#{signature},occupation=#{occupation} 
-		where user_id=#{userId}
+		set avatar_path=#{user.userHeadImg},user_name=#{user.userName},sex=#{user.sex},signature=#{user.signature},occupation=#{user.occupation} 
+		where user_id=#{user.userId}
 	</update>
 	<!-- 更改个人信息不改头像 -->
 	<update id="updateMsgWithoutAvatar">
 		update user_detail 
-		set user_name=#{userName},sex=#{sex},signature=#{signature},occupation=#{occupation} 
-		where user_id=#{userId}
+		set user_name=#{user.userName},sex=#{user.sex},signature=#{user.signature},occupation=#{user.occupation} 
+		where user_id=#{user.userId}
 	</update>
 	<!-- 用户登录 -->
 	<select id="loginUser" resultMap="userMap">
@@ -40,7 +40,7 @@
 	<insert id="addUsers" parameterType="com.moji.entity.User">
 		insert into 
 		user_detail(user_id,user_name,password,phone) 
-		values (#{userId},#{userName},#{password},#{phone})
+		values (#{user.userId},#{user.userName},#{user.password},#{user.phone})
 	</insert>
 	<!-- 修改密码 -->
 	<update id="changeUserPwd">

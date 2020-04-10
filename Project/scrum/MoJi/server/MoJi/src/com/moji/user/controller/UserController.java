@@ -53,6 +53,7 @@ public class UserController {
 		}else {
 			Gson gson = new Gson();
 			str = gson.toJson(user);
+			System.out.println(str);
 			System.out.println("登录成功");
 		}
 		return str;
@@ -71,7 +72,7 @@ public class UserController {
 		return str;
 	}
 
-	@RequestMapping(value="/changeMsg", method=RequestMethod.GET, produces="application/json;charset=utf-8")
+	@RequestMapping(value="/changeMsg", method=RequestMethod.POST, produces="application/json;charset=utf-8")
 	public String changeMsg(HttpServletRequest request) {
 		String str = "";
 		User user = new User();

@@ -62,7 +62,7 @@ public interface NoteMapper {
 	 * @throws SQLException 
 	 * @date 2019年12月14日
 	 */
-	public int deleteNote(@Param("noteId")String noteId);
+	public int deleteNote(@Param("deleteNoteId")String deleteNoteId);
 	
 	/**
 	 * 
@@ -87,7 +87,7 @@ public interface NoteMapper {
 	 * @date 2019年12月5日
 	 */
 	public int addNote(
-			@Param("NoteId")String noteId, 
+			@Param("noteId")String noteId, 
 			@Param("userId")String userId, 
 			@Param("title")String title, 
 			@Param("content")String content, 
@@ -151,6 +151,6 @@ public interface NoteMapper {
 	 * @return int 返回类型
 	 * @throws
 	 */
-	public int deleteNoteImg(@Param("noteId")String noteId);
+	public int deleteNoteImg(@Param("deleteNoteId")String deleteNoteId);
 	
 }

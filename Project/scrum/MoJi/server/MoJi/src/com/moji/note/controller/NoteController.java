@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.gson.Gson;
 import com.moji.entity.Img;
 import com.moji.entity.Note;
+import com.moji.entity.ReturnNote;
 import com.moji.note.service.NoteService;
 
 /**
@@ -46,7 +47,7 @@ public class NoteController {
 	@Autowired
 	private NoteService noteService;
 	
-	@RequestMapping(value="/add", method=RequestMethod.GET, produces="application/json;charset=utf-8")
+	@RequestMapping(value="/add", method=RequestMethod.POST, produces="application/json;charset=utf-8")
 	public String addNote(HttpServletRequest request) {
 		String userId = null;
 		String title = null;
@@ -66,7 +67,7 @@ public class NoteController {
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMddHHmmss");
 		SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		//转换成字符串格式
-		String id = null;
+		String id = simpleDateFormat.format(date);
 		String time = simpleDateFormat1.format(date);
 			
 		String str = "";
@@ -77,13 +78,13 @@ public class NoteController {
 		
 		try {
 			List<FileItem> items = upload.parseRequest(request);
+			int m = 0;
 			for(FileItem fi : items) {
-				int i = 0;
 				if(fi.isFormField()) {
 					switch (fi.getFieldName()) {
 						case "userId":
 							userId = fi.getString("UTF-8");//用户id
-							id = simpleDateFormat.format(date) + userId;//便签id
+							id = id + userId;//便签id
 							break;
 						case "title":
 							title = fi.getString("UTF-8");
@@ -114,16 +115,17 @@ public class NoteController {
 					String realPath = request.getSession().getServletContext().getRealPath("/");
 					fi.write(new File(realPath+"image\\"+fi.getName()));
 					Img img = new Img();
-					img.setImgId(id+i);
+					m++;
+					img.setImgId(id+m);
 					img.setImgPath("image/"+fi.getName());
 					img.setNoteId(id);
+					imgs.add(img);
 				}
-				i++;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+		System.out.println("left:" + left + ";right:" + right + ";top:" + top + ";botom:" + bottom);
 		int i;
 		Note note = this.noteService.checkNote(userId, left, right, top, bottom);
 		if(note != null) {
@@ -184,10 +186,29 @@ public class NoteController {
 	@RequestMapping(value="/download", method=RequestMethod.GET, produces="application/json;charset=utf-8")
 	public String downloadNote(HttpServletRequest request, @RequestParam(value="userId",required=true)String userId) {
 		String str = "";
+		//从数据库查询的数据
 		List<Note> list = this.noteService.downloadNote(userId);
+		//转化成需要返回的类型
+		List<ReturnNote> returnList = new ArrayList<>();
+		for (int i = 0; i < list.size(); i++) {
+			ReturnNote returnNote = new ReturnNote();
+			returnNote.setNoteId(list.get(i).getNoteId());
+			returnNote.setLatitude(list.get(i).getLatitude());
+			returnNote.setLongitude(list.get(i).getLongitude());
+			returnNote.setTitle(list.get(i).getTitle());
+			returnNote.setContent(list.get(i).getContent());
+			returnNote.setLocation(list.get(i).getLocation());
+			returnNote.setTime(list.get(i).getTime());
+			returnNote.setUserId(list.get(i).getUserId());
+			returnNote.setUser(list.get(i).getUser());
+			for(int j = 0; j < list.get(i).getImgList().size(); j++) {
+				returnNote.getImgList().add(list.get(i).getImgList().get(j).getImgPath());
+			}
+			returnList.add(returnNote);
+		}
 		if(list.size() > 0) {
 			Gson gson = new Gson();
-			str = gson.toJson(list);
+			str = gson.toJson(returnList);
 		}
 		return str;
 	}
@@ -195,10 +216,29 @@ public class NoteController {
 	@RequestMapping(value="/query", method=RequestMethod.GET, produces="application/json;charset=utf-8")
 	public String queryVisualNote(HttpServletRequest request) {
 		String str = "";
+		//从数据库查询的数据
 		List<Note> list = this.noteService.queryVisualNote();
+		//转化成需要返回的类型
+		List<ReturnNote> returnList = new ArrayList<>();
+		for (int i = 0; i < list.size(); i++) {
+			ReturnNote returnNote = new ReturnNote();
+			returnNote.setNoteId(list.get(i).getNoteId());
+			returnNote.setLatitude(list.get(i).getLatitude());
+			returnNote.setLongitude(list.get(i).getLongitude());
+			returnNote.setTitle(list.get(i).getTitle());
+			returnNote.setContent(list.get(i).getContent());
+			returnNote.setLocation(list.get(i).getLocation());
+			returnNote.setTime(list.get(i).getTime());
+			returnNote.setUserId(list.get(i).getUserId());
+			returnNote.setUser(list.get(i).getUser());
+			for(int j = 0; j < list.get(i).getImgList().size(); j++) {
+				returnNote.getImgList().add(list.get(i).getImgList().get(j).getImgPath());
+			}
+			returnList.add(returnNote);
+		}
 		if(list.size() > 0) {
 			Gson gson = new Gson();
-			str = gson.toJson(list);
+			str = gson.toJson(returnList);
 		}
 		return str;
 	}
@@ -212,12 +252,31 @@ public class NoteController {
 			@RequestParam(value="bottom",required=true)Double bottom) {
 		
 		String str = "";
+		//从数据库查询的数据
 		List<Note> list = new ArrayList<>();
+		//转化成需要返回的类型
+		List<ReturnNote> returnList = new ArrayList<>();
+		for (int i = 0; i < list.size(); i++) {
+			ReturnNote returnNote = new ReturnNote();
+			returnNote.setNoteId(list.get(i).getNoteId());
+			returnNote.setLatitude(list.get(i).getLatitude());
+			returnNote.setLongitude(list.get(i).getLongitude());
+			returnNote.setTitle(list.get(i).getTitle());
+			returnNote.setContent(list.get(i).getContent());
+			returnNote.setLocation(list.get(i).getLocation());
+			returnNote.setTime(list.get(i).getTime());
+			returnNote.setUserId(list.get(i).getUserId());
+			returnNote.setUser(list.get(i).getUser());
+			for(int j = 0; j < list.get(i).getImgList().size(); j++) {
+				returnNote.getImgList().add(list.get(i).getImgList().get(j).getImgPath());
+			}
+			returnList.add(returnNote);
+		}
 		try {
 			list = this.noteService.findByRange(userId, left, right, top, bottom);
 			if(list.size() > 0) {
 				Gson gson = new Gson();
-				str = gson.toJson(list);
+				str = gson.toJson(returnList);
 				System.out.println("成功查询到数据");
 			}else {
 				System.out.println("没有查询到对应数据");
