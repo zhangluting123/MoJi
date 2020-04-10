@@ -18,10 +18,10 @@
 		delete from mail_msg where mail_id=#{mailId}
 	</delete>
 	<!-- 插入消息通知 -->
-	<insert id="insertMail">
+	<insert id="insertMail" parameterType="com.moji.entity.Mail">
 		insert into 
 		mail_msg(acceptTime,comment_content,otherName,userId) 
 		values 
-		(#{mail.acceptTime},#{mail.commentContent},#{mail.otherName},#{mail.userId})
+		(#{acceptTime},#{commentContent},#{otherName},#{userId})
 	</insert>
 </mapper>

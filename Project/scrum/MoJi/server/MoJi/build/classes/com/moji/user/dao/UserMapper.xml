@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- namespace代表唯一标识符 -->
 <mapper namespace="com.moji.user.dao.UserMapper">
-	<resultMap type="com.moji.entity.Note" id="userMap">
+	<resultMap type="com.moji.entity.User" id="userMap">
 		<id property="userId" column="note_id"/>
 		<result property="userHeadImg" column="latitude"/>
 		<result property="userName" column="longitude"/>
@@ -19,14 +19,14 @@
 	<!-- 更新用户信息 -->
 	<update id="updateMsgOfUser">
 		update user_detail 
-		set avatar_path=#{user.userHeadImg},user_name=#{user.userName},sex=#{user.sex},signature=#{user.signature},occupation=#{user.occupation} 
-		where user_id=#{user.userId}
+		set avatar_path=#{userHeadImg},user_name=#{userName},sex=#{sex},signature=#{signature},occupation=#{occupation} 
+		where user_id=#{userId}
 	</update>
 	<!-- 更改个人信息不改头像 -->
 	<update id="updateMsgWithoutAvatar">
 		update user_detail 
-		set user_name=#{user.userName},sex=#{user.sex},signature=#{user.signature},occupation=#{user.occupation} 
-		where user_id=#{user.userId}
+		set user_name=#{userName},sex=#{sex},signature=#{signature},occupation=#{occupation} 
+		where user_id=#{userId}
 	</update>
 	<!-- 用户登录 -->
 	<select id="loginUser" resultMap="userMap">
@@ -37,10 +37,10 @@
 		select * from user_detail where phone=#{phone}
 	</select>
 	<!-- 添加用户 -->
-	<insert id="addUsers">
+	<insert id="addUsers" parameterType="com.moji.entity.User">
 		insert into 
 		user_detail(user_id,user_name,password,phone) 
-		values (#{user.userId},#{user.userName},#{user.password},#{user.phone})
+		values (#{userId},#{userName},#{password},#{phone})
 	</insert>
 	<!-- 修改密码 -->
 	<update id="changeUserPwd">

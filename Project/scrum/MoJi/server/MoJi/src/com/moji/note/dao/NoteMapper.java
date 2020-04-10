@@ -107,7 +107,7 @@ public interface NoteMapper {
 	 * @return int 返回类型
 	 * @throws
 	 */
-	public int addNoteImg(@Param("pathlist")List<Img> imgs);
+	public int addNoteImg(@Param("imgs")List<Img> imgs);
 
 	/**
 	 * 
