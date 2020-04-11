@@ -120,7 +120,7 @@ public class MsgAdapter extends BaseAdapter {
         RequestOptions options = new RequestOptions().circleCrop();
         if(noteList != null && noteList.size() > 0){
             if(null == noteList.get(position).getUser().getUserHeadImg() ){
-                 viewHolder.headphoto.setImageResource(R.mipmap.default_head);
+                 viewHolder.headphoto.setImageResource(R.drawable.headportrait);
             }else {
                 Glide.with(convertView).load("http://" + ip + ":8080/MoJi/" + noteList.get(position).getUser().getUserHeadImg()).apply(options).into(viewHolder.headphoto);
             }

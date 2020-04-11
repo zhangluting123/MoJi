@@ -57,7 +57,7 @@ public class MailController {
 		try {
 			List<Mail> list =  this.mailService.quaryMail(userId);
 			if(list!=null && list.size()>0) {
-				Gson gson = new Gson();
+				Gson gson = new Gson();System.out.println(str);
 				str = gson.toJson(list);
 			}
 		} catch (SQLException e) {

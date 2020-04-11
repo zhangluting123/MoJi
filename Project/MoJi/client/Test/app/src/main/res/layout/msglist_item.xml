@@ -17,7 +17,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginTop="20dp"
-            android:src="@mipmap/default_head"/>
+            android:src="@drawable/headportrait"/>
         <TextView
             android:id="@+id/tv_personalmsg"
             android:layout_alignBottom="@+id/iv_headphoto"

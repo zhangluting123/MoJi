@@ -244,7 +244,7 @@ public class FootprintFragment extends Fragment {
                     try {
                         if(DetermineConnServer.isConnByHttp(getActivity().getApplicationContext())) {
                             List<Note> threadList = new ArrayList<>();
-                            URL url = new URL("http://" + ip + ":8080/MoJi/ShowNoteServlet?left=" + left + "&right=" + right + "&top=" + top + "&bottom=" + bottom + "&userId=" + userId);
+                            URL url = new URL("http://" + ip + ":8080/MoJi/note/list?left=" + left + "&right=" + right + "&top=" + top + "&bottom=" + bottom + "&userId=" + userId);
                             URLConnection conn = url.openConnection();
                             InputStream in = conn.getInputStream();
                             BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));

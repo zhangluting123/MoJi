@@ -42,7 +42,7 @@ public interface NoteMapper {
 	* @return       List<Note>    
 	* @throws
 	 */
-	public List<Note> queryVisualNote();
+	public List<Note> queryVisualNote(@Param("userId")String userId);
 	
 	/**
 	 * 

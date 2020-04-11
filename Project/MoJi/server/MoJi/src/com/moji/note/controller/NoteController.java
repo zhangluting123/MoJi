@@ -214,10 +214,10 @@ public class NoteController {
 	}
 	
 	@RequestMapping(value="/query", method=RequestMethod.GET, produces="application/json;charset=utf-8")
-	public String queryVisualNote(HttpServletRequest request) {
+	public String queryVisualNote(HttpServletRequest request,@RequestParam(value="userId",required=true)String userId) {
 		String str = "";
 		//从数据库查询的数据
-		List<Note> list = this.noteService.queryVisualNote();
+		List<Note> list = this.noteService.queryVisualNote(userId);System.out.println(userId);
 		//转化成需要返回的类型
 		List<ReturnNote> returnList = new ArrayList<>();
 		for (int i = 0; i < list.size(); i++) {
@@ -256,28 +256,29 @@ public class NoteController {
 		List<Note> list = new ArrayList<>();
 		//转化成需要返回的类型
 		List<ReturnNote> returnList = new ArrayList<>();
-		for (int i = 0; i < list.size(); i++) {
-			ReturnNote returnNote = new ReturnNote();
-			returnNote.setNoteId(list.get(i).getNoteId());
-			returnNote.setLatitude(list.get(i).getLatitude());
-			returnNote.setLongitude(list.get(i).getLongitude());
-			returnNote.setTitle(list.get(i).getTitle());
-			returnNote.setContent(list.get(i).getContent());
-			returnNote.setLocation(list.get(i).getLocation());
-			returnNote.setTime(list.get(i).getTime());
-			returnNote.setUserId(list.get(i).getUserId());
-			returnNote.setUser(list.get(i).getUser());
-			for(int j = 0; j < list.get(i).getImgList().size(); j++) {
-				returnNote.getImgList().add(list.get(i).getImgList().get(j).getImgPath());
-			}
-			returnList.add(returnNote);
-		}
+		
 		try {
 			list = this.noteService.findByRange(userId, left, right, top, bottom);
+			for (int i = 0; i < list.size(); i++) {
+				ReturnNote returnNote = new ReturnNote();
+				returnNote.setNoteId(list.get(i).getNoteId());
+				returnNote.setLatitude(list.get(i).getLatitude());
+				returnNote.setLongitude(list.get(i).getLongitude());
+				returnNote.setTitle(list.get(i).getTitle());
+				returnNote.setContent(list.get(i).getContent());
+				returnNote.setLocation(list.get(i).getLocation());
+				returnNote.setTime(list.get(i).getTime());
+				returnNote.setUserId(list.get(i).getUserId());
+				returnNote.setUser(list.get(i).getUser());
+				for(int j = 0; j < list.get(i).getImgList().size(); j++) {
+					returnNote.getImgList().add(list.get(i).getImgList().get(j).getImgPath());
+				}
+				returnList.add(returnNote);
+			}
 			if(list.size() > 0) {
 				Gson gson = new Gson();
 				str = gson.toJson(returnList);
-				System.out.println("成功查询到数据");
+				System.out.println("成功查询到数据--"+str);
 			}else {
 				System.out.println("没有查询到对应数据");
 			}

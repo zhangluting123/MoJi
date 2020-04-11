@@ -266,10 +266,10 @@ public class AddNoteActivity extends AppCompatActivity {
                         note.setSelf(self);
                         note.setLocation(location);
 
-                        Intent intent = getIntent();
-                        int tabId = intent.getIntExtra("tab", 0);
-                        UploadFileTask task = new UploadFileTask(getApplicationContext(), note,tabId);
-                        task.execute("http://" + ip + ":8080/MoJi/AddNoteServlet");
+//                        Intent intent = getIntent();
+//                        int tabId = intent.getIntExtra("tab", 0);
+                        UploadFileTask task = new UploadFileTask(getApplicationContext(), note);
+                        task.execute("http://" + ip + ":8080/MoJi/note/add");
                     }
                     break;
             }

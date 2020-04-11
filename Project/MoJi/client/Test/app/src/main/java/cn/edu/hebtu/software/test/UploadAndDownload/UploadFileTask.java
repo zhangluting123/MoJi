@@ -34,12 +34,10 @@ import okhttp3.Response;
 public class UploadFileTask extends AsyncTask<String, Void, String> {
     private Context context;
     private Note note;
-    private int tabId;
 
-    public UploadFileTask(Context context, Note note, int tabId) {
+    public UploadFileTask(Context context, Note note) {
         this.context = context;
         this.note = note;
-        this.tabId = tabId;
     }
 
     /**
@@ -101,7 +99,6 @@ public class UploadFileTask extends AsyncTask<String, Void, String> {
         }else if("1".equals(s)){
             Toast.makeText(context,"发布成功",Toast.LENGTH_SHORT).show();
             Intent jumpToBMap = new Intent(context, MainActivity.class);
-            jumpToBMap.putExtra("tab",tabId);
             context.startActivity(jumpToBMap);
 
         }else{

@@ -5,6 +5,7 @@ import androidx.appcompat.widget.Toolbar;
 import cn.edu.hebtu.software.test.Data.User;
 import cn.edu.hebtu.software.test.R;
 import cn.edu.hebtu.software.test.Setting.MyApplication;
+import cn.edu.hebtu.software.test.Util.ActivityManager;
 import cn.jpush.android.api.JPushInterface;
 
 import android.content.Intent;
@@ -20,7 +21,6 @@ import android.widget.RadioGroup;
 
 public class MsgPermissionActivity extends AppCompatActivity {
     private Toolbar toolbar;
-    private int tabId;
     private RadioButton open;
     private RadioButton close;
     private RadioGroup radioGroup;
@@ -31,6 +31,7 @@ public class MsgPermissionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_msg_permission);
 
+        ActivityManager.getInstance().addActivity(this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -43,14 +44,11 @@ public class MsgPermissionActivity extends AppCompatActivity {
         user = data.getUser();
 
         getViews();
-        Intent intent = getIntent();
-        tabId = intent.getIntExtra("tab", 0);
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent response = new Intent(MsgPermissionActivity.this, SettingActivity.class);
-                response.putExtra("tab", tabId);
                 startActivity(response);
                 overridePendingTransition(R.animator.in_from_left, R.animator.out_to_right);
                 finish();

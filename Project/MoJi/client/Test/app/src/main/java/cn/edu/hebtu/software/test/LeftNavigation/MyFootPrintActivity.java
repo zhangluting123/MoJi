@@ -8,6 +8,7 @@ import cn.edu.hebtu.software.test.Adapter.MyFootAdapter;
 import cn.edu.hebtu.software.test.Data.Note;
 import cn.edu.hebtu.software.test.DetailActivity.ShowNoteActivity;
 import cn.edu.hebtu.software.test.Setting.MyApplication;
+import cn.edu.hebtu.software.test.Util.ActivityManager;
 import cn.edu.hebtu.software.test.Util.DetermineConnServer;
 import cn.edu.hebtu.software.test.R;
 
@@ -41,7 +42,6 @@ public class MyFootPrintActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private ListView listView;
     private List<Note> noteList;
-    private int tabId;
     private String userId;
     private MyApplication data;
     private String ip;
@@ -61,6 +61,7 @@ public class MyFootPrintActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_foot_print);
 
+        ActivityManager.getInstance().addActivity(this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -75,14 +76,12 @@ public class MyFootPrintActivity extends AppCompatActivity {
 
         init();
         toolbar = findViewById(R.id.foot_toolbar);
-        Intent request= getIntent();
-        tabId = request.getIntExtra("tab", 0);
+
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent response = new Intent(MyFootPrintActivity.this, MainActivity.class);
                 response.putExtra("flag",true);
-                response.putExtra("tab", tabId);
                 startActivity(response);
                 overridePendingTransition(R.animator.in_from_left, R.animator.out_to_right);
                 finish();
@@ -115,7 +114,7 @@ public class MyFootPrintActivity extends AppCompatActivity {
             try {
                 boolean b = DetermineConnServer.isConnByHttp(getApplicationContext());
                 if(b){
-                    URL url = new URL("http://"+getResources().getString(R.string.internet_ip)+":8080/MoJi/DownloadNoteServlet?userId=" + userId);
+                    URL url = new URL("http://"+getResources().getString(R.string.internet_ip)+":8080/MoJi/note/download?userId=" + userId);
                     URLConnection conn = url.openConnection();
                     InputStream in = conn.getInputStream();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(in,"utf-8"));

@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.mob.sdk'
 android {
-    sourceSets{
-        main{
+    sourceSets {
+        main {
             jniLibs.srcDirs = ['libs']
         }
     }

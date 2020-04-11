@@ -41,12 +41,12 @@ public class StartActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 }else{
-                    intent = new Intent(StartActivity.this,  WelcomeActivity.class);// TODO: WelcomeActivity.class
+                    intent = new Intent(StartActivity.this,  WelcomeActivity.class);
                     startActivity(intent);
                     finish();
                 }
             }
-        }, 5);
+        }, 1);
 
 
     }

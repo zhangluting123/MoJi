@@ -40,7 +40,6 @@ public class MineActivity extends AppCompatActivity {
     private TextView userSign;
     private LinearLayout toInfo1;
     private RelativeLayout toInfo2;
-    private int tabId;
 
     private String ip;
     private User user;
@@ -73,10 +72,10 @@ public class MineActivity extends AppCompatActivity {
         }
 
         getViews();
-
         userName.setText(user.getUserName());
         RequestOptions options = new RequestOptions().circleCrop();
         Glide.with(this).load("http://" + ip + ":8080/MoJi/"+user.getUserHeadImg()).apply(options).into(userHeader);
+
         if("girl".equals(user.getSex())){
             userSex.setImageResource(R.mipmap.girl);
         }else if("boy".equals(user.getSex())){
@@ -85,8 +84,6 @@ public class MineActivity extends AppCompatActivity {
         userJob.setText(user.getOccupation());
         userSign.setText(user.getSignature());
 
-        Intent request= getIntent();
-        tabId = request.getIntExtra("tab", 0);
 
         //点击返回按钮返回主页面
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -94,7 +91,6 @@ public class MineActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent response = new Intent(MineActivity.this, MainActivity.class);
                 response.putExtra("flag",true);
-                response.putExtra("tab", tabId);
                 startActivity(response);
                 overridePendingTransition(R.animator.in_from_left, R.animator.out_to_right);
                 finish();
@@ -126,7 +122,6 @@ public class MineActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(MineActivity.this,UserInfoActivity.class);
-            intent.putExtra("tab", tabId);
             startActivity(intent);
         }
     }

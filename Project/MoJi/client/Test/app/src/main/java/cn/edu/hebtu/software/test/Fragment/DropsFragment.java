@@ -306,7 +306,7 @@ public class DropsFragment extends Fragment {
         public void run() {
             try {
                 if (DetermineConnServer.isConnByHttp(getActivity().getApplicationContext())) {
-                    URL url = new URL("http://" + ip + ":8080/MoJi/QueryVisualNoteServlet");
+                    URL url = new URL("http://" + ip + ":8080/MoJi/note/query?userId="+data.getUser().getUserId());
                     URLConnection conn = url.openConnection();
                     InputStream in = conn.getInputStream();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));

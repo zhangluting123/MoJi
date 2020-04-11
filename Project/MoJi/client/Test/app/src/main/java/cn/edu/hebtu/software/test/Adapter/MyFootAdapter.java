@@ -126,7 +126,7 @@ public class MyFootAdapter extends BaseAdapter {
                             try {
                                 boolean b = DetermineConnServer.isConnByHttp(context.getApplicationContext());
                                 if(b){
-                                    URL url = new URL("http://" + ip +":8080/MoJi/DeleteNoteServlet?noteId=" + noteList.get(position).getNoteId());
+                                    URL url = new URL("http://" + ip +":8080/MoJi/note/delete?noteId=" + noteList.get(position).getNoteId());
                                     URLConnection conn = url.openConnection();
                                     InputStream in = conn.getInputStream();
                                     BufferedReader reader = new BufferedReader(new InputStreamReader(in,"utf-8"));

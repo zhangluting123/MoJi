@@ -34,6 +34,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import cn.edu.hebtu.software.test.Data.User;
 import cn.edu.hebtu.software.test.Setting.MyApplication;
 import cn.edu.hebtu.software.test.R;
+import cn.edu.hebtu.software.test.Util.ActivityManager;
 import cn.edu.hebtu.software.test.Util.DetermineConnServer;
 import cn.edu.hebtu.software.test.Util.PermissionUtils;
 import cn.edu.hebtu.software.test.Util.SharedUtil;
@@ -99,6 +100,7 @@ public class LoginInActivity extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loginin);
+        ActivityManager.getInstance().addActivity(this);
         PermissionUtils.openNotifiPermission(this);
 
         data = (MyApplication) getApplication();
@@ -203,7 +205,7 @@ public class LoginInActivity extends AppCompatActivity implements View.OnClickLi
                     Message msg = Message.obtain();
                     if(DetermineConnServer.isConnByHttp(LoginInActivity.this)){
                         User threadUser = new User();
-                        URL url = new URL("http://" + ip + ":8080/MoJi/loginUserServlet?phone=" + phone + "&password=" + pwd);
+                        URL url = new URL("http://" + ip + ":8080/MoJi/user/login?phone=" + phone + "&password=" + pwd);
                         URLConnection conn = url.openConnection();
                         InputStream in = conn.getInputStream();
                         BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));

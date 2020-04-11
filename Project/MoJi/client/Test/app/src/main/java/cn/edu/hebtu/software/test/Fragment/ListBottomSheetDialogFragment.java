@@ -138,7 +138,7 @@ public class ListBottomSheetDialogFragment extends BottomSheetDialogFragment {
                 URLConnection conn = null;
                 try {
                     if(DetermineConnServer.isConnByHttp(getActivity().getApplicationContext())){
-                        url = new URL("http://" + ip + ":8080/MoJi/ShowCommentServlet?noteId=" + currentNoteId);
+                        url = new URL("http://" + ip + ":8080/MoJi/comment/list?noteId=" + currentNoteId);
                         conn = url.openConnection();
                         InputStream in = conn.getInputStream();
                         BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));

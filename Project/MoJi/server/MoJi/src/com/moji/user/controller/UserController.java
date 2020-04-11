@@ -130,7 +130,7 @@ public class UserController {
 		return str;
 	}
 	
-	@RequestMapping(value="/rigest", method=RequestMethod.GET, produces="application/json;charset=utf-8")
+	@RequestMapping(value="/regist", method=RequestMethod.GET, produces="application/json;charset=utf-8")
 	public String rigest(HttpServletRequest request, 
 			@RequestParam(value="phone",required=true)String phone,
 			@RequestParam(value="password",required=true)String password) {

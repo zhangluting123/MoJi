@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="280dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_gravity="start"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -45,7 +44,7 @@
                     android:id="@+id/img"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:src="@mipmap/default_head"/>
+                    android:src="@drawable/headportrait"/>
                 <ImageView
                     android:layout_width="40dp"
                     android:layout_height="50dp"
@@ -53,14 +52,16 @@
                     android:layout_gravity="center_vertical"
                     android:src="@mipmap/arrow" />
             </LinearLayout>
+
             <TextView
                 android:id="@+id/btn_user_name"
-                android:layout_width="match_parent"
+                android:layout_width="82dp"
+                android:gravity="center"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/white"
                 android:layout_marginTop="10dp"
                 android:text="xxxx"
-                android:textSize="16sp"/>
+                android:textColor="@android:color/white"
+                android:textSize="16sp" />
         </LinearLayout>
     </LinearLayout>
     <LinearLayout

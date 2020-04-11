@@ -3,6 +3,7 @@ package cn.edu.hebtu.software.test.Activity;
 import androidx.appcompat.app.AppCompatActivity;
 import cn.edu.hebtu.software.test.R;
 import cn.edu.hebtu.software.test.Setting.MyApplication;
+import cn.edu.hebtu.software.test.Util.ActivityManager;
 import cn.edu.hebtu.software.test.Util.DetermineConnServer;
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
@@ -59,6 +60,7 @@ public class RegistActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_regist);
+        ActivityManager.getInstance().addActivity(this);
 
         getViews();
         register();
@@ -169,7 +171,7 @@ public class RegistActivity extends AppCompatActivity {
             public void run() {
                 try {
                     if(DetermineConnServer.isConnByHttp(getApplicationContext())) {
-                        URL url = new URL("http://" + ip + ":8080/MoJi/RegistUserServlet?phone=" + edtTel.getText().toString() + "&password=" + edtPwd.getText().toString());
+                        URL url = new URL("http://" + ip + ":8080/MoJi/user/regist?phone=" + edtTel.getText().toString() + "&password=" + edtPwd.getText().toString());
                         URLConnection conn = url.openConnection();
                         InputStream in = conn.getInputStream();
                         BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));

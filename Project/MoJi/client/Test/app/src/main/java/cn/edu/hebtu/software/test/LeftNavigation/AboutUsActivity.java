@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import cn.edu.hebtu.software.test.Activity.MainActivity;
 import cn.edu.hebtu.software.test.R;
+import cn.edu.hebtu.software.test.Setting.MyApplication;
+import cn.edu.hebtu.software.test.Util.ActivityManager;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -15,12 +17,13 @@ import android.view.Window;
 import android.view.WindowManager;
 
 public class AboutUsActivity extends AppCompatActivity {
-
+    private MyApplication data;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about_us);
 
+        ActivityManager.getInstance().addActivity(this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -30,15 +33,12 @@ public class AboutUsActivity extends AppCompatActivity {
 
         }
 
-        Intent intent = getIntent();
-        int tabId = intent.getIntExtra("tab",0);
+        data = (MyApplication)getApplication();
         Toolbar toolbar = findViewById(R.id.us_toolbar);
-
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent response = new Intent(AboutUsActivity.this, MainActivity.class);
-                response.putExtra("tab", tabId);
                 response.putExtra("flag", true);
                 startActivity(response);
                 overridePendingTransition(R.animator.in_from_left, R.animator.out_to_right);

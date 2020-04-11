@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="cn.edu.hebtu.software.test">
+
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -17,10 +18,9 @@
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
     <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" /> <!-- 这个权限用于进行网络定位 -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- 这个权限用于访问GPS定位 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:name=".Setting.MyApplication"
@@ -31,7 +31,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Activity.RegistActivity"></activity>
+        <activity android:name=".LeftNavigation.TimelineActivity"></activity>
+        <activity android:name=".Activity.RegistActivity" />
         <activity android:name=".LeftNavigation.AboutUsActivity" />
         <activity android:name=".LeftNavigation.ChangePwdActivity" />
         <activity android:name=".LeftNavigation.MsgPermissionActivity" />
@@ -41,8 +42,10 @@
         <activity android:name=".Activity.LoginInActivity" />
         <activity android:name=".Activity.GuidePageActivity" />
         <activity android:name=".Activity.WelcomeActivity" />
-        <activity android:name=".DetailActivity.AddNoteActivity" android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".DetailActivity.ShowNoteActivity"/>
+        <activity
+            android:name=".DetailActivity.AddNoteActivity"
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".DetailActivity.ShowNoteActivity" />
         <activity android:name=".Activity.StartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -50,7 +53,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".DetailActivity.MailDetailActivity" ></activity>
+        <activity android:name=".DetailActivity.MailDetailActivity" />
         <activity
             android:name=".DetailActivity.DropsDetailActivity"
             android:windowSoftInputMode="stateHidden" />
@@ -58,13 +61,11 @@
             android:name=".LeftNavigation.UserInfoActivity"
             android:windowSoftInputMode="stateHidden" />
         <activity android:name=".LeftNavigation.MineActivity" />
-        <activity android:name=".Activity.MainActivity"></activity>
+        <activity android:name=".Activity.MainActivity" />
+
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="ejqdxqqPXWoCK9GfHYjIkI7iXc3Pzn5S"/>
-
-
-        <!-- Required since 3.0.7 -->
+            android:value="ejqdxqqPXWoCK9GfHYjIkI7iXc3Pzn5S" /> <!-- Required since 3.0.7 -->
         <!-- 可配置android:process参数将Service放在其他进程中；android:enabled属性不能是false -->
         <!-- 这个是自定义Service，要继承极光JCommonService，可以在更多手机平台上使得推送通道保持的更稳定 -->
         <service
@@ -75,9 +76,7 @@
             <intent-filter>
                 <action android:name="cn.jiguang.user.service.action" />
             </intent-filter>
-        </service>
-
-        <!-- Required since 3.0.7 -->
+        </service> <!-- Required since 3.0.7 -->
         <!-- 新的 tag/alias 接口结果返回需要开发者配置一个自定的广播 -->
         <!-- 3.3.0开始所有事件将通过该类回调 -->
         <!-- 该广播需要继承 JPush 提供的 JPushMessageReceiver 类, 并如下新增一个 Intent-Filter -->
@@ -92,6 +91,5 @@
             </intent-filter>
         </receiver>
     </application>
-
 
 </manifest>

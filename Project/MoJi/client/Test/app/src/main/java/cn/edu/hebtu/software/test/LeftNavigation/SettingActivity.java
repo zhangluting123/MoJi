@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import cn.edu.hebtu.software.test.Activity.MainActivity;
 import cn.edu.hebtu.software.test.R;
+import cn.edu.hebtu.software.test.Setting.MyApplication;
+import cn.edu.hebtu.software.test.Util.ActivityManager;
 
 import android.content.Intent;
 import android.os.Build;
@@ -18,12 +20,12 @@ public class SettingActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private LinearLayout msgPermission;
     private LinearLayout changePwd;
-    private int tabId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
+        ActivityManager.getInstance().addActivity(this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -31,9 +33,6 @@ public class SettingActivity extends AppCompatActivity {
             window.setStatusBarColor(getResources().getColor(R.color.MyTheam_color));
 
         }
-
-        Intent request= getIntent();
-        tabId = request.getIntExtra("tab", 0);
 
         getViews();
         registerListener();
@@ -56,7 +55,6 @@ public class SettingActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(SettingActivity.this, MainActivity.class);
                 intent.putExtra("flag",true);
-                intent.putExtra("tab", tabId);
                 startActivity(intent);
                 overridePendingTransition(R.animator.in_from_left, R.animator.out_to_right);
                 finish();
@@ -71,12 +69,10 @@ public class SettingActivity extends AppCompatActivity {
             switch (v.getId()){
                 case R.id.ll_msgPermission:
                     intent = new Intent(SettingActivity.this, MsgPermissionActivity.class);
-                    intent.putExtra("tab", tabId);
                     startActivity(intent);
                     break;
                 case R.id.changePwd:
                     intent = new Intent(SettingActivity.this, ChangePwdActivity.class);
-                    intent.putExtra("tab", tabId);
                     startActivity(intent);
                     break;
             }

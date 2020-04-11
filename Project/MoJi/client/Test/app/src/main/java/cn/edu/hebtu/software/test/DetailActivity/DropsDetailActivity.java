@@ -114,6 +114,7 @@ public class DropsDetailActivity extends AppCompatActivity implements ViewPager.
                     comment.setCommentContent(edtInsertComment.getText().toString().trim());
                     comment.setCommentTime("今天");
                     insertComment(comment);
+
             }
         }
     };
@@ -134,6 +135,7 @@ public class DropsDetailActivity extends AppCompatActivity implements ViewPager.
         }
 
         data = (MyApplication)getApplication();
+        user = data.getUser();
         ip = data.getIp();
 
         getViews();
@@ -170,11 +172,15 @@ public class DropsDetailActivity extends AppCompatActivity implements ViewPager.
         btnSubmitComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String content = edtInsertComment.getText().toString().trim();
-                if(content.length() == 0){
-                    Toast.makeText(DropsDetailActivity.this, "评论内容不能为空", Toast.LENGTH_SHORT).show();
+                if(null != user.getUserId()) {
+                    String content = edtInsertComment.getText().toString().trim();
+                    if (content.length() == 0) {
+                        Toast.makeText(DropsDetailActivity.this, "评论内容不能为空", Toast.LENGTH_SHORT).show();
+                    } else {
+                        insertComment(content);
+                    }
                 }else{
-                    insertComment(content);
+                    Toast.makeText(getApplicationContext(), "请先登录", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -191,7 +197,7 @@ public class DropsDetailActivity extends AppCompatActivity implements ViewPager.
             public void run() {
                 if(DetermineConnServer.isConnByHttp(getApplicationContext())){
                     try {
-                        URL url = new URL("http://"+ip+":8080/MoJi/AddCommentServlet?noteId="+note.getNoteId()+"&userId="+data.getUser().getUserId()+"&commentContent="+content);
+                        URL url = new URL("http://"+ip+":8080/MoJi/comment/add?noteId="+note.getNoteId()+"&userId="+data.getUser().getUserId()+"&commentContent="+content);
                         URLConnection conn = url.openConnection();
                         InputStream in = conn.getInputStream();
                         BufferedReader reader = new BufferedReader(new InputStreamReader(in));
@@ -199,7 +205,7 @@ public class DropsDetailActivity extends AppCompatActivity implements ViewPager.
                         Message msg = Message.obtain();
                         msg.what = 1001;
                         if(str != null ){
-                            if("12".equals(str)){
+                            if("2".equals(str)){
                                 msg.obj = "评论发布成功";
                                 handler.sendMessage(Message.obtain(handler,1003));
                             }else if("1".equals(str)){
@@ -237,7 +243,7 @@ public class DropsDetailActivity extends AppCompatActivity implements ViewPager.
                 if(DetermineConnServer.isConnByHttp(getApplicationContext())){
                     try {
                         List<Comment> list = new ArrayList<>();
-                        URL url = new URL("http://"+ip+":8080/MoJi/ShowCommentServlet?noteId="+note.getNoteId());
+                        URL url = new URL("http://"+ip+":8080/MoJi/comment/list?noteId="+note.getNoteId());
                         URLConnection conn = url.openConnection();
                         InputStream in = conn.getInputStream();
                         BufferedReader reader = new BufferedReader(new InputStreamReader(in));
@@ -330,29 +336,30 @@ public class DropsDetailActivity extends AppCompatActivity implements ViewPager.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             headImg.setId(View.generateViewId());
         }
-        RelativeLayout.LayoutParams param1 = new RelativeLayout.LayoutParams(DensityUtil.dip2px(this, 40 ), DensityUtil.dip2px(this, 40));
-        relativeLayout.addView(headImg,param1);
-        Glide.with(this).load("http://"+ip+":8080/MoJi/"+comment.getUser().getUserHeadImg()).apply(options).into(headImg);
+        RelativeLayout.LayoutParams param1 = new RelativeLayout.LayoutParams(DensityUtil.dip2px(this, 40), DensityUtil.dip2px(this, 40));
+        relativeLayout.addView(headImg, param1);
+        Glide.with(this).load("http://" + ip + ":8080/MoJi/" + comment.getUser().getUserHeadImg()).apply(options).into(headImg);
 
         TextView content = new TextView(this);
-        RelativeLayout.LayoutParams param2 = new RelativeLayout.LayoutParams(DensityUtil.dip2px(this,160 ), RelativeLayout.LayoutParams.WRAP_CONTENT);
+        RelativeLayout.LayoutParams param2 = new RelativeLayout.LayoutParams(DensityUtil.dip2px(this, 160), RelativeLayout.LayoutParams.WRAP_CONTENT);
         param2.leftMargin = DensityUtil.dip2px(this, 20);
         param2.addRule(RelativeLayout.RIGHT_OF, headImg.getId());
-        relativeLayout.addView(content,param2);
+        relativeLayout.addView(content, param2);
         content.setText(comment.getCommentContent());
 
         TextView date = new TextView(this);
         RelativeLayout.LayoutParams param3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         param3.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        relativeLayout.addView(date,param3);
+        relativeLayout.addView(date, param3);
         date.setText(comment.getCommentTime());
 
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         int db = DensityUtil.dip2px(this, 10);
-        relativeLayout.setPadding(db,db,db,db);
+        relativeLayout.setPadding(db, db, db, db);
         relativeLayout.setBackgroundColor(Color.WHITE);
 
-        layout.addView(relativeLayout,params);
+        layout.addView(relativeLayout, params);
+
 
     }
 

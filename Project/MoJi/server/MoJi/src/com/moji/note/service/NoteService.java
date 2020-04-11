@@ -50,8 +50,8 @@ public class NoteService {
 	* @return       List<Note>    
 	* @throws
 	 */
-	public List<Note> queryVisualNote(){
-		return this.noteMapper.queryVisualNote();
+	public List<Note> queryVisualNote(String userId){
+		return this.noteMapper.queryVisualNote(userId);
 	}
 	
 	/**

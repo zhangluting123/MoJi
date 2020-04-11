@@ -46,7 +46,11 @@
 		on n.user_id=u.user_id
 		left join note_img i
 		on n.note_id=i.noteId
-		where n.self=0
+		where n.self=0 
+		<if test="null != userId and !userId.equals('')">
+			 or u.user_id = #{userId}
+		</if> 
+		
 	</select>
 	<!-- 查询便签 -->
 	<select id="queryNote" resultMap="noteMap">
@@ -70,7 +74,8 @@
 		on n.user_id=u.user_id
 		left join note_img i
 		on n.note_id=i.noteId
-		where (n.user_id=#{userId}) and (n.self=0) and (n.latitude between #{right} and #{left}) and (n.longitude between #{top} and #{bottom})
+		where (n.user_id=#{userId})  and (n.latitude between #{right} and #{left}) and (n.longitude between #{top} and #{bottom})
+		<!-- and (n.self=0) -->
 	</select>
 	<!-- 新增便签 -->
 	<insert id="addNote">

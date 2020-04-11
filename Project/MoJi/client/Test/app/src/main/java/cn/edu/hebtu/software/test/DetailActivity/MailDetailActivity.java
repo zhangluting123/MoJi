@@ -135,7 +135,7 @@ public class MailDetailActivity extends AppCompatActivity {
 
                 try {
                     if(DetermineConnServer.isConnByHttp(getApplicationContext())) {
-                        URL url = new URL("http://" + ip + ":8080/MoJi/DeleteMailServlet?mailId=" + mailId);
+                        URL url = new URL("http://" + ip + ":8080/MoJi/mail/delete?mailId=" + mailId);
                         URLConnection conn = url.openConnection();
                         InputStream in = conn.getInputStream();
                         BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));

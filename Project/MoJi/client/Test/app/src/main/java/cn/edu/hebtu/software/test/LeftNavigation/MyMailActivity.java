@@ -2,28 +2,38 @@ package cn.edu.hebtu.software.test.LeftNavigation;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentTabHost;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import cn.edu.hebtu.software.test.Activity.MainActivity;
 import cn.edu.hebtu.software.test.Adapter.TraceListAdapter;
 import cn.edu.hebtu.software.test.Data.Mail;
 import cn.edu.hebtu.software.test.DetailActivity.MailDetailActivity;
+import cn.edu.hebtu.software.test.Fragment.DropsFragment;
+import cn.edu.hebtu.software.test.Fragment.FootprintFragment;
+import cn.edu.hebtu.software.test.Fragment.MessageFragment;
+import cn.edu.hebtu.software.test.Fragment.NotificationFragment;
 import cn.edu.hebtu.software.test.R;
 import cn.edu.hebtu.software.test.Setting.MyApplication;
+import cn.edu.hebtu.software.test.Util.ActivityManager;
 import cn.edu.hebtu.software.test.Util.DetermineConnServer;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TabHost;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -38,43 +48,27 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.ToDoubleBiFunction;
 /**
  * @ProjectName:    MoJi
- * @Description:    我的消息
- * @Author:         邸凯扬
- * @CreateDate:     2019/12/16 17:33
+ * @Description:    java类作用描述
+ * @Author:         张璐婷
+ * @CreateDate:     2020/4/11 10:55
  * @Version:        1.0
  */
 public class MyMailActivity extends AppCompatActivity {
     private Toolbar toolbar;
-    private int tabId;
-    private RecyclerView rvTrace;
-
-    public static List<Mail> mailList;
-    private TraceListAdapter adapter;
+    private int mailId;
     private MyApplication data;
-    private String ip;
-    private Handler handler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what){
-                case 1001:
-                    Toast.makeText(getApplicationContext(), (CharSequence)msg.obj, Toast.LENGTH_SHORT).show();
-                    break;
-                case 1002:
-                    mailList = (List<Mail>)msg.obj;
-                    initData();
-                    break;
-            }
-        }
-    };
+    private Map<String, TextView> textViewMap = new HashMap<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_mail);
-
+        ActivityManager.getInstance().addActivity(this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -83,19 +77,15 @@ public class MyMailActivity extends AppCompatActivity {
 
         }
 
-        data = (MyApplication)getApplication();
-        ip = data.getIp();
-
         toolbar = findViewById(R.id.myMail_toolbar);
-        Intent request= getIntent();
-        tabId = request.getIntExtra("tab", 0);
+        data = (MyApplication)getApplication();
+        mailId = data.getMailTabId();
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent response = new Intent(MyMailActivity.this, MainActivity.class);
                 response.putExtra("flag",true);
-                response.putExtra("tab", tabId);
                 startActivity(response);
                 overridePendingTransition(R.animator.in_from_left, R.animator.out_to_right);
                 finish();
@@ -103,71 +93,61 @@ public class MyMailActivity extends AppCompatActivity {
         });
 
 
-        findView();
-        sendToServer();
+        FragmentTabHost fragmentTabHost = findViewById(android.R.id.tabhost);
+        fragmentTabHost.setup(this,
+                getSupportFragmentManager(),//FragmentManager对象用来管理多个Fragment
+                android.R.id.tabcontent);//真正显示内容页面的容器的id
 
-    }
+        //私信
+        TabHost.TabSpec message = fragmentTabHost.newTabSpec("message").setIndicator(getTabSpecView("message","私信"));
+        fragmentTabHost.addTab(message, MessageFragment.class, null);
+        //通知
+        TabHost.TabSpec notification = fragmentTabHost.newTabSpec("notification").setIndicator(getTabSpecView("notification","通知"));
+        fragmentTabHost.addTab(notification, NotificationFragment.class, null);
 
-    private void findView() {
-        rvTrace = findViewById(R.id.rvTrace);
-    }
+        //默认选中第一项
+        fragmentTabHost.setCurrentTab(mailId);
+        switch (mailId){
+            case 0:
+                textViewMap.get("message").setTextColor(getResources().getColor(R.color.MyTheam_color));
+                break;
+            case 1:
+                textViewMap.get("notification").setTextColor(getResources().getColor(R.color.MyTheam_color));
+                break;
+        }
 
-    private  void initData() {
-        adapter = new TraceListAdapter(this, mailList);
-        rvTrace.setLayoutManager(new LinearLayoutManager(this));
-        rvTrace.setAdapter(adapter);
-        adapter.setOnItemClickListener(new TraceListAdapter.OnItemClickListener() {
+        //切换选项卡的事件监听器
+        fragmentTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             @Override
-            public void onClick(int position) {
-                Intent intent = new Intent(MyMailActivity.this, MailDetailActivity.class);
-                Gson gson = new Gson();
-                String str = gson.toJson(mailList.get(position));
-                intent.putExtra("extra",str );
-                startActivity(intent);
+            public void onTabChanged(String tabId) {
+                switch (tabId){
+                    case "message":
+                        data.setMailTabId(0);
+                        textViewMap.get("message").setTextColor(getResources().getColor(R.color.MyTheam_color));
+                        textViewMap.get("notification").setTextColor(Color.BLACK);
+                        break;
+                    case "notification":
+                        data.setMailTabId(1);
+                        textViewMap.get("notification").setTextColor(getResources().getColor(R.color.MyTheam_color));
+                        textViewMap.get("message").setTextColor(Color.BLACK);
+                        break;
+                }
             }
         });
-    }
-
-    private void sendToServer() {
-        new Thread() {
-            @Override
-            public void run() {
-
-                try {
-                    if(DetermineConnServer.isConnByHttp(getApplicationContext())) {
-                        List<Mail> list = new ArrayList<>();
-                        URL url = new URL("http://" + ip + ":8080/MoJi/QueryMailServlet?userId=" + data.getUser().getUserId());
-                        URLConnection conn = url.openConnection();
-                        InputStream in = conn.getInputStream();
-                        BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));
-                        String info = reader.readLine();
-                        if (info != null) {
-                            Gson gson = new Gson();
-                            Type type = new TypeToken<List<Mail>>(){}.getType();
-                            list = gson.fromJson(info, type);
-                            Message msg = new Message();
-                            msg.what = 1002;
-                            msg.obj = list;
-                            handler.sendMessage(msg);
-                        }
-                    }else{
-                        Message msg = new Message();
-                        msg.what = 1001;
-                        msg.obj = "未连接到服务器";
-                        handler.sendMessage(msg);
-                    }
-
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        }.start();
 
     }
-    
+
+    private View getTabSpecView(String tag, String title) {
+        LayoutInflater layoutInflater = getLayoutInflater();
+        View view = layoutInflater.inflate(R.layout.mail_tabspec_layout,null);
+
+        TextView textView = view.findViewById(R.id.tv_content);
+        textView.setText(title);
+
+        textViewMap.put(tag,textView);
+        return view;
+    }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {

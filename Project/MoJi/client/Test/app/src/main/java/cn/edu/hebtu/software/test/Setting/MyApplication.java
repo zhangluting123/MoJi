@@ -26,6 +26,9 @@ public class MyApplication extends Application {
 
     private String msgPermission;
 
+    private int tabId = 0;
+    private int mailTabId = 0;
+
     public void onCreate() {
 
         super.onCreate();
@@ -104,4 +107,19 @@ public class MyApplication extends Application {
         this.msgPermission = msgPermission;
     }
 
+    public int getTabId() {
+        return tabId;
+    }
+
+    public void setTabId(int tabId) {
+        this.tabId = tabId;
+    }
+
+    public int getMailTabId() {
+        return mailTabId;
+    }
+
+    public void setMailTabId(int mailTabId) {
+        this.mailTabId = mailTabId;
+    }
 }

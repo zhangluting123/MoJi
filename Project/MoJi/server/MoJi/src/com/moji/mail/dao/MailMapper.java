@@ -44,7 +44,7 @@ public interface MailMapper {
 	* @return       boolean    
 	* @throws
 	 */
-	public int deleteMail(@Param("mialId")int mailId);
+	public int deleteMail(@Param("mailId")int mailId);
 	
 	/**
 	* @author:      张璐婷 

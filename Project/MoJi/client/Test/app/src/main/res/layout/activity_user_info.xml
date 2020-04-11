@@ -69,7 +69,7 @@
                         android:id="@+id/iv_userHead"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
-                        android:src="@mipmap/default_head"/>
+                        android:src="@drawable/headportrait"/>
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"

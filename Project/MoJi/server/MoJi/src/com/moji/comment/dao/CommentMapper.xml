@@ -23,8 +23,7 @@
 	<select id="showComment" resultMap="commentMap">
 		select * 
 		from comment_detail c
-		left join user_detail u
-		on c.comment_user_id=u.user_id
+		left join user_detail u on c.comment_user_id=u.user_id
 		where c.note_id=#{noteId}
 	</select>
 	<!-- 新增评论 -->

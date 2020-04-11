@@ -59,7 +59,7 @@ public class GuidePageActivity extends AppCompatActivity implements ViewPager.On
             @Override
             public void onClick(View v) {
                 //跳转到主activity
-                Intent intent = new Intent(GuidePageActivity.this, LoginInActivity.class);
+                Intent intent = new Intent(GuidePageActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
             }

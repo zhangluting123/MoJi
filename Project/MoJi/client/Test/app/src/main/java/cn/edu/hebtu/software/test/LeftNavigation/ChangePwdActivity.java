@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import cn.edu.hebtu.software.test.R;
 import cn.edu.hebtu.software.test.Setting.MyApplication;
+import cn.edu.hebtu.software.test.Util.ActivityManager;
 import cn.edu.hebtu.software.test.Util.DetermineConnServer;
 
 import android.content.Intent;
@@ -40,7 +41,6 @@ public class ChangePwdActivity extends AppCompatActivity {
     private EditText oldPwd;
     private EditText newPwd;
     private EditText confirmPwd;
-    private int tabId;
     private String ip;
     private MyApplication data;
     private Handler mHandler = new Handler(){
@@ -58,7 +58,7 @@ public class ChangePwdActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_pwd);
-
+        ActivityManager.getInstance().addActivity(this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -70,14 +70,11 @@ public class ChangePwdActivity extends AppCompatActivity {
         getViews();
         data = (MyApplication)getApplication();
         ip = data.getIp();
-        Intent intent = getIntent();
-        tabId = intent.getIntExtra("tab",0);
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent response = new Intent(ChangePwdActivity.this, SettingActivity.class);
-                response.putExtra("tab", tabId);
                 startActivity(response);
                 overridePendingTransition(R.animator.in_from_left, R.animator.out_to_right);
                 finish();
@@ -122,7 +119,7 @@ public class ChangePwdActivity extends AppCompatActivity {
             public void run() {
                 try {
                     if(DetermineConnServer.isConnByHttp(getApplicationContext())) {
-                        URL url = new URL("http://" + ip + ":8080/MoJi/ChangeUserPwdServlet?newPwd=" + newPwd.getText().toString() + "&userId=" + data.getUser().getUserId());
+                        URL url = new URL("http://" + ip + ":8080/MoJi/user/changePwd?newPwd=" + newPwd.getText().toString() + "&userId=" + data.getUser().getUserId());
                         URLConnection conn = url.openConnection();
                         InputStream in = conn.getInputStream();
                         BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));

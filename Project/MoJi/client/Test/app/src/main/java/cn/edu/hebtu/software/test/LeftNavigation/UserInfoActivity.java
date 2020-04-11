@@ -10,6 +10,7 @@ import cn.edu.hebtu.software.test.Data.User;
 import cn.edu.hebtu.software.test.R;
 import cn.edu.hebtu.software.test.Setting.MyApplication;
 import cn.edu.hebtu.software.test.UploadAndDownload.UploadUserMsg;
+import cn.edu.hebtu.software.test.Util.ActivityManager;
 import cn.edu.hebtu.software.test.Util.FileUtil;
 
 import android.Manifest;
@@ -113,6 +114,7 @@ public class UserInfoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_info);
+        ActivityManager.getInstance().addActivity(this);
 
         final MyApplication data = (MyApplication) getApplication();
         currentUser = data.getUser();
@@ -147,10 +149,7 @@ public class UserInfoActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent request = getIntent();
-                int tabId = request.getIntExtra("tab", 0);
                 Intent response = new Intent(UserInfoActivity.this,MineActivity.class);
-                response.putExtra("tab",tabId);
                 startActivity(response);
                 finish();
             }
@@ -269,7 +268,7 @@ public class UserInfoActivity extends AppCompatActivity {
                     }
 
                     UploadUserMsg task = new UploadUserMsg(getApplicationContext(), user, is);
-                    task.execute("http://"+ ip +":8080/MoJi/ChangeUserMsgServlet");//10.7.89.1  ; WIFI 192.168.137.1
+                    task.execute("http://"+ ip +":8080/MoJi/user/changeMsg");
 
                     break;
             }
