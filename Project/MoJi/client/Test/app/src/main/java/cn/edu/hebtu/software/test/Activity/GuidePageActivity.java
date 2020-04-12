@@ -36,7 +36,7 @@ public class GuidePageActivity extends AppCompatActivity implements ViewPager.On
     private int []imageIdArray;//图片资源的数组
     private List<View> viewList;//图片资源的集合
     private ViewGroup vg;//放置圆点
-
+    
     //实例化圆点View
     private ImageView point;
     private ImageView[] ivPointArray;
