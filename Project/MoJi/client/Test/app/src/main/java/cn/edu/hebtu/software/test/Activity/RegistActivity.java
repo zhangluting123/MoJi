@@ -29,6 +29,13 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+/**
+ * @ProjectName:    MoJi
+ * @Description:    注册页面
+ * @Author:         王佳成 | 张璐婷
+ * @CreateDate:     2019/11/26 15:32
+ * @Version:        1.0
+ */
 
 public class RegistActivity extends AppCompatActivity {
     private EditText edtTel;
