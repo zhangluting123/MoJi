@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +24,7 @@ import com.baidu.mapapi.SDKInitializer;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
+import com.baidu.mapapi.map.InfoWindow;
 import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
@@ -51,10 +53,10 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import cn.edu.hebtu.software.test.DetailActivity.ShowNoteActivity;
 import cn.edu.hebtu.software.test.Data.Note;
-import cn.edu.hebtu.software.test.Setting.MyApplication;
+import cn.edu.hebtu.software.test.DetailActivity.ShowNoteActivity;
 import cn.edu.hebtu.software.test.R;
+import cn.edu.hebtu.software.test.Setting.MyApplication;
 import cn.edu.hebtu.software.test.Util.DetermineConnServer;
 
 
@@ -190,7 +192,7 @@ public class FootprintFragment extends Fragment {
      */
     private void zoomLevelOp() {
         //设置允许放大和缩小的比例范围
-        baiduMap.setMaxAndMinZoomLevel(21, 10);
+        baiduMap.setMaxAndMinZoomLevel(21, 6);
         //设置默认比例为100m
         MapStatusUpdate msu = MapStatusUpdateFactory
                 .zoomTo(19);
@@ -287,16 +289,44 @@ public class FootprintFragment extends Fragment {
         public boolean onMarkerClick(Marker marker) {
             //从marker中获取info信息
             Bundle bundle = marker.getExtraInfo();
-            Note note = (Note) bundle.getParcelable("note");
-            //全局变量设置当前便签id
-            final MyApplication data = (MyApplication) getActivity().getApplication();
-            data.setCurrentNoteId(note.getNoteId());
+            final Note note = (Note) bundle.getParcelable("note");
 
-            Intent jumpToShow = new Intent(getActivity(), ShowNoteActivity.class);
-            Gson gson = new Gson();
-            String noteStr = gson.toJson(note);
-            jumpToShow.putExtra("noteJsonStr", noteStr);
-            startActivity(jumpToShow);
+            LayoutInflater inflater = LayoutInflater.from(getActivity().getApplicationContext());
+            View view = inflater.inflate(R.layout.activity_my_foot_infowindow, null);
+            final TextView textTime = (TextView) view.findViewById(R.id.text_item_time);
+            final TextView textLatLng = (TextView)view.findViewById(R.id.text_item_latlng);
+            final TextView textTitle = (TextView) view.findViewById(R.id.ed_item_title);
+            Button btnSee = (Button) view.findViewById(R.id.btn_see);
+            Button btnCancel = (Button) view.findViewById(R.id.btn_cancel);
+            textTime.setText("发布时间:" + note.getTime());
+            textLatLng.setText("纬度:"+note.getLatitude()+";经度:"+note.getLongitude());
+            textTitle.setText("标题:"+note.getTitle());
+            final LatLng lngFinal = new LatLng(note.getLatitude(),note.getLongitude());
+            //点击view上面的按钮调用方法
+            btnSee.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //全局变量设置当前便签id
+                    final MyApplication data = (MyApplication) getActivity().getApplication();
+                    data.setCurrentNoteId(note.getNoteId());
+
+                    Intent jumpToShow = new Intent(getActivity(), ShowNoteActivity.class);
+                    Gson gson = new Gson();
+                    String noteStr = gson.toJson(note);
+                    jumpToShow.putExtra("noteJsonStr", noteStr);
+                    startActivity(jumpToShow);
+                }
+            });
+            //点击取消按钮
+            btnCancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    baiduMap.hideInfoWindow();
+                }
+            });
+
+            InfoWindow infoWindow = new InfoWindow(view, lngFinal, -47);
+            baiduMap.showInfoWindow(infoWindow);
 
             return true;
         }
