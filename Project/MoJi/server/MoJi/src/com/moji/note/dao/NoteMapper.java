@@ -8,7 +8,6 @@
  */
 package com.moji.note.dao;
 
-import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
@@ -25,7 +24,17 @@ import com.moji.entity.Note;
  */
 public interface NoteMapper {
 	
-
+	/**
+	 * 
+	 * @Title: changeSelf
+	 * @Description: 更改便签的公开性
+	 * @param @param noteId
+	 * @param @return 参数
+	 * @return int 返回类型
+	 * @throws
+	 */
+	public int changeSelf(@Param("noteId")String noteId, @Param("self")int self);
+	
 	/**
 	 * 
 	* @author:      张璐婷 

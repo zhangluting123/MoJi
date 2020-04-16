@@ -33,6 +33,19 @@ public class NoteService {
 	
 	/**
 	 * 
+	 * @Title: changeSelf
+	 * @Description: 改变便签的公开性
+	 * @param @param noteId
+	 * @param @return 参数
+	 * @return int 返回类型
+	 * @throws
+	 */
+	public int changeSelf(String noteId, int self) {
+		return this.noteMapper.changeSelf(noteId,self);
+	}
+	
+	/**
+	 * 
 	* @author:      张璐婷 
 	* @Description: 查询指定便签的userId
 	* @param        @throws SQLException  

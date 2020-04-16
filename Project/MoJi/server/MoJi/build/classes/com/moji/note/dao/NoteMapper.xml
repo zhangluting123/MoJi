@@ -28,6 +28,10 @@
 			<result property="noteId" column="noteId"/>
 		</collection>
 	</resultMap>
+	<!-- 更改便签的公开性 -->
+	<update id="changeSelf">
+		update note_detail set self=#{self} where note_id=#{noteId}
+	</update>
 	<!-- 查询指定便签的userId -->
 	<select id="queryUserId" resultMap="noteMap">
 		select * 

@@ -47,6 +47,20 @@ public class NoteController {
 	@Autowired
 	private NoteService noteService;
 	
+	@RequestMapping(value="/changeSelf", method=RequestMethod.GET)
+	public String changeSelf(HttpServletRequest request, 
+			@RequestParam(value="noteId",required=true)String noteId,
+			@RequestParam(value="self",required=true)int self) {//self是更改后的状态
+		int i = this.noteService.changeSelf(noteId, self);
+		String re = "0";
+		if(i > 0) {
+			re = self+"";
+		}else {
+			re = "noChange";
+		}
+		return re;
+	}
+	
 	@RequestMapping(value="/countPlace", method=RequestMethod.GET)
 	public String countPlace(HttpServletRequest request, @RequestParam(value="userId",required=true)String userId) {
 		List<Note> notes = this.noteService.queryNote(userId);
@@ -152,7 +166,7 @@ public class NoteController {
 		System.out.println("left:" + left + ";right:" + right + ";top:" + top + ";botom:" + bottom);
 		int i;
 		List<Note> notes = this.noteService.checkNote(userId, left, right, top, bottom);
-		if(notes != null) {
+		if(notes.size() > 0) {
 			i = this.noteService.addNote(
 					imgs,
 					id, 
