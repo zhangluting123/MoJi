@@ -14,7 +14,7 @@
     </style>
 
     <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
-        <item name="android:textSize">17sp</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
     <style name="OverFlowMenuTheme" parent="Theme.AppCompat.NoActionBar">
@@ -52,5 +52,9 @@
     <style name="FragmentDialogAnimation">
         <item name="android:windowEnterAnimation">@animator/dialog_enter</item>
         <item name="android:windowExitAnimation">@animator/dialog_out2</item>
+    </style>
+
+    <style name="popup_menu">
+        <item name="android:windowEnterAnimation">@animator/popup_munu_in</item>
     </style>
 </resources>

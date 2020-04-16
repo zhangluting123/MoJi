@@ -115,6 +115,20 @@ public class User implements Parcelable {
     }
 
     @Override
+    public String toString() {
+        return "User{" +
+                "userId='" + userId + '\'' +
+                ", userHeadImg='" + userHeadImg + '\'' +
+                ", userName='" + userName + '\'' +
+                ", sex='" + sex + '\'' +
+                ", signature='" + signature + '\'' +
+                ", occupation='" + occupation + '\'' +
+                ", password='" + password + '\'' +
+                ", phone='" + phone + '\'' +
+                '}';
+    }
+
+    @Override
     public int describeContents() {
         return 0;
     }

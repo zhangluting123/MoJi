@@ -1,6 +1,5 @@
 package cn.edu.hebtu.software.test.UploadAndDownload;
 
-import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -12,8 +11,6 @@ import java.util.List;
 
 import cn.edu.hebtu.software.test.Activity.MainActivity;
 import cn.edu.hebtu.software.test.Data.Note;
-import cn.edu.hebtu.software.test.DetailActivity.AddNoteActivity;
-import cn.edu.hebtu.software.test.R;
 import cn.edu.hebtu.software.test.Util.DetermineConnServer;
 import okhttp3.Call;
 import okhttp3.Headers;
@@ -79,11 +76,14 @@ public class UploadFileTask extends AsyncTask<String, Void, String> {
                     .build();
 
             Call call = client.newCall(request);
+            Response response = null;
             try {
-                Response response = call.execute();
+                response = call.execute();
                 return response.body().string();
             } catch (IOException e) {
                 e.printStackTrace();
+            } finally {
+                response.close();
             }
             return null;
         }else{

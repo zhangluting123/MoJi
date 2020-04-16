@@ -31,7 +31,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".LeftNavigation.TimelineActivity"></activity>
+        <activity android:name=".DetailActivity.ReplyCommentActivity"></activity>
+        <activity android:name=".LeftNavigation.TimelineActivity" />
         <activity android:name=".Activity.RegistActivity" />
         <activity android:name=".LeftNavigation.AboutUsActivity" />
         <activity android:name=".LeftNavigation.ChangePwdActivity" />
@@ -54,8 +55,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".DetailActivity.MailDetailActivity" />
+
         <activity
             android:name=".DetailActivity.DropsDetailActivity"
+            android:configChanges="keyboardHidden"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".LeftNavigation.UserInfoActivity"

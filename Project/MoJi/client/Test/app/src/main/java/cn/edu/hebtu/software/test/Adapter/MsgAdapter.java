@@ -1,8 +1,6 @@
 package cn.edu.hebtu.software.test.Adapter;
 
 import android.content.Context;
-import android.media.audiofx.LoudnessEnhancer;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,7 +69,7 @@ public class MsgAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return position;
     }
 
     @Override

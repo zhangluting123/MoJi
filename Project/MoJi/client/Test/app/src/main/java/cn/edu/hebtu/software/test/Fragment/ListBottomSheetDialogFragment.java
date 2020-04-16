@@ -216,7 +216,7 @@ public class ListBottomSheetDialogFragment extends BottomSheetDialogFragment {
             RequestOptions requestOptions = new RequestOptions();
             requestOptions.circleCrop();
             Glide.with(getActivity().getApplicationContext()).load("http://" + ip + ":8080/MoJi/" + commentList.get(position).getUser().getUserHeadImg()).apply(requestOptions).into(holder.commentAvatar);
-            holder.commentUserName.setText(commentList.get(position).getUserName());
+            holder.commentUserName.setText(commentList.get(position).getUser().getUserName());
             holder.commentContent.setText(commentList.get(position).getCommentContent());
             holder.commentTime.setText(commentList.get(position).getCommentTime());
 //            holder.itemView.setOnClickListener(new View.OnClickListener() {

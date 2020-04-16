@@ -1,24 +1,40 @@
 package cn.edu.hebtu.software.test.DetailActivity;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.inputmethodservice.KeyboardView;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,17 +62,20 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.widget.ImageViewCompat;
 import androidx.viewpager.widget.ViewPager;
+import cn.edu.hebtu.software.test.Adapter.CommentAdapter;
 import cn.edu.hebtu.software.test.Adapter.GuidePageAdapter;
 import cn.edu.hebtu.software.test.Data.Comment;
 import cn.edu.hebtu.software.test.Data.Note;
 import cn.edu.hebtu.software.test.Data.User;
 import cn.edu.hebtu.software.test.Setting.MyApplication;
 import cn.edu.hebtu.software.test.R;
-import cn.edu.hebtu.software.test.Util.DensityUtil;
+import cn.edu.hebtu.software.test.Util.ActivityManager;
 import cn.edu.hebtu.software.test.Util.DetermineConnServer;
+import cn.edu.hebtu.software.test.Util.SoftKeyBoardListener;
+import cn.edu.hebtu.software.test.View.InnerScrollListView;
 
 /**
  * @ProjectName: MoJi
@@ -76,7 +95,7 @@ public class DropsDetailActivity extends AppCompatActivity implements ViewPager.
     private TextView commentCount;
     private EditText edtInsertComment;
     private Button btnSubmitComment;
-    private LinearLayout layout;
+    private LinearLayout noComment;
     private Note note;
     private List<Comment> commentList;
     private RequestOptions options = new RequestOptions().circleCrop();
@@ -90,10 +109,13 @@ public class DropsDetailActivity extends AppCompatActivity implements ViewPager.
     private ImageView[] ivPointArray;
 
     private LinearLayout.LayoutParams layoutParams;
+    private PopupWindow popupWindow;
 
     private MyApplication data;
     private String ip;
     private User user;
+
+    private CommentAdapter commentAdapter;
 
     private Handler handler = new Handler(){
         @Override
@@ -113,7 +135,11 @@ public class DropsDetailActivity extends AppCompatActivity implements ViewPager.
                     comment.setUser(user);
                     comment.setCommentContent(edtInsertComment.getText().toString().trim());
                     comment.setCommentTime("今天");
-                    insertComment(comment);
+                    commentList.add(comment);
+                    if(commentList.size() <= 0) {
+                        noComment.setVisibility(View.GONE);
+                    }
+                    commentAdapter.flush(commentList);
 
             }
         }
@@ -125,6 +151,7 @@ public class DropsDetailActivity extends AppCompatActivity implements ViewPager.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dropsdetail);
 
+        ActivityManager.getInstance().addActivity(this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -177,7 +204,14 @@ public class DropsDetailActivity extends AppCompatActivity implements ViewPager.
                     if (content.length() == 0) {
                         Toast.makeText(DropsDetailActivity.this, "评论内容不能为空", Toast.LENGTH_SHORT).show();
                     } else {
-                        insertComment(content);
+                        if(edtInsertComment.getHint().equals("请输入评论")) {
+                            insertComment(content);
+                        }else{
+                            //TODO
+                            Toast.makeText(getApplicationContext(), "回复评论---", Toast.LENGTH_SHORT).show();
+                            edtInsertComment.setHint("请输入评论");
+                            edtInsertComment.setText("");
+                        }
                     }
                 }else{
                     Toast.makeText(getApplicationContext(), "请先登录", Toast.LENGTH_LONG).show();
@@ -185,95 +219,6 @@ public class DropsDetailActivity extends AppCompatActivity implements ViewPager.
             }
         });
 
-    }
-    /**
-     *  @author: 张璐婷
-     *  @time: 2019/12/11  18:39
-     *  @Description: 插入评论
-     */
-    private void insertComment(String content){
-        new Thread(){
-            @Override
-            public void run() {
-                if(DetermineConnServer.isConnByHttp(getApplicationContext())){
-                    try {
-                        URL url = new URL("http://"+ip+":8080/MoJi/comment/add?noteId="+note.getNoteId()+"&userId="+data.getUser().getUserId()+"&commentContent="+content);
-                        URLConnection conn = url.openConnection();
-                        InputStream in = conn.getInputStream();
-                        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-                        String str = reader.readLine();
-                        Message msg = Message.obtain();
-                        msg.what = 1001;
-                        if(str != null ){
-                            if("2".equals(str)){
-                                msg.obj = "评论发布成功";
-                                handler.sendMessage(Message.obtain(handler,1003));
-                            }else if("1".equals(str)){
-                                msg.obj = "评论发布成功[未发送通知]";
-                            }
-                        }else{
-                            msg.obj = "评论发布失败";
-                        }
-                        handler.sendMessage(msg);
-
-                        in.close();
-                        reader.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }else{
-                    Message message  = Message.obtain();
-                    message.what = 1001;
-                    message.obj = "未连接到服务器";
-                    handler.sendMessage(message);
-                }
-            }
-        }.start();
-    }
-
-    /**
-     *  @author: 张璐婷
-     *  @time: 2019/12/11  18:39
-     *  @Description: 获得评论
-     */
-    private void getComments(){
-        new Thread(){
-            @Override
-            public void run() {
-                if(DetermineConnServer.isConnByHttp(getApplicationContext())){
-                    try {
-                        List<Comment> list = new ArrayList<>();
-                        URL url = new URL("http://"+ip+":8080/MoJi/comment/list?noteId="+note.getNoteId());
-                        URLConnection conn = url.openConnection();
-                        InputStream in = conn.getInputStream();
-                        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-                        String str = null;
-                        while((str = reader.readLine()) != null){
-                            Gson gson = new Gson();
-                            Type type = new TypeToken<List<Comment>>(){}.getType();
-                            list = gson.fromJson(str,type);
-                        }
-                        Message msg = Message.obtain();
-                        msg.what = 1002;
-                        msg.obj = list;
-                        handler.sendMessage(msg);
-
-                        in.close();
-                        reader.close();
-                    } catch (MalformedURLException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                }else{
-                    Message message  = Message.obtain();
-                    message.what = 1001;
-                    message.obj = "未连接到服务器";
-                    handler.sendMessage(message);
-                }
-            }
-        }.start();
     }
 
     private void getViews() {
@@ -286,6 +231,7 @@ public class DropsDetailActivity extends AppCompatActivity implements ViewPager.
         commentCount = findViewById(R.id.tv_commentCount);
         edtInsertComment = findViewById(R.id.edt_insertComment);
         btnSubmitComment = findViewById(R.id.btn_submitComment);
+        noComment = findViewById(R.id.ll_noComment);
         vp = findViewById(R.id.vp_glide);
         vg = findViewById(R.id.guide_ll_point);
     }
@@ -300,10 +246,8 @@ public class DropsDetailActivity extends AppCompatActivity implements ViewPager.
             commentCount.setText("0");
             noComment();
         }else{
-            for(int i = 0; i < commentList.size(); i++){
-                insertComment(commentList.get(i));
-            }
-            commentCount.setText(commentList.size()+"");
+           commentCount.setText(commentList.size()+"");
+            showCommentList();
         }
     }
     /**
@@ -312,57 +256,152 @@ public class DropsDetailActivity extends AppCompatActivity implements ViewPager.
      *  @Description: 没有评论
      */
     private void noComment(){
-        layout = findViewById(R.id.ll_comment);
-        RelativeLayout relativeLayout = new RelativeLayout(this);
-        TextView content = new TextView(this);
-        RelativeLayout.LayoutParams param2 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        int dis =  DensityUtil.dip2px(this, 30);
-        param2.setMargins(dis,dis,dis,dis);
-        relativeLayout.addView(content,param2);
-        layout.addView(relativeLayout);
-        content.setText("还没有评论，快来评论吧！");
+        noComment.setVisibility(View.VISIBLE);
     }
 
     /**
      *  @author: 张璐婷
-     *  @time: 2019/12/11  18:40
-     *  @Description: 插入评论
+     *  @time: 2020/4/14  8:48
+     *  @Description: 展示评论列表
      */
-    private void insertComment(Comment comment){
-        layout = findViewById(R.id.ll_comment);
-        RelativeLayout relativeLayout = new RelativeLayout(this);
+    private void showCommentList(){
+        ListView listView = findViewById(R.id.comment_list);
+        commentAdapter = new CommentAdapter( commentList, R.layout.item_comment, getApplicationContext());
+        listView.setAdapter(commentAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                edtInsertComment.setHint("回复@"+commentList.get(position).getUser().getUserName());
+                edtInsertComment.setHintTextColor(getResources().getColor(android.R.color.darker_gray));
+                edtInsertComment.setSelection(0);
+                edtInsertComment.setFocusable(true);
+                //弹出键盘
+                InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+            }
+        });
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                showPopupWindow(parent,commentList.get(position));
+                return true;
+            }
+        });
+    }
 
-        ImageView headImg = new ImageView(this);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            headImg.setId(View.generateViewId());
-        }
-        RelativeLayout.LayoutParams param1 = new RelativeLayout.LayoutParams(DensityUtil.dip2px(this, 40), DensityUtil.dip2px(this, 40));
-        relativeLayout.addView(headImg, param1);
-        Glide.with(this).load("http://" + ip + ":8080/MoJi/" + comment.getUser().getUserHeadImg()).apply(options).into(headImg);
+    /**
+     *  @author: 张璐婷
+     *  @time: 2020/4/13  16:53
+     *  @Description: 点击评论弹出菜单
+     */
 
-        TextView content = new TextView(this);
-        RelativeLayout.LayoutParams param2 = new RelativeLayout.LayoutParams(DensityUtil.dip2px(this, 160), RelativeLayout.LayoutParams.WRAP_CONTENT);
-        param2.leftMargin = DensityUtil.dip2px(this, 20);
-        param2.addRule(RelativeLayout.RIGHT_OF, headImg.getId());
-        relativeLayout.addView(content, param2);
-        content.setText(comment.getCommentContent());
-
-        TextView date = new TextView(this);
-        RelativeLayout.LayoutParams param3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        param3.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        relativeLayout.addView(date, param3);
-        date.setText(comment.getCommentTime());
-
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        int db = DensityUtil.dip2px(this, 10);
-        relativeLayout.setPadding(db, db, db, db);
-        relativeLayout.setBackgroundColor(Color.WHITE);
-
-        layout.addView(relativeLayout, params);
-
+    private void showPopupWindow(AdapterView<?> parent, Comment comment){
+        View v = LayoutInflater.from(getApplicationContext()).inflate(R.layout.popup_menu,null);
+        popupWindow = new PopupWindow(this);
+        popupWindow.setContentView(v);
+        registerListener(comment,v);
+        popupWindow.setTouchable(true);
+        popupWindow.setFocusable(true); //设置点击menu以外其他地方以及返回键退出
+        popupWindow.setOutsideTouchable(true);  //设置触摸外面时消失
+        //设置弹出位置
+        popupWindow.showAtLocation(parent, Gravity.CENTER,0,0);
+        popupWindow.setAnimationStyle(R.style.popup_menu);
+        //设置弹出时背景色变暗
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        lp.alpha = 0.4f;
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        getWindow().setAttributes(lp);
+        //关闭时背景色恢复
+        popupWindow.setOnDismissListener(() -> {
+            WindowManager.LayoutParams lp1 = getWindow().getAttributes();
+            lp1.alpha = 1f;
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+            getWindow().setAttributes(lp1);
+        });
 
     }
 
+    /**
+     *  @author: 张璐婷
+     *  @time: 2020/4/14  17:06
+     *  @Description: 监听器类
+     */
+    class CustomerOnClickListener implements View.OnClickListener {
+        private Comment comment;
+        public CustomerOnClickListener(Comment comment){
+            this.comment = comment;
+        }
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.share:
+
+                    Toast.makeText(getApplicationContext(), "分享评论", Toast.LENGTH_SHORT).show();
+                    break;
+                case R.id.copy:
+                    ClipboardManager manager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                    ClipData clipData = ClipData.newPlainText("tag1", comment.getCommentContent());
+                    manager.setPrimaryClip(clipData);
+                    Toast.makeText(getApplicationContext(), "已加入剪切板", Toast.LENGTH_SHORT).show();
+                    break;
+                case R.id.report:
+                    Toast.makeText(getApplicationContext(), "举报评论", Toast.LENGTH_SHORT).show();
+                    break;
+            }
+            popupWindow.dismiss();
+        }
+
+    }
+
+    /**
+     *  @author: 张璐婷
+     *  @time: 2020/4/14  17:05
+     *  @Description: 注册PopupWindow中元素的监听器
+     *  必须是同一个视图点击才有效
+     */
+    private void registerListener(Comment comment,View v){
+        CustomerOnClickListener listener = new CustomerOnClickListener(comment);
+        Button report = v.findViewById(R.id.report);
+        Button share = v.findViewById(R.id.share);
+        Button copy = v.findViewById(R.id.copy);
+        report.setOnClickListener(listener);
+        share.setOnClickListener(listener);
+        copy.setOnClickListener(listener);
+    }
+
+
+    /**
+     *  @author: 张璐婷
+     *  @time: 2020/4/14  17:06
+     *  @Description: 触屏操作
+     */
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        onKeyBoardListener();
+        return super.dispatchTouchEvent(ev);
+    }
+
+    /**
+     *  @author: 张璐婷
+     *  @time: 2020/4/16  8:44
+     *  @Description: 监听键盘是否弹起
+     */
+    private void onKeyBoardListener(){
+        SoftKeyBoardListener.setListener(DropsDetailActivity.this, new SoftKeyBoardListener.OnSoftKeyBoardChangeListener() {
+            @Override
+            public void keyBoardShow(int height) {
+//                Log.e("软键盘显示高度", height+"");
+            }
+
+            @Override
+            public void keyBoardHide(int height) {
+//                Log.e("软键盘隐藏高度", height+"");
+                if(!edtInsertComment.getHint().equals("请输入评论")) {
+                    edtInsertComment.setHint("请输入评论");
+                }
+            }
+        });
+    }
 
     /**
      * 加载底部圆点
@@ -467,5 +506,105 @@ public class DropsDetailActivity extends AppCompatActivity implements ViewPager.
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
 
+    }
+
+
+
+    /**
+     *  @author: 张璐婷
+     *  @time: 2019/12/11  18:39
+     *  @Description: 插入评论
+     */
+    private void insertComment(String content){
+            new Thread(){
+            @Override
+            public void run() {
+                if(DetermineConnServer.isConnByHttp(getApplicationContext())){
+                    try {
+                        URL url = new URL("http://"+ip+":8080/MoJi/comment/add?noteId="+note.getNoteId()+"&userId="+data.getUser().getUserId()+"&commentContent="+content);
+                        URLConnection conn = url.openConnection();
+                        InputStream in = conn.getInputStream();
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+                        String str = reader.readLine();
+                        Message msg = Message.obtain();
+                        msg.what = 1001;
+                        if(str != null ){
+                            if("2".equals(str)){
+                                msg.obj = "评论发布成功";
+                                handler.sendMessage(Message.obtain(handler,1003));
+                            }else if("1".equals(str)){
+                                msg.obj = "评论发布成功[未发送通知]";
+                                handler.sendMessage(Message.obtain(handler,1003));
+                            }
+                        }else{
+                            msg.obj = "评论发布失败";
+                            handler.sendMessage(Message.obtain(handler,1001));
+                        }
+
+                        in.close();
+                        reader.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                    Message message  = Message.obtain();
+                    message.obj = "未连接到服务器";
+                    handler.sendMessage(Message.obtain(handler,1001));
+                }
+            }
+        }.start();
+    }
+
+    /**
+     *  @author: 张璐婷
+     *  @time: 2019/12/11  18:39
+     *  @Description: 获得评论
+     */
+    private void getComments(){
+        new Thread(){
+            @Override
+            public void run() {
+                if(DetermineConnServer.isConnByHttp(getApplicationContext())){
+                    try {
+                        List<Comment> list = new ArrayList<>();
+                        URL url = new URL("http://"+ip+":8080/MoJi/comment/list?noteId="+note.getNoteId());
+                        URLConnection conn = url.openConnection();
+                        InputStream in = conn.getInputStream();
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+                        String str = null;
+                        while((str = reader.readLine()) != null){
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<List<Comment>>(){}.getType();
+                            list = gson.fromJson(str,type);
+                        }
+                        Message msg = Message.obtain();
+                        msg.what = 1002;
+                        msg.obj = list;
+                        handler.sendMessage(msg);
+
+                        in.close();
+                        reader.close();
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                }else{
+                    Message message  = Message.obtain();
+                    message.what = 1001;
+                    message.obj = "未连接到服务器";
+                    handler.sendMessage(message);
+                }
+            }
+        }.start();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }
