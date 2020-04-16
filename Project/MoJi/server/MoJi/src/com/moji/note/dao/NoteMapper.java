@@ -8,6 +8,7 @@
  */
 package com.moji.note.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
@@ -23,6 +24,7 @@ import com.moji.entity.Note;
  *
  */
 public interface NoteMapper {
+	
 
 	/**
 	 * 
@@ -116,31 +118,13 @@ public interface NoteMapper {
 	 * @author 春波
 	 * @date 2019年12月5日
 	 */
-	public Note checkNote(
+	public List<Note> checkNote(
 			@Param("userId")String userId, 
 			@Param("left")double left, 
 			@Param("right")double right, 
 			@Param("top")double top, 
 			@Param("bottom")double bottom);
 	
-	/**
-	 * 
-	 * @Title: updateNote
-	 * @Description: 更新已有的便签
-	 * @author 春波
-	 * @date 2019年12月5日
-	 */
-	public int updateNote(
-			@Param("note")Note note, 
-			@Param("noteId")String noteId, 
-			@Param("userId")String userId, 
-			@Param("title")String title, 
-			@Param("content")String content, 
-			@Param("latitude")double latitude, 
-			@Param("longitude")double longitude, 
-			@Param("location")String location, 
-			@Param("time")String time, 
-			@Param("self")int self);
 	
 	/**
 	 * 

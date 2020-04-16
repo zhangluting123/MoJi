@@ -47,6 +47,30 @@ public class NoteController {
 	@Autowired
 	private NoteService noteService;
 	
+	@RequestMapping(value="/countPlace", method=RequestMethod.GET)
+	public String countPlace(HttpServletRequest request, @RequestParam(value="userId",required=true)String userId) {
+		List<Note> notes = this.noteService.queryNote(userId);
+		int num = 0;
+		for(int i = 0; i < notes.size(); i++) {
+			String thisLatitude = notes.get(i).getLatitude()+"";
+			String thisLongitude = notes.get(i).getLongitude()+"";
+			int m = 0;
+			for(int j = i+1; j < notes.size(); j++) {
+				String currentLatitude = notes.get(j).getLatitude()+"";
+				String currentLongitude = notes.get(j).getLongitude()+"";
+				if(thisLatitude.equals(currentLatitude) && thisLongitude.equals(currentLongitude)) {
+					m = 1;
+					break;
+				}
+			}
+			if(m == 0) {
+				num++;
+			}
+			
+		}
+		return num+"";
+	}
+	
 	@RequestMapping(value="/add", method=RequestMethod.POST, produces="application/json;charset=utf-8")
 	public String addNote(HttpServletRequest request) {
 		String userId = null;
@@ -65,7 +89,7 @@ public class NoteController {
 		Date date = new Date();
 		//将日期格式化
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMddHHmmss");
-		SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
 		//转换成字符串格式
 		String id = simpleDateFormat.format(date);
 		String time = simpleDateFormat1.format(date);
@@ -127,46 +151,38 @@ public class NoteController {
 		}
 		System.out.println("left:" + left + ";right:" + right + ";top:" + top + ";botom:" + bottom);
 		int i;
-		Note note = this.noteService.checkNote(userId, left, right, top, bottom);
-		if(note != null) {
-			i = noteService.updateNote(
+		List<Note> notes = this.noteService.checkNote(userId, left, right, top, bottom);
+		if(notes != null) {
+			i = this.noteService.addNote(
 					imgs,
-					note,
 					id, 
 					userId, 
-					title, content, 
+					title, content,
+					notes.get(0).getLatitude(),
+					notes.get(0).getLongitude(),
+					location,
+					time, 
+					Integer.valueOf(self)
+					);
+		}else {
+			i = this.noteService.addNote(
+					imgs,
+					id, 
+					userId, 
+					title, content,
 					Double.valueOf(latitude), 
 					Double.valueOf(longitude), 
 					location,
 					time, 
 					Integer.valueOf(self)
 					);
-			if(i > 0) {
-				str = "1";
-				System.out.println("便签替换成功");
-			}else {
-				str = "0";
-				System.out.println("便签替换失败");
-			}
+		}
+		if(i > 0) {
+			str = "1";
+			System.out.println("便签新增成功");
 		}else {
-			i = this.noteService.addNote(
-					imgs,
-					id, 
-					userId, 
-					title, content, 
-					Double.valueOf(latitude), 
-					Double.valueOf(longitude),
-					location,
-					time, 
-					Integer.valueOf(self)
-					);
-			if(i > 0) {
-				str = "1";
-				System.out.println("便签新增成功");
-			}else {
-				str = "0";
-				System.out.println("便签新增失败");
-			}
+			str = "0";
+			System.out.println("便签新增失败");
 		}
 		return str;
 	}
@@ -217,7 +233,7 @@ public class NoteController {
 	public String queryVisualNote(HttpServletRequest request,@RequestParam(value="userId",required=true)String userId) {
 		String str = "";
 		//从数据库查询的数据
-		List<Note> list = this.noteService.queryVisualNote(userId);System.out.println(userId);
+		List<Note> list = this.noteService.queryVisualNote(userId);
 		//转化成需要返回的类型
 		List<ReturnNote> returnList = new ArrayList<>();
 		for (int i = 0; i < list.size(); i++) {

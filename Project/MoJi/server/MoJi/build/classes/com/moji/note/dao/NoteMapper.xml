@@ -50,7 +50,6 @@
 		<if test="null != userId and !userId.equals('')">
 			 or u.user_id = #{userId}
 		</if> 
-		
 	</select>
 	<!-- 查询便签 -->
 	<select id="queryNote" resultMap="noteMap">
@@ -75,7 +74,7 @@
 		left join note_img i
 		on n.note_id=i.noteId
 		where (n.user_id=#{userId})  and (n.latitude between #{right} and #{left}) and (n.longitude between #{top} and #{bottom})
-		<!-- and (n.self=0) -->
+		order by n.time desc
 	</select>
 	<!-- 新增便签 -->
 	<insert id="addNote">
@@ -102,12 +101,6 @@
 		on n.note_id=i.noteId
 		where (n.user_id=#{userId}) and (n.latitude between #{right} and #{left}) and (n.longitude between #{top} and #{bottom})
 	</select>
-	<!-- 更新已有的便签 -->
-	<update id="updateNote">
-		update note_detail 
-		set note_id=#{noteId},user_id=#{userId},title=#{title},content=#{content},latitude=#{latitude},longitude=#{longitude},location=#{location},time=#{time},self=#{self} 
-		where latitude=#{note.latitude} and longitude=#{note.longitude}
-	</update>
 	<!-- 按照noteid删除图片 -->
 	<delete id="deleteNoteImg">
 		delete from note_img where noteId=#{deleteNoteId}

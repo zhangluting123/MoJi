@@ -8,6 +8,7 @@
  */
 package com.moji.note.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -128,23 +129,8 @@ public class NoteService {
 	 * @author 春波
 	 * @date 2019年12月5日
 	 */
-	public Note checkNote(String userId, double left, double right, double top, double bottom) {
+	public List<Note> checkNote(String userId, double left, double right, double top, double bottom) {
 		return this.noteMapper.checkNote(userId, left, right, top, bottom);
-	}
-	
-	/**
-	 * 
-	 * @Title: updateNote
-	 * @Description: 更新已有的便签
-	 * @author 春波
-	 * @date 2019年12月5日
-	 */
-	public int updateNote(List<Img> imgs, Note note, String id, String userId, String title, String content, double latitude, double longitude, String location, String time, int self) {
-		int i1 = this.noteMapper.updateNote(note, id, userId, title, content, latitude, longitude, location, time, self);
-		int i2 = this.noteMapper.deleteNoteImg(note.getNoteId());
-		int i3 = this.noteMapper.addNoteImg(imgs);
-		int i4 = i1 + i2 + i3;
-		return i4;
 	}
 	
 
