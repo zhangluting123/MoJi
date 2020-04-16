@@ -70,6 +70,7 @@ import cn.edu.hebtu.software.test.Util.DetermineConnServer;
 public class FootprintFragment extends Fragment {
     private View view;
     private MapView mapView = null;
+    private TextView placeNum;
     //百度地图控制器
     private BaiduMap baiduMap;
     //UI控制器
@@ -112,6 +113,9 @@ public class FootprintFragment extends Fragment {
                 case 2:
                     Toast.makeText(getActivity().getApplicationContext(), (CharSequence)msg.obj, Toast.LENGTH_SHORT).show();
                     break;
+                case 3:
+                    String num = (String)msg.obj;
+                    placeNum.setText("您一共去过"+num+"个地方");
             }
         }
     };
@@ -144,6 +148,7 @@ public class FootprintFragment extends Fragment {
         mapView = view.findViewById(R.id.bMapView);
         baiduMap = mapView.getMap();
         uiSettings = baiduMap.getUiSettings();
+        placeNum = view.findViewById(R.id.text_num_place);
     }
 
     /**
@@ -171,6 +176,8 @@ public class FootprintFragment extends Fragment {
         locationOption();
         //设置监听器
         registListener();
+        //统计去过的地方数并显示
+        countPlace();
     }
 
     /**
@@ -213,6 +220,41 @@ public class FootprintFragment extends Fragment {
                 MapStatusUpdateFactory.newMapStatus(mapStatus);
         //应用地图状态
         baiduMap.setMapStatus(msu);
+    }
+
+    /**
+     *  @author 春波
+     *  @time 2020/4/16  10:11
+     *  @Description：统计去过多少个地方
+     */
+    private void countPlace(){
+        new Thread() {
+            public void run() {
+                try {
+                    if(DetermineConnServer.isConnByHttp(getActivity().getApplicationContext())) {
+                        URL url = new URL("http://" + ip + ":8080/MoJi/note/countPlace?userId="+userId);
+                        URLConnection conn = url.openConnection();
+                        InputStream in = conn.getInputStream();
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));
+                        String str = reader.readLine();
+
+                        Message msg = Message.obtain();
+                        msg.obj = str;
+                        msg.what = 3;
+                        handler.sendMessage(msg);
+                    }else{
+                        Message msg = Message.obtain();
+                        msg.obj = "未连接到服务器";
+                        msg.what = 2;
+                        handler.sendMessage(msg);
+                    }
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }.start();
     }
 
     /**
@@ -372,10 +414,36 @@ public class FootprintFragment extends Fragment {
 
     /**
      *  @author 春波
+     *  @time 2020/4/16  11:21
+     *  @Description：整理list，去除位置相同的
+     */
+    private  void sortList(){
+        List<Integer> removeIndex = new ArrayList<>();
+        for(int i = 0; i < list.size(); i++){
+            String thisLatitude = list.get(i).getLatitude()+"";
+            String thisLongitude = list.get(i).getLongitude()+"";
+            for(int j = i+1; j < list.size(); j++) {
+                String currentLatitude = list.get(j).getLatitude()+"";
+                String currentLongitude = list.get(j).getLongitude()+"";
+                if(thisLatitude.equals(currentLatitude) && thisLongitude.equals(currentLongitude)) {
+                    removeIndex.add(j);
+                    break;
+                }
+            }
+        }
+        for (int i = removeIndex.size()-1; i >= 0; i--){
+            int re = removeIndex.get(i);
+            Note n = list.remove(re);
+        }
+    }
+
+    /**
+     *  @author 春波
      *  @time 2019/11/12  14:36
      *  @Description：显示标注覆盖物
      */
     private void showMarkerOption() {
+        sortList();//整理list，去除位置相同的，只保留一个且是最新的
         if(list.size() > 0){
             Marker marker;
             for(final Note note:list){
