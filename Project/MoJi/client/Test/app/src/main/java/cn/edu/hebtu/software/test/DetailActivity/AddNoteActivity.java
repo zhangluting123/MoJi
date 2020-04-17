@@ -1,8 +1,24 @@
 package cn.edu.hebtu.software.test.DetailActivity;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import cn.edu.hebtu.software.test.Data.Note;
+import cn.edu.hebtu.software.test.Setting.MyApplication;
+import cn.edu.hebtu.software.test.R;
+import cn.edu.hebtu.software.test.UploadAndDownload.UploadFileTask;
+import cn.edu.hebtu.software.test.Util.ActivityManager;
+import cn.edu.hebtu.software.test.Util.DensityUtil;
+import cn.edu.hebtu.software.test.Util.FileUtil;
+
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -40,20 +56,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import cn.edu.hebtu.software.test.Data.Note;
-import cn.edu.hebtu.software.test.R;
-import cn.edu.hebtu.software.test.Setting.MyApplication;
-import cn.edu.hebtu.software.test.UploadAndDownload.UploadFileTask;
-import cn.edu.hebtu.software.test.Util.ActivityManager;
-import cn.edu.hebtu.software.test.Util.DensityUtil;
-import cn.edu.hebtu.software.test.Util.FileUtil;
-
 public class AddNoteActivity extends AppCompatActivity {
     //纬度
     private double latitude;
@@ -62,7 +64,8 @@ public class AddNoteActivity extends AppCompatActivity {
     //位置
     private String location;
     //ip
-    private String ip;
+    private String ip
+            ;
     //用户名
     private String userId;
     //图片
