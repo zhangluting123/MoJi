@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace代表唯一标识符 -->
+<mapper namespace="com.moji.video.dao.VideoMapper">
+	<resultMap type="com.moji.entity.Video" id="videoMap">
+		<id property="videoId" column="video_id"/>
+		<result property="path" column="video_path"/>
+		<result property="title" column="video_title"/>
+		<result property="duration" column="video_duration"/>
+		<result property="size" column="video_size"/>
+		<result property="uploadTime" column="video_upload_time"/>
+		<association property="user">
+			<id property="userId" column="user_id"/>
+			<result property="userHeadImg" column="avatar_path"/>
+			<result property="userName" column="user_name"/>
+			<result property="sex" column="sex"/>
+			<result property="signature" column="signature"/>
+			<result property="occupation" column="occupation"/>
+			<result property="password" column="password"/>
+			<result property="phone" column="phone"/>
+		</association>
+	</resultMap>
+	<insert id="addVideo">
+		insert into 
+		video_detail(video_id,video_title,video_path,video_duration,video_size,video_upload_time,user_id)
+		values(#{video.videoId},#{video.title},#{video.path},#{video.duration},#{video.size},#{video.uploadTime},#{userId})
+	</insert>
+	<select id="checkVideoId" resultType="java.lang.Integer">
+		select count(*) from video_detail where video_id=#{videoId}
+	</select>
+</mapper>
