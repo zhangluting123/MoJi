@@ -31,7 +31,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".DetailActivity.ReplyCommentActivity"></activity>
+        <activity android:name=".DetailActivity.UploadVideoActivity"></activity>
+        <activity android:name=".DetailActivity.ReplyCommentActivity" />
         <activity android:name=".LeftNavigation.TimelineActivity" />
         <activity android:name=".Activity.RegistActivity" />
         <activity android:name=".LeftNavigation.AboutUsActivity" />
@@ -55,7 +56,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".DetailActivity.MailDetailActivity" />
-
         <activity
             android:name=".DetailActivity.DropsDetailActivity"
             android:configChanges="keyboardHidden"

@@ -21,7 +21,6 @@ import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
@@ -37,7 +36,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentTabHost;
 import cn.edu.hebtu.software.test.Data.User;
 import cn.edu.hebtu.software.test.DetailActivity.AddNoteActivity;
-import cn.edu.hebtu.software.test.LeftNavigation.TimelineActivity;
+import cn.edu.hebtu.software.test.DetailActivity.UploadVideoActivity;
 import cn.edu.hebtu.software.test.Fragment.DropsFragment;
 import cn.edu.hebtu.software.test.Fragment.FootprintFragment;
 import cn.edu.hebtu.software.test.Fragment.MileageFragment;
@@ -46,10 +45,11 @@ import cn.edu.hebtu.software.test.LeftNavigation.MineActivity;
 import cn.edu.hebtu.software.test.LeftNavigation.MyFootPrintActivity;
 import cn.edu.hebtu.software.test.LeftNavigation.MyMailActivity;
 import cn.edu.hebtu.software.test.LeftNavigation.SettingActivity;
-import cn.edu.hebtu.software.test.Setting.MyApplication;
+import cn.edu.hebtu.software.test.LeftNavigation.TimelineActivity;
 import cn.edu.hebtu.software.test.R;
-import cn.jpush.android.api.JPushInterface;
+import cn.edu.hebtu.software.test.Setting.MyApplication;
 import cn.edu.hebtu.software.test.Util.ActivityManager;
+import cn.jpush.android.api.JPushInterface;
 
 /**
  * @ProjectName:    MoJi
@@ -206,12 +206,15 @@ public class MainActivity extends AppCompatActivity  {
                     switch (item.getItemId()) {
                         case R.id.addNote:
                             MyApplication data = (MyApplication) getApplication();
-                            Intent jumpToAdd = new Intent(MainActivity.this, AddNoteActivity.class);
-                            jumpToAdd.putExtra("latitude", data.getLatitude());//维度
-                            jumpToAdd.putExtra("longitude", data.getLongitude());//经度
-                            jumpToAdd.putExtra("location", data.getLocation());
-                            startActivity(jumpToAdd);
+                            Intent jumpToAddNote = new Intent(MainActivity.this, AddNoteActivity.class);
+                            jumpToAddNote.putExtra("latitude", data.getLatitude());//维度
+                            jumpToAddNote.putExtra("longitude", data.getLongitude());//经度
+                            jumpToAddNote.putExtra("location", data.getLocation());
+                            startActivity(jumpToAddNote);
                             break;
+                        case R.id.addVideo:
+                            Intent jumpToAddVideo = new Intent(MainActivity.this, UploadVideoActivity.class);
+                            startActivity(jumpToAddVideo);
                     }
                 }else{
                     Toast.makeText(getApplicationContext(), "请先登录", Toast.LENGTH_LONG).show();
