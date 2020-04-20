@@ -7,9 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.inputmethodservice.KeyboardView;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,7 +16,6 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,13 +25,11 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,7 +57,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 import cn.edu.hebtu.software.test.Adapter.CommentAdapter;
@@ -75,7 +69,6 @@ import cn.edu.hebtu.software.test.R;
 import cn.edu.hebtu.software.test.Util.ActivityManager;
 import cn.edu.hebtu.software.test.Util.DetermineConnServer;
 import cn.edu.hebtu.software.test.Util.SoftKeyBoardListener;
-import cn.edu.hebtu.software.test.View.InnerScrollListView;
 
 /**
  * @ProjectName: MoJi
@@ -97,7 +90,7 @@ public class DropsDetailActivity extends AppCompatActivity implements ViewPager.
     private Button btnSubmitComment;
     private LinearLayout noComment;
     private Note note;
-    private List<Comment> commentList;
+    private List<Comment> commentList = new ArrayList<>();
     private RequestOptions options = new RequestOptions().circleCrop();
 
     private ViewPager vp;
@@ -116,6 +109,7 @@ public class DropsDetailActivity extends AppCompatActivity implements ViewPager.
     private User user;
 
     private CommentAdapter commentAdapter;
+    private String commentId;//当前选中评论ID
 
     private Handler handler = new Handler(){
         @Override
@@ -123,24 +117,39 @@ public class DropsDetailActivity extends AppCompatActivity implements ViewPager.
             switch (msg.what) {
                 case 1001:
                     Toast.makeText(getApplicationContext(), (CharSequence)msg.obj, Toast.LENGTH_SHORT).show();
-                    edtInsertComment.setText("");
                     break;
                 case 1002:
                     commentList = (List<Comment>)msg.obj;
                     initComment();
                     break;
                 case 1003:
+                    if(commentList.size() <= 0) { //之前没有评论，初始化adapter
+                        noComment.setVisibility(View.GONE);
+                        showCommentList();
+                    }
                     Comment comment = new Comment();
                     user = data.getUser();
+                    comment.setId((String) msg.obj);
                     comment.setUser(user);
                     comment.setCommentContent(edtInsertComment.getText().toString().trim());
                     comment.setCommentTime("今天");
+                    comment.setReplyCount(0);
                     commentList.add(comment);
-                    if(commentList.size() <= 0) {
-                        noComment.setVisibility(View.GONE);
+                    commentAdapter.flush(commentList);
+                    clearInput();
+                    break;
+                case 1004:
+                    Toast.makeText(getApplicationContext(), (CharSequence)msg.obj, Toast.LENGTH_SHORT).show();
+                    for(int i = 0;i < commentList.size();++i){
+                        if(commentList.get(i).getId().equals(commentId)){
+                            Integer a = commentList.get(i).getReplyCount();
+                            commentList.get(i).setReplyCount(++a);
+                            break;
+                        }
                     }
                     commentAdapter.flush(commentList);
-
+                    clearInput();
+                    break;
             }
         }
     };
@@ -207,10 +216,8 @@ public class DropsDetailActivity extends AppCompatActivity implements ViewPager.
                         if(edtInsertComment.getHint().equals("请输入评论")) {
                             insertComment(content);
                         }else{
-                            //TODO
-                            Toast.makeText(getApplicationContext(), "回复评论---", Toast.LENGTH_SHORT).show();
-                            edtInsertComment.setHint("请输入评论");
-                            edtInsertComment.setText("");
+                            //回复评论
+                            insertReplyComment();
                         }
                     }
                 }else{
@@ -273,9 +280,11 @@ public class DropsDetailActivity extends AppCompatActivity implements ViewPager.
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 edtInsertComment.setHint("回复@"+commentList.get(position).getUser().getUserName());
                 edtInsertComment.setHintTextColor(getResources().getColor(android.R.color.darker_gray));
+                commentId = commentList.get(position).getId();
+                Log.e("comment-list", commentList.toArray().toString());
                 edtInsertComment.setSelection(0);
                 edtInsertComment.setFocusable(true);
-                //弹出键盘
+                //键盘如果关闭弹出
                 InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
             }
@@ -383,6 +392,18 @@ public class DropsDetailActivity extends AppCompatActivity implements ViewPager.
 
     /**
      *  @author: 张璐婷
+     *  @time: 2020/4/20  17:53
+     *  @Description:  清空输入内容,键盘隐藏
+     */
+    private void clearInput(){
+        edtInsertComment.setText("");
+        edtInsertComment.setHint("请输入评论");
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+    }
+
+    /**
+     *  @author: 张璐婷
      *  @time: 2020/4/16  8:44
      *  @Description: 监听键盘是否弹起
      */
@@ -455,7 +476,6 @@ public class DropsDetailActivity extends AppCompatActivity implements ViewPager.
             viewList.add(imageView);
         }else{
             for (int i = 0;i<note.getImgList().size();i++){
-                Log.e("img=", note.getImgList().get(i));
                 //new ImageView并设置图片资源
                 ImageView imageView = new ImageView(this);
                 imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -527,18 +547,15 @@ public class DropsDetailActivity extends AppCompatActivity implements ViewPager.
                         BufferedReader reader = new BufferedReader(new InputStreamReader(in));
                         String str = reader.readLine();
                         Message msg = Message.obtain();
-                        msg.what = 1001;
-                        if(str != null ){
-                            if("2".equals(str)){
-                                msg.obj = "评论发布成功";
-                                handler.sendMessage(Message.obtain(handler,1003));
-                            }else if("1".equals(str)){
-                                msg.obj = "评论发布成功[未发送通知]";
-                                handler.sendMessage(Message.obtain(handler,1003));
-                            }
+                        String[] strings = str.split(",");
+                        if("2".equals(strings[0]) || "1".equals(strings[0])){//2-评论发布成功,1-评论发布成功[未发送通知]
+                            msg.obj = strings[1];Log.e("1notifcommentId=", strings[0]+"---"+strings[1]);
+                            msg.what = 1003;
+                            handler.sendMessage(msg);
                         }else{
                             msg.obj = "评论发布失败";
-                            handler.sendMessage(Message.obtain(handler,1001));
+                            msg.what = 1001;
+                            handler.sendMessage(msg);
                         }
 
                         in.close();
@@ -549,7 +566,8 @@ public class DropsDetailActivity extends AppCompatActivity implements ViewPager.
                 }else{
                     Message message  = Message.obtain();
                     message.obj = "未连接到服务器";
-                    handler.sendMessage(Message.obtain(handler,1001));
+                    message.what = 1001;
+                    handler.sendMessage(message);
                 }
             }
         }.start();
@@ -572,7 +590,7 @@ public class DropsDetailActivity extends AppCompatActivity implements ViewPager.
                         InputStream in = conn.getInputStream();
                         BufferedReader reader = new BufferedReader(new InputStreamReader(in));
                         String str = null;
-                        while((str = reader.readLine()) != null){
+                        if((str = reader.readLine()) != null){
                             Gson gson = new Gson();
                             Type type = new TypeToken<List<Comment>>(){}.getType();
                             list = gson.fromJson(str,type);
@@ -599,6 +617,43 @@ public class DropsDetailActivity extends AppCompatActivity implements ViewPager.
             }
         }.start();
     }
+
+    /**
+     *  @author: 张璐婷
+     *  @time: 2020/4/20  16:37
+     *  @Description: 回复评论
+     */
+    private void insertReplyComment(){
+        new Thread(){
+            @Override
+            public void run() {
+                if(DetermineConnServer.isConnByHttp(getApplicationContext())){
+                    try {
+                        URL url = new URL("http://"+ip+":8080/MoJi/replyComment/add?replyContent="+edtInsertComment.getText().toString()+"&commentId="+commentId+"&replyUserId="+data.getUser().getUserId());
+                        URLConnection conn = url.openConnection();
+                        InputStream in = conn.getInputStream();
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(in,"utf-8"));
+                        if(reader.readLine().equals("OK")){
+                            Message message = Message.obtain();
+                            message.what = 1004;
+                            message.obj = "回复成功";
+                            handler.sendMessage(message);
+                        }
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                    Message message  = Message.obtain();
+                    message.what = 1001;
+                    message.obj = "未连接到服务器";
+                    handler.sendMessage(message);
+                }
+            }
+        }.start();
+    }
+
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {

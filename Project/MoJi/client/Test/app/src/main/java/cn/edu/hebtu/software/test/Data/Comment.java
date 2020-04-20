@@ -17,18 +17,21 @@ public class Comment implements Parcelable {
     private String noteId;
     private String commentContent;
     private String commentTime;
+    private Integer replyCount;
 
     public Comment(){
 
     }
 
-    public Comment(User user, String id, String noteId, String commentContent, String commentTime) {
+    public Comment(User user, String id, String noteId, String commentContent, String commentTime, Integer replyCount) {
         this.user = user;
         this.id = id;
         this.noteId = noteId;
         this.commentContent = commentContent;
         this.commentTime = commentTime;
+        this.replyCount = replyCount;
     }
+
 
     protected Comment(Parcel in) {
         user = in.readParcelable(User.class.getClassLoader());
@@ -36,6 +39,11 @@ public class Comment implements Parcelable {
         noteId = in.readString();
         commentContent = in.readString();
         commentTime = in.readString();
+        if (in.readByte() == 0) {
+            replyCount = null;
+        } else {
+            replyCount = in.readInt();
+        }
     }
 
     public static final Creator<Comment> CREATOR = new Creator<Comment>() {
@@ -90,14 +98,23 @@ public class Comment implements Parcelable {
         this.commentTime = commentTime;
     }
 
+    public Integer getReplyCount() {
+        return replyCount;
+    }
+
+    public void setReplyCount(Integer replyCount) {
+        this.replyCount = replyCount;
+    }
+
     @Override
     public String toString() {
         return "Comment{" +
-                user.toString()+
+                "user=" + user +
                 ", id='" + id + '\'' +
                 ", noteId='" + noteId + '\'' +
                 ", commentContent='" + commentContent + '\'' +
                 ", commentTime='" + commentTime + '\'' +
+                ", replyCount=" + replyCount +
                 '}';
     }
 
@@ -113,5 +130,11 @@ public class Comment implements Parcelable {
         dest.writeString(noteId);
         dest.writeString(commentContent);
         dest.writeString(commentTime);
+        if (replyCount == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(replyCount);
+        }
     }
 }

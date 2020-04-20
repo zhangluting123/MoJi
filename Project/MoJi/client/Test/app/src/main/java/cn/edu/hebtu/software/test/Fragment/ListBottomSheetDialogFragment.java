@@ -2,6 +2,7 @@ package cn.edu.hebtu.software.test.Fragment;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -37,6 +38,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import cn.edu.hebtu.software.test.Data.Comment;
+import cn.edu.hebtu.software.test.DetailActivity.ReplyCommentActivity;
 import cn.edu.hebtu.software.test.Setting.MyApplication;
 import cn.edu.hebtu.software.test.R;
 import cn.edu.hebtu.software.test.Util.DetermineConnServer;
@@ -219,29 +221,14 @@ public class ListBottomSheetDialogFragment extends BottomSheetDialogFragment {
             holder.commentUserName.setText(commentList.get(position).getUser().getUserName());
             holder.commentContent.setText(commentList.get(position).getCommentContent());
             holder.commentTime.setText(commentList.get(position).getCommentTime());
-//            holder.itemView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    //设置全局变量
-//                    final Data data = (Data)getActivity().getApplication();
-//                    data.setReplyName(commentList.get(position).getUserName());
-//                    data.setReplyCommentId(commentList.get(position).getId());
-//                    //弹出评论输入框
-//                    InputDialog inputDialog = new InputDialog(getActivity());
-//                    Window window = inputDialog.getWindow();
-//                    window.getDecorView().setPadding(0, 0, 0, 0);
-//                    WindowManager.LayoutParams params = window.getAttributes();
-//                    //设置窗口宽度为充满全屏
-//                    params.width = WindowManager.LayoutParams.MATCH_PARENT;
-//                    //设置窗口高度为包裹内容
-//                    params.height = WindowManager.LayoutParams.WRAP_CONTENT;
-//                    //将设置好的属性set回去
-//                    window.setAttributes(params);
-//                    //设置软键盘通常是可见的
-//                    window.setSoftInputMode(params.SOFT_INPUT_STATE_VISIBLE);
-//                    inputDialog.show();
-//                }
-//            });
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity().getApplicationContext(), ReplyCommentActivity.class);
+                    intent.putExtra("comment",commentList.get(position));
+                    getActivity().getApplicationContext().startActivity(intent);
+                }
+            });
 
         }
 

@@ -39,7 +39,7 @@ import java.util.Map;
 /**
  *  @author: 张璐婷
  *  @time: 2019/12/12  10:38
- *  @Description: 评论页
+ *  @Description: 通知详情页
  */
 public class MailDetailActivity extends AppCompatActivity {
     private Button btnDelete;
@@ -60,8 +60,7 @@ public class MailDetailActivity extends AppCompatActivity {
                     break;
                 case 1002:
                     Toast.makeText(getApplicationContext(), (CharSequence)msg.obj, Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(MailDetailActivity.this, MyMailActivity.class);
-                    startActivity(intent);
+                    finish();
                     overridePendingTransition(R.animator.in_from_left, R.animator.out_to_right);
                     finish();
                     break;
@@ -109,9 +108,7 @@ public class MailDetailActivity extends AppCompatActivity {
             Type type = new TypeToken<Map<String,String>>(){}.getType();
             Map<String,String> map = gson.fromJson(intent.getStringExtra("extra"), type);
             Log.e("extra", extra);
-            if(map.get("mailId") != null) {
-                mailId = map.get("mailId");
-            }
+            mailId = map.get("mailId");
             myName.setText(data.getUser().getUserName());
             otherName.setText(map.get("otherName"));
             commentContent.setText(map.get("commentContent"));

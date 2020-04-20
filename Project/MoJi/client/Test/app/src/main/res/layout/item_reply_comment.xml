@@ -6,22 +6,24 @@
     android:padding="10dp"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <ImageView
-        android:id="@+id/iv_commentHead"
+        android:id="@+id/iv_replyHead"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:src="@drawable/headportrait"/>
     <TextView
         android:id="@+id/user_name"
-        android:layout_toRightOf="@id/iv_commentHead"
+        android:layout_toRightOf="@id/iv_replyHead"
         android:layout_marginLeft="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="12sp"
         android:text="李四"/>
     <TextView
-        android:id="@+id/tv_commentContent"
-        android:layout_toRightOf="@id/iv_commentHead"
+        android:id="@+id/tv_replyContent"
+        android:layout_toRightOf="@id/iv_replyHead"
         android:layout_width="wrap_content"
         android:textColor="@android:color/black"
+        android:textSize="12sp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
@@ -29,9 +31,10 @@
         android:layout_below="@id/user_name"
         android:text="测试测试测试测尺测试测试测试测试测试测尺测试测试"/>
     <TextView
-        android:id="@+id/tv_commentDate"
+        android:id="@+id/tv_replyDate"
         android:layout_alignParentRight="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="12sp"
         android:text="2019/11/12"/>
 </RelativeLayout>

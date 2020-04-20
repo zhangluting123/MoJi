@@ -35,15 +35,13 @@ public class MyReceiver extends JPushMessageReceiver{
             //获取通知消息的内容
             String content = notificationMessage.notificationContent;
             Log.e("notif", notificationMessage.toString());
-            Log.i("zlt","通知消息内容：" +content);
+            Log.e("zlt","通知消息内容：" +content);
             String extra = notificationMessage.notificationExtras;
             //在Activity中显示通知消息的内容
             Intent intent = new Intent(context, MailDetailActivity.class);
             intent.putExtra("extra", extra);
             context.startActivity(intent);
     }
-
-
 
 //    @Override
 //    public void onAliasOperatorResult(Context context, JPushMessage jPushMessage) {

@@ -2,7 +2,6 @@ package cn.edu.hebtu.software.test.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -95,11 +94,15 @@ public class CommentAdapter extends BaseAdapter {
             viewHolder.commentDate.setText(commentList.get(position).getCommentTime());
             CustomerButtonListener listener = new CustomerButtonListener(position);
             viewHolder.replyComment.setOnClickListener(listener);
-            //TODO 查找回复评论个数
-//            viewHolder.replyNumber.setText(0);
+            //回复评论个数
+            int count = commentList.get(position).getReplyCount();
+            if(count > 0){
+                viewHolder.replyComment.setVisibility(View.VISIBLE);
+                viewHolder.replyNumber.setText(count+"");
+            }else {
+                viewHolder.replyComment.setVisibility(View.GONE);
+            }
         }
-
-
         return convertView;
     }
 
@@ -117,11 +120,10 @@ public class CommentAdapter extends BaseAdapter {
 
         @Override
         public void onClick(View v) {
-            if(v.getId() == viewHolder.replyComment.getId()){
-                    Intent intent = new Intent(context, ReplyCommentActivity.class);
-                    intent.putExtra("comment",commentList.get(position));
-                    context.startActivity(intent);
-            }
+            Intent intent = new Intent(context, ReplyCommentActivity.class);
+            intent.putExtra("comment",commentList.get(position));
+            context.startActivity(intent);
+
         }
 
     }
