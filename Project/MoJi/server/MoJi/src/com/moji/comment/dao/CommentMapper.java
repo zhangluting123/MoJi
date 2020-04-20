@@ -42,4 +42,13 @@ public interface CommentMapper {
 			@Param("userId")String userId, 
 			@Param("content")String content, 
 			@Param("time")String time);
+	
+	/**
+	 * @Title: findComment
+	 * @Description: 查找某一条评论
+	 * @author: 张璐婷 
+	 * @date: 2020年4月20日 下午7:18:10
+	 */
+	public Comment findComment(@Param("commentId")String commentId);
+	
 }

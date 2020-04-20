@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.moji.replycomment.dao.ReplyCommentMapper">
+	<resultMap type="com.moji.entity.ReplyComment" id="replyMap">
+		<id property="replyId" column="replyId"/>
+		<result property="replyContent" column="reply_content"/>
+		<result property="replyTime" column="reply_time"/>
+		<association property="comment">
+			<id property="id" column="comment_id"/>
+		</association>
+		<association property="replyUser">
+			<id property="userId" column="user_id"/>
+			<result property="userHeadImg" column="avatar_path"/>
+			<result property="userName" column="user_name"/>
+			<result property="sex" column="sex"/>
+			<result property="signature" column="signature"/>
+			<result property="occupation" column="occupation"/>
+			<result property="phone" column="phone"/>
+		</association>
+	</resultMap>
+	
+	<!-- 插入回复的评论 -->
+	<insert id="insertReplyComment">
+		insert into reply_comment_detail 
+		values(#{replyId},#{commentId},#{replyUserId},#{replyContent},#{replyTime})
+	</insert>
+	
+	<!-- 查询评论数量 -->
+	<select id="queryCountOfReplyByCommentId" resultType="java.lang.Integer">
+		select count(*) from reply_comment_detail
+		where comment_id = #{commentId}
+	</select>
+	
+	<!-- 查询评论 -->
+	<select id="queryReplyCommentByCommentId" resultMap="replyMap">
+		select * 
+		from reply_comment_detail r
+		left join user_detail u on r.reply_user_id = u.user_id
+		where comment_id = #{commentId}
+	</select>
+</mapper>

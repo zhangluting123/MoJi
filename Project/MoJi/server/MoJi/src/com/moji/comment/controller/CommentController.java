@@ -31,6 +31,7 @@ import com.moji.entity.Note;
 import com.moji.entity.User;
 import com.moji.mail.service.MailService;
 import com.moji.note.service.NoteService;
+import com.moji.replycomment.service.ReplyCommentService;
 import com.moji.user.service.UserService;
 import com.moji.util.JPushUtil;
 
@@ -48,6 +49,8 @@ public class CommentController {
 	@Autowired
 	private CommentService commentService;
 	@Autowired
+	private ReplyCommentService replyCommentService;
+	@Autowired
 	private NoteService noteService;
 	@Autowired
 	private UserService userService;
@@ -57,6 +60,10 @@ public class CommentController {
 	@RequestMapping(value="/list", method=RequestMethod.GET, produces="application/json;charset=utf-8")
 	public String showCommentByNoteId(HttpServletRequest request, @RequestParam(value="noteId",required=true)String noteId) {
 		List<Comment> list = this.commentService.showComment(noteId);
+		//添加评论数量
+		for(int i = 0; i < list.size();i++) {
+			list.get(i).setReplyCount(this.replyCommentService.countOfReply(list.get(i).getId()));
+		}
 		String str = "";
 		if(list.size() > 0) {
 			Gson gson = new Gson();
@@ -94,27 +101,31 @@ public class CommentController {
 			extrasparams.put("otherName", user.getUserName());
 			extrasparams.put("commentContent", commentContent);
 			System.out.println("userId="+userId+";notegetuserid="+note.getUser().getUserId());
+			
+			Mail mail = new Mail();
+			mail.setAcceptTime(commentTime);
+			mail.setCommentContent(commentContent);
+			mail.setOtherName(user.getUserName());
+			mail.setUserId(note.getUser().getUserId());
+			try {
+				int b = this.mailService.insertMail(mail);
+				if(b > 0) {
+					System.out.println("通知消息写入成功！");
+				}
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			extrasparams.put("mailId", mail.getMailId()+"");
 			int j = JPushUtil.sendToBieMing(note.getUser().getUserId(),"叮咚~","新消息",user.getUserName()+"评论你啦,快去看看吧！",extrasparams);
 			if(j == 1) {
 				re = "2";
 				System.out.println("[评论已发送通知]");
-				Mail mail = new Mail();
-				mail.setAcceptTime(commentTime);
-				mail.setCommentContent(commentContent);
-				mail.setOtherName(user.getUserName());
-				mail.setUserId(note.getUser().getUserId());
-				try {
-					int b = this.mailService.insertMail(mail);
-					if(b > 0) {
-						System.out.println("通知消息写入成功！");
-					}
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
 			}
 		}
 		
-		return re;
+		return re+","+commentId;
 	}
 	
 	

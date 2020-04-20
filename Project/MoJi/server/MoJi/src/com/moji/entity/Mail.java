@@ -33,17 +33,18 @@ public class Mail {
 		this.otherName = otherName;
 		this.userId = userId;
 	}
-	public int getMailId() {
-		return mailId;
-	}
 	
 
-	public String getAcceptTime() {
-		return acceptTime;
+	public int getMailId() {
+		return mailId;
 	}
 	public void setMailId(int mailId) {
 		this.mailId = mailId;
 	}
+	public String getAcceptTime() {
+		return acceptTime;
+	}
+
 	public void setAcceptTime(String acceptTime) {
 		this.acceptTime = acceptTime;
 	}

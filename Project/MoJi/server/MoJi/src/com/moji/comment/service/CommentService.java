@@ -48,4 +48,14 @@ public class CommentService {
 	public int addComment(String commentId, String noteId, String userId, String content, String time) {
 		return commentMapper.addComment(commentId, noteId, userId, content, time);
 	}
+	
+	/**
+	 * @Title: findComment
+	 * @Description: 查找某一条评论
+	 * @author: 张璐婷 
+	 * @date: 2020年4月20日 下午7:24:57
+	 */
+	public Comment findComment(String commentId) {
+		return commentMapper.findComment(commentId);
+	}
 }

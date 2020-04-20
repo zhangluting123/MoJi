@@ -34,4 +34,13 @@
 		values 
 		(#{commentId},#{noteId},#{userId},#{content},#{time})
 	</insert>
+	
+	<!-- 查找某一条评论 -->
+	<select id="findComment" resultMap="commentMap">
+		select * 
+		from comment_detail c
+		left join user_detail u
+		on c.comment_user_id=u.user_id
+		where c.comment_id=#{commentId}
+	</select>
 </mapper>

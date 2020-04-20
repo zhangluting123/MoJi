@@ -43,6 +43,7 @@
 				com.moji.note.dao;
 				com.moji.quotation.dao;
 				com.moji.user.dao;
+				com.moji.replycomment.dao;
 				com.moji.video.dao"/>
 	</bean>
 

@@ -18,7 +18,7 @@
 		delete from mail_msg where mail_id=#{mailId}
 	</delete>
 	<!-- 插入消息通知 -->
-	<insert id="insertMail" parameterType="com.moji.entity.Mail">
+	<insert id="insertMail" parameterType="com.moji.entity.Mail" useGeneratedKeys="true" keyProperty="mailId">
 		insert into 
 		mail_msg(acceptTime,comment_content,otherName,userId) 
 		values 

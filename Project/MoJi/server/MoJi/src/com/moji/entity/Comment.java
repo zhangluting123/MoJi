@@ -17,12 +17,6 @@ package com.moji.entity;
  * @version V1.0
  */
 
-/**
- * @ClassName: Comment
- * @Description: TODO(这里用一句话描述这个类的作用)
- * @author 春波
- * @date 2019年12月3日
- */
 public class Comment {
 	private String id;
 	private String noteId;
@@ -30,19 +24,24 @@ public class Comment {
 	private String commentContent;
 	private String commentTime;
 	private User user;
+	private Integer replyCount;
 	
 	public Comment() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Comment(User user, String id, String noteId, String userId, String commentContent, String commentTime) {
+	
+
+	public Comment(String id, String noteId, String userId, String commentContent, String commentTime, User user,
+			Integer replyCount) {
 		super();
-		this.user = user;
 		this.id = id;
 		this.noteId = noteId;
 		this.userId = userId;
 		this.commentContent = commentContent;
 		this.commentTime = commentTime;
+		this.user = user;
+		this.replyCount = replyCount;
 	}
 
 	public String getUserId() {
@@ -92,5 +91,14 @@ public class Comment {
 	public void setCommentTime(String commentTime) {
 		this.commentTime = commentTime;
 	}
+
+	public Integer getReplyCount() {
+		return replyCount;
+	}
+
+	public void setReplyCount(Integer replyCount) {
+		this.replyCount = replyCount;
+	}
+
 
 }
