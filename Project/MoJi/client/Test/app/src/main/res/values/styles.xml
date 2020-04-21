@@ -7,11 +7,11 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="actionOverflowButtonStyle">@style/OverflowButtonStyle</item><!-- 设置menu默认图标 -->
+<!--        <item name="actionOverflowButtonStyle">@style/OverflowButtonStyle</item>&lt;!&ndash; 设置menu默认图标 &ndash;&gt;-->
     </style>
-    <style name="OverflowButtonStyle" parent="@android:style/Widget.ActionButton.Overflow">
-        <item name="android:src" >@mipmap/add</item>
-    </style>
+<!--    <style name="OverflowButtonStyle" parent="@android:style/Widget.ActionButton.Overflow">-->
+<!--        <item name="android:src" >@mipmap/add</item>-->
+<!--    </style>-->
 
     <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:textSize">16sp</item>

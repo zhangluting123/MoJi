@@ -17,7 +17,7 @@
             android:fitsSystemWindows="true"
             android:clipToPadding="true"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="80dp"
             android:background="@color/MyTheam_color"
             android:gravity="center_vertical"
             app:titleTextAppearance="@style/Toolbar.TitleText"
@@ -28,7 +28,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="Activity"
-                style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"/>
+                style="@style/Toolbar.TitleText"/>
         </androidx.appcompat.widget.Toolbar>
         <androidx.fragment.app.FragmentTabHost
             android:id="@android:id/tabhost"

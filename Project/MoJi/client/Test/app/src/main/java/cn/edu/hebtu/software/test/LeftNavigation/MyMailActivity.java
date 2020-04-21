@@ -9,6 +9,7 @@ import cn.edu.hebtu.software.test.Activity.MainActivity;
 import cn.edu.hebtu.software.test.Adapter.TraceListAdapter;
 import cn.edu.hebtu.software.test.Data.Mail;
 import cn.edu.hebtu.software.test.DetailActivity.MailDetailActivity;
+import cn.edu.hebtu.software.test.Fragment.AtMeFragment;
 import cn.edu.hebtu.software.test.Fragment.DropsFragment;
 import cn.edu.hebtu.software.test.Fragment.FootprintFragment;
 import cn.edu.hebtu.software.test.Fragment.MessageFragment;
@@ -104,15 +105,21 @@ public class MyMailActivity extends AppCompatActivity {
         //通知
         TabHost.TabSpec notification = fragmentTabHost.newTabSpec("notification").setIndicator(getTabSpecView("notification","通知"));
         fragmentTabHost.addTab(notification, NotificationFragment.class, null);
+        //@我
+        TabHost.TabSpec atme = fragmentTabHost.newTabSpec("atme").setIndicator(getTabSpecView("atme","@我"));
+        fragmentTabHost.addTab(atme, AtMeFragment.class, null);
 
         //默认选中第一项
         fragmentTabHost.setCurrentTab(mailId);
         switch (mailId){
             case 0:
-                textViewMap.get("message").setTextColor(getResources().getColor(R.color.MyTheam_color));
+                textViewMap.get("message").setTextColor(getResources().getColor(R.color.colorActionBarBackground));
                 break;
             case 1:
-                textViewMap.get("notification").setTextColor(getResources().getColor(R.color.MyTheam_color));
+                textViewMap.get("notification").setTextColor(getResources().getColor(R.color.colorActionBarBackground));
+                break;
+            case 2:
+                textViewMap.get("atme").setTextColor(getResources().getColor(R.color.colorActionBarBackground));
                 break;
         }
 
@@ -123,13 +130,21 @@ public class MyMailActivity extends AppCompatActivity {
                 switch (tabId){
                     case "message":
                         data.setMailTabId(0);
-                        textViewMap.get("message").setTextColor(getResources().getColor(R.color.MyTheam_color));
+                        textViewMap.get("message").setTextColor(getResources().getColor(R.color.colorActionBarBackground));
                         textViewMap.get("notification").setTextColor(Color.BLACK);
+                        textViewMap.get("atme").setTextColor(Color.BLACK);
                         break;
                     case "notification":
                         data.setMailTabId(1);
-                        textViewMap.get("notification").setTextColor(getResources().getColor(R.color.MyTheam_color));
                         textViewMap.get("message").setTextColor(Color.BLACK);
+                        textViewMap.get("notification").setTextColor(getResources().getColor(R.color.colorActionBarBackground));
+                        textViewMap.get("atme").setTextColor(Color.BLACK);
+                        break;
+                    case "atme":
+                        data.setMailTabId(2);
+                        textViewMap.get("notification").setTextColor(Color.BLACK);
+                        textViewMap.get("message").setTextColor(Color.BLACK);
+                        textViewMap.get("atme").setTextColor(getResources().getColor(R.color.colorActionBarBackground));
                         break;
                 }
             }

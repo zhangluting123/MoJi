@@ -1,13 +1,17 @@
 package cn.edu.hebtu.software.test.DetailActivity;
 
+import android.Manifest;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -40,13 +44,17 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.mob.tools.RxMob;
+import com.zhy.base.fileprovider.FileProvider7;
 
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -58,6 +66,8 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
 import cn.edu.hebtu.software.test.Adapter.CommentAdapter;
 import cn.edu.hebtu.software.test.Adapter.GuidePageAdapter;
@@ -68,6 +78,7 @@ import cn.edu.hebtu.software.test.Setting.MyApplication;
 import cn.edu.hebtu.software.test.R;
 import cn.edu.hebtu.software.test.Util.ActivityManager;
 import cn.edu.hebtu.software.test.Util.DetermineConnServer;
+import cn.edu.hebtu.software.test.Util.ShareImage;
 import cn.edu.hebtu.software.test.Util.SoftKeyBoardListener;
 
 /**
@@ -344,8 +355,11 @@ public class DropsDetailActivity extends AppCompatActivity implements ViewPager.
         public void onClick(View v) {
             switch (v.getId()){
                 case R.id.share:
-
-                    Toast.makeText(getApplicationContext(), "分享评论", Toast.LENGTH_SHORT).show();
+                    if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(DropsDetailActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},1);
+                    } else {
+                        shareComment(comment);
+                    }
                     break;
                 case R.id.copy:
                     ClipboardManager manager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
@@ -359,6 +373,44 @@ public class DropsDetailActivity extends AppCompatActivity implements ViewPager.
             }
             popupWindow.dismiss();
         }
+
+    }
+    /**
+     *  @author: 张璐婷
+     *  @time: 2020/4/21  21:02
+     *  @Description: 分享评论
+     */
+    private void shareComment(Comment comment){
+        new Thread(){
+            @Override
+            public void run() {
+                Bitmap head = null;
+                try {
+                    URL url = new URL("http://"+ip+":8080/MoJi/"+comment.getUser().getUserHeadImg());
+                    HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+                    conn.setDoInput(true);
+                    conn.connect();
+                    InputStream is = conn.getInputStream();
+                    head = BitmapFactory.decodeStream(is);
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                Bitmap newImg = ShareImage.drawTextAtBitmap(getApplicationContext(),head,comment.getUser().getUserName(),comment.getCommentContent());
+                //分享图片
+                File filePath = ShareImage.saveImageToGallery(getApplicationContext(), newImg);
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("image/*");
+                Uri uri = FileProvider7.getUriForFile(getApplicationContext(),filePath);
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra(Intent.EXTRA_STREAM, uri);
+
+                // 目标应用选择对话框的标题
+                startActivity(Intent.createChooser(intent, "请选择"));
+            }
+        }.start();
 
     }
 

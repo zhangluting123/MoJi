@@ -28,10 +28,6 @@ public class TraceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private static final int TYPE_TOP = 0x0000;
     private static final int TYPE_NORMAL= 0x0001;
 
-
-
-
-
     public TraceListAdapter(Context context, List<Mail> mailList) {
         inflater = LayoutInflater.from(context);
         this.mailList = mailList;
@@ -47,7 +43,6 @@ public class TraceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         return  holder;
     }
-    
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
@@ -62,7 +57,6 @@ public class TraceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         } else if (getItemViewType(position) == TYPE_NORMAL) {
             itemHolder.tvTopLine.setVisibility(View.VISIBLE);
             itemHolder.tvAcceptTime.setTextColor(0xff999999);
-
             itemHolder.tvDot.setBackgroundResource(R.drawable.timelline_dot_normal);
         }
 
@@ -108,9 +102,6 @@ public class TraceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         this.longClickListener = longClickListener;
     }
 
-
-
-
     @Override
     public int getItemCount() {
         return mailList.size();
@@ -123,7 +114,6 @@ public class TraceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
         return TYPE_NORMAL;
     }
-
 
     public  class ViewHolder extends RecyclerView.ViewHolder {
         private TextView tvAcceptTime;
@@ -142,7 +132,7 @@ public class TraceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         public void bindHolder(Mail mail) {
             tvAcceptTime.setText(mail.getAcceptTime());
-            acName.setText("——>");
+//            acName.setText("——>");
             title.setText("来自于"+mail.getOtherName()+"的消息");
         }
     }
