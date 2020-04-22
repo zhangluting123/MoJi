@@ -44,7 +44,6 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.mob.tools.RxMob;
 import com.zhy.base.fileprovider.FileProvider7;
 
 
@@ -147,6 +146,9 @@ public class DropsDetailActivity extends AppCompatActivity implements ViewPager.
                     comment.setReplyCount(0);
                     commentList.add(comment);
                     commentAdapter.flush(commentList);
+                    int b = Integer.parseInt(commentCount.getText().toString());
+                    b++;
+                    commentCount.setText(b+"");
                     clearInput();
                     break;
                 case 1004:
