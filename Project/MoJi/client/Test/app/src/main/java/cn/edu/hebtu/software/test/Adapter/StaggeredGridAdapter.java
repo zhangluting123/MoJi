@@ -24,6 +24,10 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<StaggeredGridAdap
     private AdapterView.OnItemClickListener mListener;
     private List<Integer> list=new ArrayList<>();
 
+    public StaggeredGridAdapter(Context mContext) {
+        this.mContext = mContext;
+    }
+
     public void replaceAll(List<Integer> mylist) {
         list.clear();
         if (mylist != null && mylist.size() > 0) {
