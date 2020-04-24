@@ -77,7 +77,7 @@ public class UploadVideoActivity extends AppCompatActivity {
         ip = data.getIp();
         video.setUser(data.getUser());
         //设置下拉框
-        tags.add("请选择");
+        tags.add("请选择标签");
         tags.add("美食");
         tags.add("吃喝");
         tags.add("玩乐");
