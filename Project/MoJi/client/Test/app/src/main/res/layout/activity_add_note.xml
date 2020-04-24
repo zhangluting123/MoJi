@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/noteRelative"
     android:fitsSystemWindows="true"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -100,7 +99,7 @@
                     android:maxLength="20"
                     android:maxLines="1"
                     android:textCursorDrawable="@null"
-                    android:background="@drawable/note_edittext_background"
+                    android:background="@drawable/note_et_background"
                     android:textColorHint="@color/colorNoteEditTextHintColor"/>
             </LinearLayout>
             <LinearLayout
@@ -130,7 +129,7 @@
                     android:hint="不要超过300字"
                     android:maxLength="300"
                     android:textCursorDrawable="@null"
-                    android:background="@drawable/note_edittext_background"
+                    android:background="@drawable/note_et_background"
                     android:textColorHint="@color/colorNoteEditTextHintColor"/>
 
             </LinearLayout>

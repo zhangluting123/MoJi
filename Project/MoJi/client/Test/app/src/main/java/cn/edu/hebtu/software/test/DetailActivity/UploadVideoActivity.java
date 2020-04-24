@@ -15,10 +15,17 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -43,9 +50,13 @@ public class UploadVideoActivity extends AppCompatActivity {
     private TextView tvVideoPath;
     private TextView tvVideoDuration;
     private TextView tvVideoSize;
+    private EditText tvVideoContent;
+    private Spinner videoTag;
     private ImageView videoImg;
     //视频数据
     private Video video = new Video();
+    //tag数据
+    private List<String> tags = new ArrayList<>();
     //视频路径
     private String vPath = "";
     //视频缩略图
@@ -61,10 +72,21 @@ public class UploadVideoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload_video);
-
+        //给video添加user
         final MyApplication data = (MyApplication) getApplication();
         ip = data.getIp();
         video.setUser(data.getUser());
+        //设置下拉框
+        tags.add("请选择标签");
+        tags.add("美食");
+        tags.add("吃喝");
+        tags.add("玩乐");
+        tags.add("交友");
+        //新建适配器
+        ArrayAdapter<String> adapter=new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,tags);
+        //adapter设置一个下拉列表样式，参数为系统子布局
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -74,6 +96,8 @@ public class UploadVideoActivity extends AppCompatActivity {
         getViews();
         setSupportActionBar(addNoteToolbar);
         registListener();
+        //Spinner加载适配器
+        videoTag.setAdapter(adapter);
     }
 
     /**
@@ -82,15 +106,17 @@ public class UploadVideoActivity extends AppCompatActivity {
      *  @Description：获取控件
      */
     private void getViews() {
-        addNoteToolbar = findViewById(R.id.addNoteToolbar);
-        btnVideoUpload = findViewById(R.id.btn_video_upload);
-        btnChooseVideo = findViewById(R.id.btn_choose_video);
-        tvVideoId = findViewById(R.id.tv_video_id);
-        tvVideoTitle = findViewById(R.id.tv_video_title);
-        tvVideoPath = findViewById(R.id.tv_video_path);
-        tvVideoDuration = findViewById(R.id.tv_video_duration);
-        tvVideoSize = findViewById(R.id.tv_video_size);
-        videoImg = findViewById(R.id.img_video_bitmap);
+        this.addNoteToolbar = findViewById(R.id.addNoteToolbar);
+        this.btnVideoUpload = findViewById(R.id.btn_video_upload);
+        this.btnChooseVideo = findViewById(R.id.btn_choose_video);
+        this.tvVideoId = findViewById(R.id.tv_video_id);
+        this.tvVideoTitle = findViewById(R.id.tv_video_title);
+        this.tvVideoPath = findViewById(R.id.tv_video_path);
+        this.tvVideoDuration = findViewById(R.id.tv_video_duration);
+        this.tvVideoSize = findViewById(R.id.tv_video_size);
+        this.tvVideoContent = findViewById(R.id.tx_video_content);
+        this.videoTag =findViewById(R.id.spinnerVideoTagStatic);
+        this.videoImg = findViewById(R.id.img_video_bitmap);
     }
 
     /**
@@ -99,9 +125,10 @@ public class UploadVideoActivity extends AppCompatActivity {
      *  @Description：设置自定义点击事件监听器
      */
     private void registListener(){
-        listener = new MyCustomListener();
-        btnVideoUpload.setOnClickListener(listener);
-        btnChooseVideo.setOnClickListener(listener);
+        this.listener = new MyCustomListener();
+        this.btnVideoUpload.setOnClickListener(listener);
+        this.btnChooseVideo.setOnClickListener(listener);
+        this.videoTag.setOnItemSelectedListener(new OnItemSelectedListenerImpl());
     }
 
     /**
@@ -122,6 +149,25 @@ public class UploadVideoActivity extends AppCompatActivity {
                     break;
             }
         }
+    }
+
+    /**
+     *  @author 春波
+     *  @time 2020/4/24  12:16
+     *  @Description：下拉框选择事件
+     */
+    private class OnItemSelectedListenerImpl implements AdapterView.OnItemSelectedListener {
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            String tag = parent.getItemAtPosition(position).toString();
+            video.setTag(tag);
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+            video.setTag("null");
+        }
+
     }
 
     /**
@@ -250,8 +296,18 @@ public class UploadVideoActivity extends AppCompatActivity {
      *  @Description：上传视频及其信息到服务器
      */
     public void uploadVideo(){
+        if(this.tvVideoContent.getText().toString().trim().equals("")){
+            Toast toast = Toast.makeText(this,"请填写内容",Toast.LENGTH_SHORT);
+            toast.show();
+        }else {
+            video.setContent(this.tvVideoContent.getText().toString().trim());
+        }
+        if("null".equals(video.getTag())){
+            Toast toast = Toast.makeText(this,"请选择标签",Toast.LENGTH_SHORT);
+            toast.show();
+        }
         if (vPath.length() == 0){
-            Toast toast = Toast.makeText(this,"内容不能为空",Toast.LENGTH_SHORT);
+            Toast toast = Toast.makeText(this,"请选择视频",Toast.LENGTH_SHORT);
             toast.show();
         }else {
             UploadVideoTask task = new UploadVideoTask(this, video);

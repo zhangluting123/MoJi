@@ -20,9 +20,12 @@ public class Video {
 	 private String videoId;//id
 	 private String path;//路径
 	 private String title;//标题
+	 private String content;//内容
 	 private String duration;//时长
 	 private String size;//大小
 	 private String uploadTime;//上传时间
+	 private String tag;//分类
+	 private int like;//点赞数量
 	 private User user;//用户信息
 	public String getVideoId() {
 		return videoId;
@@ -65,6 +68,24 @@ public class Video {
 	}
 	public void setUser(User user) {
 		this.user = user;
+	}
+	public String getTag() {
+		return tag;
+	}
+	public void setTag(String tag) {
+		this.tag = tag;
+	}
+	public int getLike() {
+		return like;
+	}
+	public void setLike(int like) {
+		this.like = like;
+	}
+	public String getContent() {
+		return content;
+	}
+	public void setContent(String content) {
+		this.content = content;
 	}
 
 }
