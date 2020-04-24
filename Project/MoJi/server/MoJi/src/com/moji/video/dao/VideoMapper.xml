@@ -6,9 +6,12 @@
 		<id property="videoId" column="video_id"/>
 		<result property="path" column="video_path"/>
 		<result property="title" column="video_title"/>
+		<result property="content" column="video_content"/>
 		<result property="duration" column="video_duration"/>
 		<result property="size" column="video_size"/>
 		<result property="uploadTime" column="video_upload_time"/>
+		<result property="tag" column="video_tag"/>
+		<result property="like" column="video_like"/>
 		<association property="user">
 			<id property="userId" column="user_id"/>
 			<result property="userHeadImg" column="avatar_path"/>
@@ -22,8 +25,8 @@
 	</resultMap>
 	<insert id="addVideo">
 		insert into 
-		video_detail(video_id,video_title,video_path,video_duration,video_size,video_upload_time,user_id)
-		values(#{video.videoId},#{video.title},#{video.path},#{video.duration},#{video.size},#{video.uploadTime},#{userId})
+		video_detail(video_id,video_title,video_content,video_path,video_duration,video_size,video_upload_time,video_tag,video_like,user_id)
+		values(#{video.videoId},#{video.title},#{video.content},#{video.path},#{video.duration},#{video.size},#{video.uploadTime},#{video.tag},#{video.like},#{userId})
 	</insert>
 	<select id="checkVideoId" resultType="java.lang.Integer">
 		select count(*) from video_detail where video_id=#{videoId}

@@ -19,6 +19,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.ibatis.annotations.Case;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -44,6 +45,7 @@ public class VideoController {
 	@RequestMapping(value="/upload",method=RequestMethod.POST, produces="application/json;charset=utf-8")
 	public String upload(HttpServletRequest request) {
 		Video video = new Video();
+		video.setLike(0);
 		String userId = "";
 		String re = "FAIL";
 		
@@ -61,6 +63,8 @@ public class VideoController {
 						case "videoTitle":
 							video.setTitle(fi.getString("UTF-8"));
 							break;
+						case "videoContent":
+							video.setContent(fi.getString("UTF-8"));
 						case "videoPath":
 							video.setPath(fi.getString("UTF-8"));
 							break;
@@ -73,6 +77,8 @@ public class VideoController {
 						case "userId":
 							userId = fi.getString("UTF-8");
 							break;
+						case "videoTag":
+							video.setTag(fi.getString("UTF-8"));
 						default:
 							break;
 					}
