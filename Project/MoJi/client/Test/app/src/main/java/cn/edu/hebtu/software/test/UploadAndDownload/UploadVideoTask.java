@@ -95,10 +95,12 @@ public class UploadVideoTask extends AsyncTask<String, Integer, String> {
             //传参
             builder.addFormDataPart("videoId", video.getVideoId())
                     .addFormDataPart("videoTitle",video.getTitle())
+                    .addFormDataPart("videoContent",video.getContent())
                     .addFormDataPart("videoPath",video.getPath())
                     .addFormDataPart("videoDuration",video.getDuration())
                     .addFormDataPart("videoSize",video.getSize())
-                    .addFormDataPart("userId",video.getUser().getUserId());
+                    .addFormDataPart("userId",video.getUser().getUserId())
+                    .addFormDataPart("videoTag",video.getTag());
             //传视频
             File file = new File(video.getPath());
             builder.addPart(Headers.of("Content-Disposition","form-data; name='file';filename=" + file.getName()),
