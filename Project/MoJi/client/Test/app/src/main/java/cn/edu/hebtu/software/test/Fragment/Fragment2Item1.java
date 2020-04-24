@@ -72,7 +72,7 @@ public class Fragment2Item1 extends MyBaseFragment {
                         adapter.replaceAll(getData());
                         refreshLayout.finishRefresh();
                     }
-                },1500);
+                },1000);
             }
         });
 
@@ -85,7 +85,7 @@ public class Fragment2Item1 extends MyBaseFragment {
                         adapter.addData(adapter.getItemCount(),getData());
                         refreshLayout.finishLoadMore();
                     }
-                },1500);
+                },1000);
             }
         });
 
