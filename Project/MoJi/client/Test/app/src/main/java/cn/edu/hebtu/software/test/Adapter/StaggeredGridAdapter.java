@@ -23,14 +23,6 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<StaggeredGridAdap
     private Context mContext;
     private AdapterView.OnItemClickListener mListener;
     private List<Integer> list=new ArrayList<>();
-    private int[] ids = {R.drawable.demo1,R.drawable.demo2,R.drawable.demo3,R.drawable.demo4,R.drawable.demo5,R.drawable.demo6,R.drawable.demo7,R.drawable.demo8};
-
-    public StaggeredGridAdapter(Context mContext) {
-        this.mContext = mContext;
-        for(int i=0;i<8;i++){
-            list.add(ids[i]);
-        }
-    }
 
     public void replaceAll(List<Integer> mylist) {
         list.clear();

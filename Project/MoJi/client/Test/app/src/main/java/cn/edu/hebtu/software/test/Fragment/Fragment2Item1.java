@@ -54,7 +54,7 @@ public class Fragment2Item1 extends MyBaseFragment {
         mRvPu=(RecyclerView)mRootView.findViewById(R.id.rv_pu);
         //设置布局方式,2列，垂直
         mRvPu.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-        StaggeredGridAdapter adapter = new StaggeredGridAdapter(getActivity());
+        StaggeredGridAdapter adapter = new StaggeredGridAdapter();
         mRvPu.setAdapter(adapter);
 
         //设置下拉刷新和上拉加载监听
