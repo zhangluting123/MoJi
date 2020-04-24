@@ -49,12 +49,17 @@ public class Fragment2Item1 extends MyBaseFragment {
         mRootView = inflater.inflate(getContentViewId(), container, false);
         Log.e("TAG", "onCreateView");
 
+        for(int i = 0 ; i < ids.length;i++){
+            list.add(ids[i]);
+        }
+
         refreshlayout = mRootView.findViewById(R.id.refreshlayout);
 
         mRvPu=(RecyclerView)mRootView.findViewById(R.id.rv_pu);
         //设置布局方式,2列，垂直
         mRvPu.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         StaggeredGridAdapter adapter = new StaggeredGridAdapter(getActivity());
+        adapter.replaceAll(list);
         mRvPu.setAdapter(adapter);
 
         //设置下拉刷新和上拉加载监听
