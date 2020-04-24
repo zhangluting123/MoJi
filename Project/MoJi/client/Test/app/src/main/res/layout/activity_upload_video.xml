@@ -48,7 +48,7 @@
         android:hint="请输入你想说的话（不超过300字）"
         android:maxLength="300"
         android:textCursorDrawable="@null"
-        android:background="@drawable/note_edittext_background"
+        android:background="@drawable/note_et_background"
         android:textColorHint="@color/colorNoteEditTextHintColor"/>
     <Button
         android:id="@+id/btn_choose_video"
