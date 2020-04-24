@@ -22,14 +22,40 @@ import cn.edu.hebtu.software.test.R;
 public class StaggeredGridAdapter extends RecyclerView.Adapter<StaggeredGridAdapter.LinearViewHolder>{
     private Context mContext;
     private AdapterView.OnItemClickListener mListener;
-    private List<String> list=new ArrayList<>();
+    private List<Integer> list=new ArrayList<>();
+    private int[] ids = {R.drawable.demo1,R.drawable.demo2,R.drawable.demo3,R.drawable.demo4,R.drawable.demo5,R.drawable.demo6,R.drawable.demo7,R.drawable.demo8};
 
     public StaggeredGridAdapter(Context mContext) {
         this.mContext = mContext;
-        for(int i=0;i<30;i++){
-            list.add(String.format("%s-%s", i/10+1,i));
+        for(int i=0;i<8;i++){
+            list.add(ids[i]);
         }
     }
+
+    public void replaceAll(List<Integer> mylist) {
+        list.clear();
+        if (mylist != null && mylist.size() > 0) {
+            list.addAll(list);
+        }
+        notifyDataSetChanged();
+    }
+
+    /**
+     * 插入数据使用notifyItemInserted，如果要使用插入动画，必须使用notifyItemInserted
+     * 才会有效果。即便不需要使用插入动画，也建议使用notifyItemInserted方式添加数据，
+     * 不然容易出现闪动和间距错乱的问题
+     * */
+    public void addData(int position,ArrayList<Integer> list) {
+        list.addAll(position,list);
+        notifyItemInserted(position);
+    }
+
+    //移除数据使用notifyItemRemoved
+    public void removeData(int position) {
+        list.remove(position);
+        notifyItemRemoved(position);
+    }
+
     @Override
     public StaggeredGridAdapter.LinearViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new LinearViewHolder(LayoutInflater.from(mContext).inflate(R.layout.layout_staggere_grid_item,parent,false));
@@ -37,7 +63,9 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<StaggeredGridAdap
 
     @Override
     public void onBindViewHolder(StaggeredGridAdapter.LinearViewHolder holder, int position) {
-        if(position%2==0){
+        holder.setData(list.get(position));
+
+        /*if(position%2==0){
             holder.mImageView.setImageResource(R.drawable.demo1);
             //ViewGroup.LayoutParams para;
             //para = holder.mImageView.getLayoutParams();
@@ -49,13 +77,12 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<StaggeredGridAdap
         }
         else{
             holder.mImageView.setImageResource(R.drawable.demo2);
-        }
-
+        }*/
     }
 
     @Override
     public int getItemCount() {
-        return 30;
+        return list != null ? list.size() : 0;
     }
 
     class LinearViewHolder extends RecyclerView.ViewHolder{
@@ -65,6 +92,13 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<StaggeredGridAdap
             super(itemView);
             mImageView=(ImageView) itemView.findViewById(R.id.iv);
             mCardView= itemView.findViewById(R.id.card);
+        }
+
+        void setData(Object data) {
+            if (data != null) {
+                int id = (int) data;
+                mImageView.setImageResource(id);
+            }
         }
     }
 }
