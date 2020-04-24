@@ -30,7 +30,7 @@ import cn.edu.hebtu.software.test.R;
  */
 public class Fragment2Item1 extends MyBaseFragment {
 
-
+    private StaggeredGridAdapter adapter;
     private RecyclerView mRvPu;
     private SmartRefreshLayout refreshlayout;
     private List<Integer> list=new ArrayList<>();
@@ -58,7 +58,7 @@ public class Fragment2Item1 extends MyBaseFragment {
         mRvPu=(RecyclerView)mRootView.findViewById(R.id.rv_pu);
         //设置布局方式,2列，垂直
         mRvPu.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-        StaggeredGridAdapter adapter = new StaggeredGridAdapter(getActivity());
+        adapter = new StaggeredGridAdapter(getActivity(),list);
         adapter.replaceAll(list);
         mRvPu.setAdapter(adapter);
 
@@ -89,7 +89,6 @@ public class Fragment2Item1 extends MyBaseFragment {
             }
         });
 
-
         return mRootView;
     }
 
@@ -110,7 +109,7 @@ public class Fragment2Item1 extends MyBaseFragment {
 
     private ArrayList<Integer>  getData() {
         ArrayList<Integer> list = new ArrayList<>();
-        for(int i = 0 ; i < 8;i++){
+        for(int i = 0 ; i < ids.length;i++){
             list.add(ids[i]);
         }
         return list;

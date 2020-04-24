@@ -36,7 +36,7 @@ public class Fragment2Item2 extends MyBaseFragment{
         mRvPu=(RecyclerView)mRootView.findViewById(R.id.rv_pu);
         //设置布局方式,2列，垂直
         mRvPu.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-        mRvPu.setAdapter(new StaggeredGridAdapter(getActivity()));
+        //mRvPu.setAdapter(new StaggeredGridAdapter(getActivity()));
 
         return mRootView;
     }

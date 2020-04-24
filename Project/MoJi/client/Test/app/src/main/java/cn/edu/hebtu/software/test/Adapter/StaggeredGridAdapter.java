@@ -24,14 +24,15 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<StaggeredGridAdap
     private AdapterView.OnItemClickListener mListener;
     private List<Integer> list=new ArrayList<>();
 
-    public StaggeredGridAdapter(Context mContext) {
+    public StaggeredGridAdapter(Context mContext,List<Integer> mylist) {
         this.mContext = mContext;
+        list.addAll(mylist);
     }
 
     public void replaceAll(List<Integer> mylist) {
         list.clear();
         if (mylist != null && mylist.size() > 0) {
-            list.addAll(list);
+            list.addAll(mylist);
         }
         notifyDataSetChanged();
     }
@@ -41,8 +42,8 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<StaggeredGridAdap
      * 才会有效果。即便不需要使用插入动画，也建议使用notifyItemInserted方式添加数据，
      * 不然容易出现闪动和间距错乱的问题
      * */
-    public void addData(int position,ArrayList<Integer> list) {
-        list.addAll(position,list);
+    public void addData(int position,ArrayList<Integer> mylist) {
+        list.addAll(position,mylist);
         notifyItemInserted(position);
     }
 
