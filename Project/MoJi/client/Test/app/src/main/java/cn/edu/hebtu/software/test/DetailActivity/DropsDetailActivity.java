@@ -286,7 +286,7 @@ public class DropsDetailActivity extends AppCompatActivity implements ViewPager.
      */
     private void showCommentList(){
         ListView listView = findViewById(R.id.comment_list);
-        commentAdapter = new CommentAdapter( commentList, R.layout.item_comment, getApplicationContext());
+        commentAdapter = new CommentAdapter(commentList, R.layout.item_comment, getApplicationContext());
         listView.setAdapter(commentAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -294,7 +294,6 @@ public class DropsDetailActivity extends AppCompatActivity implements ViewPager.
                 edtInsertComment.setHint("回复@"+commentList.get(position).getUser().getUserName());
                 edtInsertComment.setHintTextColor(getResources().getColor(android.R.color.darker_gray));
                 commentId = commentList.get(position).getId();
-                Log.e("comment-list", commentList.toArray().toString());
                 edtInsertComment.setSelection(0);
                 edtInsertComment.setFocusable(true);
                 //键盘如果关闭弹出
@@ -677,7 +676,7 @@ public class DropsDetailActivity extends AppCompatActivity implements ViewPager.
      *  @time: 2020/4/20  16:37
      *  @Description: 回复评论
      */
-    private void insertReplyComment(){
+    public void insertReplyComment(){
         new Thread(){
             @Override
             public void run() {

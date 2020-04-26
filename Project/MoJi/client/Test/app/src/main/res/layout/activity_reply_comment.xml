@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:layout_width="match_parent"
+<RelativeLayout android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:fitsSystemWindows="true"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -9,6 +8,7 @@
         android:id="@+id/reply_comment_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:gravity="center_vertical"
         app:navigationIcon="@mipmap/back"
         android:background="@color/smssdk_common_white"
@@ -34,67 +34,105 @@
             android:textColor="@android:color/black"
             android:text="）"/>
     </androidx.appcompat.widget.Toolbar>
-    <RelativeLayout
+    <ScrollView
+        android:fillViewport="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:background="@android:color/white">
-        <ImageView
-            android:id="@+id/iv_commentHead"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginLeft="10dp"
-            android:src="@drawable/headportrait"/>
-        <TextView
-            android:id="@+id/user_name"
-            android:layout_toRightOf="@id/iv_commentHead"
-            android:layout_marginLeft="20dp"
-            android:textSize="12sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="李四"/>
-        <TextView
-            android:id="@+id/tv_commentContent"
-            android:layout_toRightOf="@id/iv_commentHead"
-            android:layout_width="wrap_content"
-            android:textColor="@android:color/black"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_below="@id/user_name"
-            android:text="测试测试测试测尺测试测试测试测试测试测尺测试测试"/>
-        <TextView
-            android:id="@+id/tv_commentDate"
-            android:layout_marginRight="10dp"
-            android:layout_alignParentRight="true"
-            android:textSize="12sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="2019/11/12"/>
-    </RelativeLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="14dp"/>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@android:color/white">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:textColor="@android:color/black"
-            android:text="全部回复"/>
-        <ListView
-            android:id="@+id/lv_replyList"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+        android:layout_below="@id/reply_comment_toolbar">
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:divider="@drawable/list_divider"
-            android:dividerHeight="1dp"/>
+            android:orientation="vertical">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:background="@android:color/white">
+                <ImageView
+                    android:id="@+id/iv_commentHead"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="10dp"
+                    android:src="@drawable/headportrait"/>
+                <TextView
+                    android:id="@+id/user_name"
+                    android:layout_toRightOf="@id/iv_commentHead"
+                    android:layout_marginLeft="20dp"
+                    android:textSize="13sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="李四"/>
+                <TextView
+                    android:id="@+id/tv_commentContent"
+                    android:layout_toRightOf="@id/iv_commentHead"
+                    android:layout_width="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_below="@id/user_name"
+                    android:text="测试测试测试测尺测试测试测试测试测试测尺测试测试"/>
+                <TextView
+                    android:id="@+id/tv_commentDate"
+                    android:layout_marginRight="10dp"
+                    android:layout_alignParentRight="true"
+                    android:textSize="10sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2019/11/12"/>
+            </RelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="14dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@android:color/white">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:textColor="@android:color/black"
+                    android:text="全部回复"/>
+                <cn.edu.hebtu.software.test.View.InnerScrollListView
+                    android:id="@+id/lv_replyList"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="70dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none"
+                    android:divider="@drawable/list_divider"
+                    android:dividerHeight="1dp"/>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+    <LinearLayout
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+        <EditText
+            android:id="@+id/edt_insertComment"
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_height="match_parent"
+            android:textSize="16dp"
+            android:hint="请输入评论"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textColorHint="@android:color/darker_gray"
+            android:background="@android:color/white"/>
+        <Button
+            android:id="@+id/btn_submitComment"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:text="提交"
+            android:textSize="17sp"
+            android:textColor="@android:color/white"
+            android:background="@color/colorAccent"/>
     </LinearLayout>
-
-</LinearLayout>
+</RelativeLayout>

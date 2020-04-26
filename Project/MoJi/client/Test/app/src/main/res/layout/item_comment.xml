@@ -23,7 +23,7 @@
     <TextView
         android:id="@+id/tv_commentContent"
         android:layout_toRightOf="@id/iv_commentHead"
-        android:layout_width="200dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
@@ -35,7 +35,7 @@
         android:layout_alignParentRight="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="12sp"
+        android:textSize="10sp"
         android:text="2019/11/12"/>
     <LinearLayout
         android:id="@+id/ll_reply_comment"

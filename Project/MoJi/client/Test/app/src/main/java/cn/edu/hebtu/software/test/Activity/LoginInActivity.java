@@ -75,6 +75,8 @@ public class LoginInActivity extends AppCompatActivity implements View.OnClickLi
                     user = (User) msg.obj;
                     final MyApplication data = (MyApplication) getApplication();
                     data.setUser(user);
+                    JPushInterface.init(getApplicationContext());
+                    JPushInterface.setDebugMode(true);
                     //登陆成功,如果退出登录时已关闭推送功能，则再次登录时恢复此功能
                     if(JPushInterface.isPushStopped(getApplicationContext())){
                         JPushInterface.resumePush(getApplicationContext());
@@ -90,6 +92,12 @@ public class LoginInActivity extends AppCompatActivity implements View.OnClickLi
                     break;
                 case 3:
                     Toast.makeText(LoginInActivity.this, "未连接到服务器", Toast.LENGTH_SHORT).show();
+                    break;
+                case 4:
+                    if(!"success".equals(SharedUtil.getString("isGuide", getApplicationContext(), user.getUserId()))){
+                        // 调用 Handler 来异步设置别名，一般都是用userId来进行设置别名（唯一性）。
+                        JPushInterface.setAlias(getApplicationContext(),user.getUserId() ,mAliasCallback);
+                    }
                     break;
             }
         }
@@ -248,8 +256,7 @@ public class LoginInActivity extends AppCompatActivity implements View.OnClickLi
                     SharedUtil.putString("isGuide",LoginInActivity.this, user.getUserId(), "success");
                     break;
                 case 6002:
-                    // 延迟 60 秒来调用 Handler 设置别名(网络不佳时)
-                    handler.sendMessageDelayed(handler.obtainMessage(1001, alias), 1000 * 60);
+                    handler.sendMessageDelayed(handler.obtainMessage(4, alias), 1000 * 1);
                     break;
                 default:
                     break;

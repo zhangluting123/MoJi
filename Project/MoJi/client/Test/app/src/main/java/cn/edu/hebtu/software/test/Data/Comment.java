@@ -18,18 +18,20 @@ public class Comment implements Parcelable {
     private String commentContent;
     private String commentTime;
     private Integer replyCount;
+    private Note note;
 
     public Comment(){
 
     }
 
-    public Comment(User user, String id, String noteId, String commentContent, String commentTime, Integer replyCount) {
+    public Comment(User user, String id, String noteId, String commentContent, String commentTime, Integer replyCount, Note note) {
         this.user = user;
         this.id = id;
         this.noteId = noteId;
         this.commentContent = commentContent;
         this.commentTime = commentTime;
         this.replyCount = replyCount;
+        this.note = note;
     }
 
 
@@ -44,6 +46,28 @@ public class Comment implements Parcelable {
         } else {
             replyCount = in.readInt();
         }
+        note = in.readParcelable(Note.class.getClassLoader());
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(user, flags);
+        dest.writeString(id);
+        dest.writeString(noteId);
+        dest.writeString(commentContent);
+        dest.writeString(commentTime);
+        if (replyCount == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(replyCount);
+        }
+        dest.writeParcelable(note, flags);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<Comment> CREATOR = new Creator<Comment>() {
@@ -106,6 +130,14 @@ public class Comment implements Parcelable {
         this.replyCount = replyCount;
     }
 
+    public Note getNote() {
+        return note;
+    }
+
+    public void setNote(Note note) {
+        this.note = note;
+    }
+
     @Override
     public String toString() {
         return "Comment{" +
@@ -115,26 +147,11 @@ public class Comment implements Parcelable {
                 ", commentContent='" + commentContent + '\'' +
                 ", commentTime='" + commentTime + '\'' +
                 ", replyCount=" + replyCount +
+                ", note=" + note +
                 '}';
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeParcelable(user, flags);
-        dest.writeString(id);
-        dest.writeString(noteId);
-        dest.writeString(commentContent);
-        dest.writeString(commentTime);
-        if (replyCount == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeInt(replyCount);
-        }
-    }
+
+
 }

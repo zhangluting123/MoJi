@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -16,7 +17,13 @@ import java.util.List;
 import cn.edu.hebtu.software.test.Data.ReplyComment;
 import cn.edu.hebtu.software.test.R;
 import cn.edu.hebtu.software.test.Setting.MyApplication;
-
+/**
+ * @ProjectName:    MoJi
+ * @Description:    回复消息适配器
+ * @Author:         张璐婷
+ * @CreateDate:     2020/4/24 13:33
+ * @Version:        1.0
+ */
 public class ReplyCommentAdapter extends BaseAdapter {
     private List<ReplyComment> replyCommentList;
     private Context context;
@@ -70,6 +77,9 @@ public class ReplyCommentAdapter extends BaseAdapter {
             viewHolder.userName = convertView.findViewById(R.id.user_name);
             viewHolder.replyDate = convertView.findViewById(R.id.tv_replyDate);
             viewHolder.replyHead = convertView.findViewById(R.id.iv_replyHead);
+            viewHolder.parent = convertView.findViewById(R.id.rl_parent);
+            viewHolder.atSomeBody = convertView.findViewById(R.id.tv_atSomeBody);
+            viewHolder.commentContent = convertView.findViewById(R.id.tv_comment_content);
             convertView.setTag(viewHolder);
         }else{
             viewHolder = (ViewHolder)convertView.getTag();
@@ -83,6 +93,13 @@ public class ReplyCommentAdapter extends BaseAdapter {
             viewHolder.replyContent.setText(replyCommentList.get(position).getReplyContent());
             viewHolder.replyDate.setText(replyCommentList.get(position).getReplyTime());
             viewHolder.userName.setText(replyCommentList.get(position).getReplyUser().getUserName());
+            if(replyCommentList.get(position).getReplyComment() != null){
+                viewHolder.parent.setVisibility(View.VISIBLE);
+                viewHolder.atSomeBody.setText(replyCommentList.get(position).getReplyComment().getReplyUser().getUserName());
+                viewHolder.commentContent.setText(replyCommentList.get(position).getReplyComment().getReplyContent());
+            }else{
+                viewHolder.parent.setVisibility(View.GONE);
+            }
         }
 
         return convertView;
@@ -93,5 +110,13 @@ public class ReplyCommentAdapter extends BaseAdapter {
         private TextView userName;
         private TextView replyContent;
         private TextView replyDate;
+        private RelativeLayout parent;
+        private TextView atSomeBody;
+        private TextView commentContent;
+    }
+
+    public void flush(List<ReplyComment> replyComments){
+        this.replyCommentList = replyComments;
+        notifyDataSetChanged();
     }
 }

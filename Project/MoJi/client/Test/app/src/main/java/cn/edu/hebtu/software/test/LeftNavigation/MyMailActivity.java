@@ -3,56 +3,29 @@ package cn.edu.hebtu.software.test.LeftNavigation;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentTabHost;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import cn.edu.hebtu.software.test.Activity.MainActivity;
-import cn.edu.hebtu.software.test.Adapter.TraceListAdapter;
-import cn.edu.hebtu.software.test.Data.Mail;
-import cn.edu.hebtu.software.test.DetailActivity.MailDetailActivity;
-import cn.edu.hebtu.software.test.Fragment.AtMeFragment;
-import cn.edu.hebtu.software.test.Fragment.DropsFragment;
-import cn.edu.hebtu.software.test.Fragment.FootprintFragment;
+import cn.edu.hebtu.software.test.Fragment.MyCommentFragment;
 import cn.edu.hebtu.software.test.Fragment.MessageFragment;
 import cn.edu.hebtu.software.test.Fragment.NotificationFragment;
 import cn.edu.hebtu.software.test.R;
 import cn.edu.hebtu.software.test.Setting.MyApplication;
 import cn.edu.hebtu.software.test.Util.ActivityManager;
-import cn.edu.hebtu.software.test.Util.DetermineConnServer;
 
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.lang.reflect.Type;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.function.ToDoubleBiFunction;
+
 /**
  * @ProjectName:    MoJi
  * @Description:    java类作用描述
@@ -102,12 +75,12 @@ public class MyMailActivity extends AppCompatActivity {
         //私信
         TabHost.TabSpec message = fragmentTabHost.newTabSpec("message").setIndicator(getTabSpecView("message","私信"));
         fragmentTabHost.addTab(message, MessageFragment.class, null);
+        //评论
+        TabHost.TabSpec mycomment = fragmentTabHost.newTabSpec("mycomment").setIndicator(getTabSpecView("mycomment","评论"));
+        fragmentTabHost.addTab(mycomment, MyCommentFragment.class, null);
         //通知
         TabHost.TabSpec notification = fragmentTabHost.newTabSpec("notification").setIndicator(getTabSpecView("notification","通知"));
         fragmentTabHost.addTab(notification, NotificationFragment.class, null);
-        //@我
-        TabHost.TabSpec atme = fragmentTabHost.newTabSpec("atme").setIndicator(getTabSpecView("atme","@我"));
-        fragmentTabHost.addTab(atme, AtMeFragment.class, null);
 
         //默认选中第一项
         fragmentTabHost.setCurrentTab(mailId);
@@ -116,10 +89,10 @@ public class MyMailActivity extends AppCompatActivity {
                 textViewMap.get("message").setTextColor(getResources().getColor(R.color.colorActionBarBackground));
                 break;
             case 1:
-                textViewMap.get("notification").setTextColor(getResources().getColor(R.color.colorActionBarBackground));
+                textViewMap.get("mycomment").setTextColor(getResources().getColor(R.color.colorActionBarBackground));
                 break;
             case 2:
-                textViewMap.get("atme").setTextColor(getResources().getColor(R.color.colorActionBarBackground));
+                textViewMap.get("notification").setTextColor(getResources().getColor(R.color.colorActionBarBackground));
                 break;
         }
 
@@ -131,20 +104,20 @@ public class MyMailActivity extends AppCompatActivity {
                     case "message":
                         data.setMailTabId(0);
                         textViewMap.get("message").setTextColor(getResources().getColor(R.color.colorActionBarBackground));
+                        textViewMap.get("mycomment").setTextColor(Color.BLACK);
                         textViewMap.get("notification").setTextColor(Color.BLACK);
-                        textViewMap.get("atme").setTextColor(Color.BLACK);
                         break;
-                    case "notification":
+                    case "mycomment":
                         data.setMailTabId(1);
                         textViewMap.get("message").setTextColor(Color.BLACK);
-                        textViewMap.get("notification").setTextColor(getResources().getColor(R.color.colorActionBarBackground));
-                        textViewMap.get("atme").setTextColor(Color.BLACK);
-                        break;
-                    case "atme":
-                        data.setMailTabId(2);
+                        textViewMap.get("mycomment").setTextColor(getResources().getColor(R.color.colorActionBarBackground));
                         textViewMap.get("notification").setTextColor(Color.BLACK);
+                        break;
+                    case "notification":
+                        data.setMailTabId(2);
                         textViewMap.get("message").setTextColor(Color.BLACK);
-                        textViewMap.get("atme").setTextColor(getResources().getColor(R.color.colorActionBarBackground));
+                        textViewMap.get("mycomment").setTextColor(Color.BLACK);
+                        textViewMap.get("notification").setTextColor(getResources().getColor(R.color.colorActionBarBackground));
                         break;
                 }
             }

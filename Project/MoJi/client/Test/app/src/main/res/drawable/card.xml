@@ -3,9 +3,6 @@
     <item>
         <shape android:shape="rectangle">
             <padding
-                android:bottom="10dp"
-                android:left="10dp"
-                android:right="10dp"
                 android:top="10dp" />
             <solid android:color="#22cdcdcd" />
             <corners android:radius="0dp" />
@@ -14,7 +11,6 @@
     <item>
         <shape>
             <solid android:color="#FFFFFF" />
-            <corners android:radius="28dp" />
         </shape>
     </item>
 </layer-list>

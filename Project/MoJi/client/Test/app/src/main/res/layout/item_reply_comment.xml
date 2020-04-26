@@ -16,14 +16,14 @@
         android:layout_marginLeft="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="12sp"
+        android:textSize="13sp"
         android:text="李四"/>
     <TextView
         android:id="@+id/tv_replyContent"
         android:layout_toRightOf="@id/iv_replyHead"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:textColor="@android:color/black"
-        android:textSize="12sp"
+        android:textSize="13sp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
@@ -35,6 +35,63 @@
         android:layout_alignParentRight="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="12sp"
+        android:textSize="10sp"
         android:text="2019/11/12"/>
+
+    <RelativeLayout
+        android:id="@+id/rl_parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_replyContent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_toRightOf="@id/iv_replyHead">
+        <View
+            android:id="@+id/custom_view"
+            android:layout_width="2dp"
+            android:layout_height="20dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginRight="6dp"
+            android:background="@color/colorPrimary"/>
+        <LinearLayout
+            android:id="@+id/ll_usermsg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/custom_view"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="4dp"
+                android:textSize="13sp"
+                android:text="\@"
+                android:textColor="@color/colorPrimary" />
+
+            <TextView
+                android:id="@+id/tv_atSomeBody"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="13sp"
+                android:text="张三"
+                android:textColor="@color/colorPrimary" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="13sp"
+                android:text="："
+                android:textColor="@color/colorPrimary" />
+        </LinearLayout>
+        <TextView
+            android:id="@+id/tv_comment_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ll_usermsg"
+            android:layout_marginTop="4dp"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/custom_view"
+            android:textSize="12sp"
+            android:text="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"/>
+    </RelativeLayout>
 </RelativeLayout>

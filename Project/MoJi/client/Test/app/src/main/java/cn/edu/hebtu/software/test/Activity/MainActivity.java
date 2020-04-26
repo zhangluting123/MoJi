@@ -49,6 +49,7 @@ import cn.edu.hebtu.software.test.LeftNavigation.TimelineActivity;
 import cn.edu.hebtu.software.test.R;
 import cn.edu.hebtu.software.test.Setting.MyApplication;
 import cn.edu.hebtu.software.test.Util.ActivityManager;
+import cn.edu.hebtu.software.test.Util.SharedUtil;
 import cn.jpush.android.api.JPushInterface;
 
 /**
@@ -197,7 +198,6 @@ public class MainActivity extends AppCompatActivity  {
         mToolbar = findViewById(R.id.id_drawer_layout_toolbar);
         mDrawerlayout = findViewById(R.id.id_drawer_layout);
         //菜单
-        //TODO-----添加菜单---------
         mToolbar.inflateMenu(R.menu.menu_drawer);
         mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
@@ -227,17 +227,13 @@ public class MainActivity extends AppCompatActivity  {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final MyApplication data = (MyApplication) getApplication();
-
-                JPushInterface.stopPush(getApplicationContext());
+                SharedUtil.remove("isGuide", getApplicationContext(), user.getUserId());
                 user.setUserId(null);
                 img.setImageResource(R.drawable.headportrait);
                 user_name.setText("登录");
                 Intent intent = new Intent(MainActivity.this, MainActivity.class);
                 startActivity(intent);
                 ActivityManager.getInstance().exit();
-
-
             }
         });
 

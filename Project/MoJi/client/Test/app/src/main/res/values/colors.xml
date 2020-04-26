@@ -16,5 +16,6 @@
     <color name="colorShowNoteCenterBackground">#A0DCDCDC</color>
     <color name="colorShowNoteTitleBackground">#FFE4B5</color>
     <color name="colorCommentTimeText">#C0C0C0</color>
+    <color name="colorBlue">#1c8d37</color>
 
 </resources>

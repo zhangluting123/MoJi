@@ -7,6 +7,7 @@ import android.util.Log;
 
 
 import cn.edu.hebtu.software.test.DetailActivity.MailDetailActivity;
+import cn.edu.hebtu.software.test.LeftNavigation.MyMailActivity;
 import cn.jpush.android.api.NotificationMessage;
 import cn.jpush.android.service.JPushMessageReceiver;
 
@@ -34,12 +35,13 @@ public class MyReceiver extends JPushMessageReceiver{
         super.onNotifyMessageOpened(context, notificationMessage);
             //获取通知消息的内容
             String content = notificationMessage.notificationContent;
-            Log.e("notif", notificationMessage.toString());
-            Log.e("zlt","通知消息内容：" +content);
             String extra = notificationMessage.notificationExtras;
+            Log.e("JPush-content=", content);
+            Log.e("JPush-extra", extra);
             //在Activity中显示通知消息的内容
-            Intent intent = new Intent(context, MailDetailActivity.class);
-            intent.putExtra("extra", extra);
+            Intent intent = new Intent(context, MyMailActivity.class);
+            MyApplication data = (MyApplication)context.getApplicationContext();
+            data.setMailTabId(1);
             context.startActivity(intent);
     }
 
@@ -53,7 +55,6 @@ public class MyReceiver extends JPushMessageReceiver{
 //                break;
 //            case 6002:
 //                // 延迟 60 秒来调用 Handler 设置别名(网络不佳时)
-//
 //                this.context = context;
 //                mHandler.sendMessageDelayed(mHandler.obtainMessage(1001, jPushMessage.getAlias()), 1000 * 60);
 //
