@@ -109,4 +109,12 @@
 	<delete id="deleteNoteImg">
 		delete from note_img where noteId=#{deleteNoteId}
 	</delete>
+	<!-- 根据ID值查询note -->
+	<select id="queryNoteById" resultMap="noteMap">
+		select * 
+		from note_detail n
+		left join user_detail u on n.user_id=u.user_id
+		left join note_img i on n.note_id=i.noteId
+		where n.note_id = #{noteId}
+	</select>
 </mapper>

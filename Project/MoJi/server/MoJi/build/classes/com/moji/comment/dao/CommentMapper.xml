@@ -19,6 +19,21 @@
 			<result property="phone" column="phone"/>
 		</association>
 	</resultMap>
+	<resultMap type="com.moji.entity.Comment" id="commentMap2">
+		<id property="id" column="comment_id"/>
+		<result property="noteId" column="note_id"/>
+		<result property="userId" column="comment_user_id"/>
+		<result property="commentContent" column="comment_content"/>
+		<result property="commentTime" column="comment_time"/>
+		<association property="user" column="{userId=user_id}"
+			select="com.moji.user.dao.UserMapper.queryUser">
+		</association>
+		<!-- 查询Note -->
+		<association property="dbNote" column="{noteId=note_id}" 
+			select="com.moji.note.dao.NoteMapper.queryNoteById">
+		</association>
+	</resultMap>
+	
 	<!-- 对数据库comment_detail表进行操作 -->
 	<select id="showComment" resultMap="commentMap">
 		select * 
@@ -39,8 +54,18 @@
 	<select id="findComment" resultMap="commentMap">
 		select * 
 		from comment_detail c
-		left join user_detail u
-		on c.comment_user_id=u.user_id
+		left join user_detail u on c.comment_user_id=u.user_id
+		left join note_detail n on n.note_id = c.note_id
 		where c.comment_id=#{commentId}
 	</select>
+	
+	<!-- 查找评论和note -->
+	<select id="findCommentAndNote" resultMap="commentMap2">
+		select * 
+		from comment_detail c
+		left join user_detail u on c.comment_user_id=u.user_id
+		left join note_detail n on n.note_id = c.note_id
+		where c.comment_id=#{commentId}
+	</select>
+	
 </mapper>
