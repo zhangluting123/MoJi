@@ -320,6 +320,7 @@ public class DropsDetailActivity extends AppCompatActivity implements ViewPager.
         View v = LayoutInflater.from(getApplicationContext()).inflate(R.layout.popup_menu,null);
         popupWindow = new PopupWindow(this);
         popupWindow.setContentView(v);
+        popupWindow.setBackgroundDrawable(null);
         registerListener(comment,v);
         popupWindow.setTouchable(true);
         popupWindow.setFocusable(true); //设置点击menu以外其他地方以及返回键退出
@@ -327,6 +328,7 @@ public class DropsDetailActivity extends AppCompatActivity implements ViewPager.
         //设置弹出位置
         popupWindow.showAtLocation(parent, Gravity.CENTER,0,0);
         popupWindow.setAnimationStyle(R.style.popup_menu);
+
         //设置弹出时背景色变暗
         WindowManager.LayoutParams lp = getWindow().getAttributes();
         lp.alpha = 0.4f;

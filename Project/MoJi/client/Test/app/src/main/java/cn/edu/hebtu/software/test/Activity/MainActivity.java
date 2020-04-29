@@ -228,6 +228,7 @@ public class MainActivity extends AppCompatActivity  {
             @Override
             public void onClick(View v) {
                 SharedUtil.remove("isGuide", getApplicationContext(), user.getUserId());
+                JPushInterface.stopPush(getApplicationContext());
                 user.setUserId(null);
                 img.setImageResource(R.drawable.headportrait);
                 user_name.setText("登录");

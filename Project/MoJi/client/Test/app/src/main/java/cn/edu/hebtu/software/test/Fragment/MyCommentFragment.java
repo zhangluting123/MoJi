@@ -130,6 +130,7 @@ public class MyCommentFragment extends Fragment {
         View v = LayoutInflater.from(getActivity().getApplicationContext()).inflate(R.layout.popup_menu2,null);
         popupWindow = new PopupWindow(getActivity().getApplicationContext());
         popupWindow.setContentView(v);
+        popupWindow.setBackgroundDrawable(null);
         registerListener(mailMyComment,v);
         popupWindow.setTouchable(true);
         popupWindow.setFocusable(true); //设置点击menu以外其他地方以及返回键退出
