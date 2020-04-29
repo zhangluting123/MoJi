@@ -136,7 +136,7 @@ public class CommentController {
 		new Thread() {
 			public void run() {
 				try {
-					Thread.sleep(1000*60);
+					Thread.sleep(1000*20);
 					int count = JPushUtil.testGetReport(msgId);
 					if(count > 0) {
 						System.out.println("通知发送成功");
