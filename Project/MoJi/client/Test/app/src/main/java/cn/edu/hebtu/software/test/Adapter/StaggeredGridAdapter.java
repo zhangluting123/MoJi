@@ -7,11 +7,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.TextView;
+
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
+import com.makeramen.roundedimageview.RoundedImageView;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import cn.edu.hebtu.software.test.Data.Note;
 import cn.edu.hebtu.software.test.R;
+
+import static com.baidu.mapapi.BMapManager.getContext;
 
 /**
  * @Author: 邸祯策
@@ -23,10 +33,12 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<StaggeredGridAdap
     private Context mContext;
     private AdapterView.OnItemClickListener mListener;
     private List<Integer> list=new ArrayList<>();
+    private List<Note> noteList = new ArrayList<>();//数据源
 
-    public StaggeredGridAdapter(Context mContext,List<Integer> mylist) {
+    public StaggeredGridAdapter(Context mContext,List<Note> noteList) {
         this.mContext = mContext;
-        list.addAll(mylist);
+        //list.addAll(mylist);
+        this.noteList = noteList;
     }
 
     public void replaceAll(List<Integer> mylist) {
@@ -60,7 +72,7 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<StaggeredGridAdap
 
     @Override
     public void onBindViewHolder(StaggeredGridAdapter.LinearViewHolder holder, int position) {
-        holder.setData(list.get(position));
+        holder.setData(noteList.get(position));
 
         /*if(position%2==0){
             holder.mImageView.setImageResource(R.drawable.demo1);
@@ -79,22 +91,41 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<StaggeredGridAdap
 
     @Override
     public int getItemCount() {
-        return list != null ? list.size() : 0;
+        return noteList != null ? noteList.size() : 0;
     }
 
     class LinearViewHolder extends RecyclerView.ViewHolder{
         private ImageView mImageView;
         private CardView mCardView;
+        private RoundedImageView roundedImageView;
+        private TextView title;
+        private TextView petname;
         public LinearViewHolder(View itemView){
             super(itemView);
-            mImageView=(ImageView) itemView.findViewById(R.id.iv);
-            mCardView= itemView.findViewById(R.id.card);
+            mImageView = (ImageView) itemView.findViewById(R.id.iv);
+            mCardView = itemView.findViewById(R.id.card);
+            roundedImageView = itemView.findViewById(R.id.head);
+            title = itemView.findViewById(R.id.title);
+            petname = itemView.findViewById(R.id.petname);
         }
 
         void setData(Object data) {
             if (data != null) {
-                int id = (int) data;
-                mImageView.setImageResource(id);
+                Note note = (Note)data;
+                //mImageView.setImageResource(id);
+                //Glide.with(getContext()).load("http://123.56.175.200:8080/MoJi/image/2.jpg").into(mImageView);
+                if(null == note.getUser().getUserHeadImg()){
+                    roundedImageView.setImageResource(R.drawable.headportrait);
+                }else {
+                    Glide.with(getContext()).load("http://123.56.175.200:8080/MoJi/" + note.getUser().getUserHeadImg()).into(roundedImageView);
+                }
+                if(note.getImgList().size() > 0){
+                    Glide.with(getContext()).load("http://123.56.175.200:8080/MoJi/" + note.getImgList().get(0)).into(mImageView);
+                }else {
+                    mImageView.setImageResource(R.mipmap.default_bg);
+                }
+                title.setText(note.getTitle());
+                petname.setText(note.getUser().getUserName());
             }
         }
     }

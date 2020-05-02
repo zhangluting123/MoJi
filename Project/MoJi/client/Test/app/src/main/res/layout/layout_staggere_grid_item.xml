@@ -28,6 +28,7 @@
         </androidx.appcompat.widget.AppCompatImageView>
     </androidx.cardview.widget.CardView>
     <TextView
+        android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="title"
@@ -46,6 +47,7 @@
             android:src="@drawable/head"
             app:riv_oval="true" />
         <TextView
+            android:id="@+id/petname"
             android:layout_marginLeft="4dp"
             android:layout_marginBottom="2dp"
             android:layout_alignParentBottom="true"
