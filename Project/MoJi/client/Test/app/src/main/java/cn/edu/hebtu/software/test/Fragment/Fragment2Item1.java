@@ -52,8 +52,6 @@ public class Fragment2Item1 extends MyBaseFragment {
     private StaggeredGridAdapter adapter;
     private RecyclerView mRvPu;
     private SmartRefreshLayout refreshlayout;
-    private List<Integer> list=new ArrayList<>();
-    private int[] ids = {R.drawable.demo1,R.drawable.demo2,R.drawable.demo3,R.drawable.demo4,R.drawable.demo5,R.drawable.demo6,R.drawable.demo7,R.drawable.demo8};
 
     private Handler handler = new Handler() {
         @Override
@@ -63,7 +61,6 @@ public class Fragment2Item1 extends MyBaseFragment {
                     Toast.makeText(getActivity().getApplicationContext(), (CharSequence) msg.obj, Toast.LENGTH_SHORT).show();
                     break;
             }
-
         }
     };
 
@@ -80,22 +77,17 @@ public class Fragment2Item1 extends MyBaseFragment {
         mRootView = inflater.inflate(getContentViewId(), container, false);
         Log.e("TAG", "onCreateView");
 
-        for(int i = 0 ; i < ids.length;i++){
-            list.add(ids[i]);
-        }
-
         data = (MyApplication)getActivity().getApplication();
         new getMessage().start();
 
         refreshlayout = mRootView.findViewById(R.id.refreshlayout);
-
         mRvPu=(RecyclerView)mRootView.findViewById(R.id.rv_pu);
+
         //设置布局方式,2列，垂直
-        mRvPu.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        mRvPu.setLayoutManager(staggeredGridLayoutManager);
         adapter = new StaggeredGridAdapter(getActivity(),noteList);
-        //adapter.replaceAll(list);
         mRvPu.setAdapter(adapter);
-        //adapter.notifyDataSetChanged();
 
         //设置下拉刷新和上拉加载监听
         refreshlayout.setOnRefreshListener(new OnRefreshListener() {
@@ -134,7 +126,7 @@ public class Fragment2Item1 extends MyBaseFragment {
 
     @Override
     protected void initData() {
-
+        new getMessage().start();
     }
 
     @Override
@@ -142,12 +134,9 @@ public class Fragment2Item1 extends MyBaseFragment {
         return  R.layout.add;
     }
 
-    private ArrayList<Integer>  getData() {
-        ArrayList<Integer> list = new ArrayList<>();
-        for(int i = 0 ; i < ids.length;i++){
-            list.add(ids[i]);
-        }
-        return list;
+    private List<Note>  getData() {
+        new getMessage().start();
+        return noteList;
     }
 
     class getMessage extends Thread{

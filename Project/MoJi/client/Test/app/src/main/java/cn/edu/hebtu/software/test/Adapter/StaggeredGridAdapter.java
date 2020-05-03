@@ -20,6 +20,7 @@ import java.util.List;
 
 import cn.edu.hebtu.software.test.Data.Note;
 import cn.edu.hebtu.software.test.R;
+import cn.edu.hebtu.software.test.Util.ScreenUtils;
 
 import static com.baidu.mapapi.BMapManager.getContext;
 
@@ -30,21 +31,20 @@ import static com.baidu.mapapi.BMapManager.getContext;
  */
 
 public class StaggeredGridAdapter extends RecyclerView.Adapter<StaggeredGridAdapter.LinearViewHolder>{
+
     private Context mContext;
     private AdapterView.OnItemClickListener mListener;
-    private List<Integer> list=new ArrayList<>();
     private List<Note> noteList = new ArrayList<>();//数据源
 
     public StaggeredGridAdapter(Context mContext,List<Note> noteList) {
         this.mContext = mContext;
-        //list.addAll(mylist);
         this.noteList = noteList;
     }
 
-    public void replaceAll(List<Integer> mylist) {
-        list.clear();
-        if (mylist != null && mylist.size() > 0) {
-            list.addAll(mylist);
+    public void replaceAll(List<Note> newNoteList) {
+        noteList.clear();
+        if (newNoteList != null && newNoteList.size() > 0) {
+            noteList.addAll(newNoteList);
         }
         notifyDataSetChanged();
     }
@@ -54,14 +54,14 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<StaggeredGridAdap
      * 才会有效果。即便不需要使用插入动画，也建议使用notifyItemInserted方式添加数据，
      * 不然容易出现闪动和间距错乱的问题
      * */
-    public void addData(int position,ArrayList<Integer> mylist) {
-        list.addAll(position,mylist);
+    public void addData(int position,List<Note> addNoteList) {
+        noteList.addAll(position,addNoteList);
         notifyItemInserted(position);
     }
 
     //移除数据使用notifyItemRemoved
     public void removeData(int position) {
-        list.remove(position);
+        noteList.remove(position);
         notifyItemRemoved(position);
     }
 
@@ -73,20 +73,6 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<StaggeredGridAdap
     @Override
     public void onBindViewHolder(StaggeredGridAdapter.LinearViewHolder holder, int position) {
         holder.setData(noteList.get(position));
-
-        /*if(position%2==0){
-            holder.mImageView.setImageResource(R.drawable.demo1);
-            //ViewGroup.LayoutParams para;
-            //para = holder.mImageView.getLayoutParams();
-            //para.height = 600;
-            //holder.mImageView.setLayoutParams(para);
-        }
-        else if(position%3==0){
-            holder.mImageView.setImageResource(R.drawable.demo7);
-        }
-        else{
-            holder.mImageView.setImageResource(R.drawable.demo2);
-        }*/
     }
 
     @Override
@@ -112,8 +98,6 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<StaggeredGridAdap
         void setData(Object data) {
             if (data != null) {
                 Note note = (Note)data;
-                //mImageView.setImageResource(id);
-                //Glide.with(getContext()).load("http://123.56.175.200:8080/MoJi/image/2.jpg").into(mImageView);
                 if(null == note.getUser().getUserHeadImg()){
                     roundedImageView.setImageResource(R.drawable.headportrait);
                 }else {
