@@ -1,25 +1,14 @@
 package cn.edu.hebtu.software.test.Fragment;
 
-import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
-
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
-
 import com.flyco.tablayout.SlidingTabLayout;
-
 import java.util.ArrayList;
-
 import cn.edu.hebtu.software.test.Adapter.CustPagerTransformer;
 import cn.edu.hebtu.software.test.Adapter.MyPagerAdapter;
 import cn.edu.hebtu.software.test.R;
+
 
 /**
  * @ProjectName:    MoJi
@@ -32,16 +21,16 @@ public class MileageFragment extends MyBaseFragment {
 
     ArrayList<MyBaseFragment> mFagments;
     SlidingTabLayout tablayout;
-    private String[] mTitles = {"推荐", "关注", "景点", "小街","小店"};
+    private String[] mTitles = {"推荐", "关注", "景点", "小街","小店","Vlog"};
 
     @Override
     protected int getContentViewId() {
-        return R.layout.fragment2_layout;
+        return R.layout.mileage_layout;
     }
 
     @Override
     protected void lazyLoad() {
-        Log.e("fragment2", "fragment2");
+        Log.e("MileageFragment", "MileageFragment");
     }
     @Override
     protected void initData() {
@@ -51,11 +40,12 @@ public class MileageFragment extends MyBaseFragment {
         tablayout = mRootView.findViewById(R.id.shape_table_layout);
 
         mFagments = new ArrayList<>();
-        mFagments.add(new Fragment2Item1());
-        mFagments.add(new Fragment2Item2());
-        mFagments.add(new Fragment2Item3());
-        mFagments.add(new Fragment2Item4());
-        mFagments.add(new Fragment2Item5());
+        mFagments.add(new MileageFragmentItem1());
+        mFagments.add(new MileageFragmentItem2());
+        mFagments.add(new MileageFragmentItem3());
+        mFagments.add(new MileageFragmentItem4());
+        mFagments.add(new MileageFragmentItem5());
+        mFagments.add(new MileageFragmentItem6());
         // 在activity中FragmentManager通过getSupportFragmentManager()去获取，如果在是在fragment中就需要通过getChildFragmentManager()去获取
         MyPagerAdapter adapter = new MyPagerAdapter(getChildFragmentManager(),mFagments,mTitles);
         viewPager.setAdapter(adapter);

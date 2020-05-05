@@ -7,7 +7,7 @@ import cn.edu.hebtu.software.test.R;
  * @Date: 2020/04/23
  * @Describe:
  */
-public class Fragment2Item3 extends MyBaseFragment {
+public class MileageFragmentItem3 extends MyBaseFragment {
     @Override
     protected void lazyLoad() {
 
@@ -21,6 +21,6 @@ public class Fragment2Item3 extends MyBaseFragment {
     @Override
     protected int getContentViewId() {
 
-        return  R.layout.fragment2_layout_item3;
+        return  R.layout.mileage_layout_item3;
     }
 }

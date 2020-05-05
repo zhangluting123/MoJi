@@ -18,7 +18,7 @@ import cn.edu.hebtu.software.test.R;
  * @Date: 2019/04/23
  * @Describe:
  */
-public class Fragment2Item2 extends MyBaseFragment{
+public class MileageFragmentItem2 extends MyBaseFragment{
     private RecyclerView mRvPu;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

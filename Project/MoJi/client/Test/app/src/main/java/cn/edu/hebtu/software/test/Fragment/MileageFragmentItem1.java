@@ -8,15 +8,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -48,7 +45,7 @@ import cn.edu.hebtu.software.test.Util.DetermineConnServer;
  * @Date: 2020/04/23
  * @Describe: 推荐页
  */
-public class Fragment2Item1 extends MyBaseFragment {
+public class MileageFragmentItem1 extends MyBaseFragment {
 
     private MyApplication data;
     private List<Note> noteList = new ArrayList<>();
