@@ -56,14 +56,10 @@ public class MileageFragment extends MyBaseFragment {
         mFagments.add(new Fragment2Item3());
         mFagments.add(new Fragment2Item4());
         mFagments.add(new Fragment2Item5());
-        // 在activity中FragmentManager通过getSupportFragmentManager()去获取，如果在是在fragment中就需要通过getChildFragmentManager()去说去
+        // 在activity中FragmentManager通过getSupportFragmentManager()去获取，如果在是在fragment中就需要通过getChildFragmentManager()去获取
         MyPagerAdapter adapter = new MyPagerAdapter(getChildFragmentManager(),mFagments,mTitles);
         viewPager.setAdapter(adapter);
         viewPager.setPageTransformer(false, new CustPagerTransformer(getActivity()));
         tablayout.setViewPager(viewPager, mTitles);
-
     }
-
-
-
 }

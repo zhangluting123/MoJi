@@ -1,5 +1,6 @@
 package cn.edu.hebtu.software.test.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -7,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -14,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -35,6 +38,7 @@ import java.util.List;
 
 import cn.edu.hebtu.software.test.Adapter.StaggeredGridAdapter;
 import cn.edu.hebtu.software.test.Data.Note;
+import cn.edu.hebtu.software.test.DetailActivity.DropsDetailActivity;
 import cn.edu.hebtu.software.test.R;
 import cn.edu.hebtu.software.test.Setting.MyApplication;
 import cn.edu.hebtu.software.test.Util.DetermineConnServer;
@@ -56,6 +60,7 @@ public class Fragment2Item1 extends MyBaseFragment {
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
+
             switch (msg.what) {
                 case 1001:
                     Toast.makeText(getActivity().getApplicationContext(), (CharSequence) msg.obj, Toast.LENGTH_SHORT).show();
@@ -87,6 +92,18 @@ public class Fragment2Item1 extends MyBaseFragment {
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         mRvPu.setLayoutManager(staggeredGridLayoutManager);
         adapter = new StaggeredGridAdapter(getActivity(),noteList);
+
+        adapter.setOnItemClickListener(new StaggeredGridAdapter.OnItemClickListener() {
+            @Override
+            public void onClick(int position) {
+                Intent intent = new Intent(getActivity(), DropsDetailActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("note", noteList.get(position));
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
+
         mRvPu.setAdapter(adapter);
 
         //设置下拉刷新和上拉加载监听
