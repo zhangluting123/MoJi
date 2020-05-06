@@ -57,7 +57,6 @@ public class MileageFragmentItem1 extends MyBaseFragment {
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-
             switch (msg.what) {
                 case 1001:
                     Toast.makeText(getActivity().getApplicationContext(), (CharSequence) msg.obj, Toast.LENGTH_SHORT).show();
@@ -70,7 +69,6 @@ public class MileageFragmentItem1 extends MyBaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.e("TAG", "onCreate");
-
         this.mActivity = getActivity();
     }
 
@@ -95,7 +93,8 @@ public class MileageFragmentItem1 extends MyBaseFragment {
             public void onClick(int position) {
                 Intent intent = new Intent(getActivity(), DropsDetailActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putParcelable("note", noteList.get(position));
+                Log.e("position",position+"");
+                bundle.putParcelable("note", adapter.getNoteList().get(position));
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
@@ -136,6 +135,7 @@ public class MileageFragmentItem1 extends MyBaseFragment {
 
     @Override
     protected void lazyLoad() {
+
     }
 
     @Override
@@ -145,7 +145,7 @@ public class MileageFragmentItem1 extends MyBaseFragment {
 
     @Override
     protected int getContentViewId() {
-        return  R.layout.add;
+        return  R.layout.mileage_common;
     }
 
     private List<Note>  getData() {

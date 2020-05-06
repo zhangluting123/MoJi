@@ -152,4 +152,8 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<StaggeredGridAdap
     public void setOnItemLongClickListener(OnItemLongClickListener longClickListener) {
         this.longClickListener = longClickListener;
     }
+
+    public List<Note> getNoteList() {
+        return noteList;
+    }
 }
