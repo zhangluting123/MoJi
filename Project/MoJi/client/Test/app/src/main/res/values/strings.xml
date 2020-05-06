@@ -4,6 +4,8 @@
     <!--        <string name="internet_ip"> 123.56.175.200</string>-->
     <!--lcb本地测试ip-->
     <!--    <string name="internet_ip">192.168.16.102</string>-->
-    <!--zlt本地测试ip-->
+    <!--dzc本地测试ip-->
     <string name="internet_ip"> 123.56.175.200</string>
+    <!--zlt本地测试ip-->
+<!--    <string name="internet_ip">192.168.2.167</string>-->
 </resources>

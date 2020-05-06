@@ -61,6 +61,9 @@ public class MileageFragmentItem1 extends MyBaseFragment {
                 case 1001:
                     Toast.makeText(getActivity().getApplicationContext(), (CharSequence) msg.obj, Toast.LENGTH_SHORT).show();
                     break;
+                case 1002:
+                    init();
+                    break;
             }
         }
     };
@@ -72,6 +75,7 @@ public class MileageFragmentItem1 extends MyBaseFragment {
         //new getMessage().start();
         //adapter.notifyDataSetChanged();
         this.mActivity = getActivity();
+
     }
 
     @Override
@@ -82,6 +86,11 @@ public class MileageFragmentItem1 extends MyBaseFragment {
         data = (MyApplication)getActivity().getApplication();
         new getMessage().start();
 
+
+        return mRootView;
+    }
+
+    private void init(){
         refreshlayout = mRootView.findViewById(R.id.refreshlayout);
         mRvPu=(RecyclerView)mRootView.findViewById(R.id.rv_pu);
 
@@ -131,9 +140,7 @@ public class MileageFragmentItem1 extends MyBaseFragment {
             }
         });
 
-        return mRootView;
     }
-
 
     @Override
     protected void lazyLoad() {
@@ -172,6 +179,10 @@ public class MileageFragmentItem1 extends MyBaseFragment {
                         noteList = gson.fromJson(str, type);
                         Collections.reverse(noteList);
                     }
+                    Message message = Message.obtain();
+                    message.what = 1002;
+//                    message.obj = "未连接到服务器";
+                    handler.sendMessage(message);
                     in.close();
                     reader.close();
                 } else {
