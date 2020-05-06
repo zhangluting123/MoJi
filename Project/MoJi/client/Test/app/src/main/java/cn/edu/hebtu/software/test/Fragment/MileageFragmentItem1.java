@@ -69,6 +69,7 @@ public class MileageFragmentItem1 extends MyBaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.e("TAG", "onCreate");
+        //new getMessage().start();
         this.mActivity = getActivity();
     }
 
