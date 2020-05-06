@@ -28,12 +28,12 @@ import com.baidu.mapapi.map.InfoWindow;
 import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
-import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.OverlayOptions;
+import com.baidu.mapapi.map.TextureMapView;
 import com.baidu.mapapi.map.UiSettings;
 import com.baidu.mapapi.model.LatLng;
 import com.google.gson.Gson;
@@ -69,7 +69,7 @@ import cn.edu.hebtu.software.test.Util.DetermineConnServer;
  */
 public class FootprintFragment extends Fragment {
     private View view;
-    private MapView mapView = null;
+    private TextureMapView mapView = null;
     private TextView placeNum;
     //百度地图控制器
     private BaiduMap baiduMap;

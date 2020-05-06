@@ -26,9 +26,9 @@ import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
-import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
+import com.baidu.mapapi.map.TextureMapView;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.utils.DistanceUtil;
 import com.baidu.mapapi.utils.SpatialRelationUtil;
@@ -47,15 +47,12 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import cn.edu.hebtu.software.test.Adapter.MsgAdapter;
 import cn.edu.hebtu.software.test.Data.Note;
 import cn.edu.hebtu.software.test.DetailActivity.DropsDetailActivity;
@@ -80,7 +77,7 @@ public class DropsFragment extends Fragment {
     private List<Note> noteList = new ArrayList<>();
 
     private BaiduMap baiduMap;
-    private MapView mapView;
+    private TextureMapView mapView;
     private LocationClient locationClient;
     private LocationClientOption locationClientOption;
     private Double latitude;
@@ -117,14 +114,11 @@ public class DropsFragment extends Fragment {
         ip = data.getIp();
         if(data.getDistance() == null) {
             tvRangenum.setText(1+"");
-
         }else{
             tvRangenum.setText(data.getDistance());
         }
 
         init();
-
-
 
         return view;
     }
@@ -163,7 +157,6 @@ public class DropsFragment extends Fragment {
         }
 
         locationOption();
-        setAdapter();
 
     }
     /**
@@ -186,6 +179,11 @@ public class DropsFragment extends Fragment {
         msgAdapter.notifyDataSetChanged();
     }
 
+    /**
+     *  @author: 张璐婷
+     *  @time: 2020/5/6  14:16
+     *  @Description: 设置Adapter
+     */
     private void setAdapter(){
         //绑定adapter
         final ListView listView = view.findViewById(R.id.lv_msgs);
@@ -300,15 +298,15 @@ public class DropsFragment extends Fragment {
                         //获取定位详细数据
                         //获取地址信息
                         String addr = bdLocation.getAddrStr();
-                        Log.e("lcb", "地址：" + addr);
+                        Log.e("点滴", "地址：" + addr);
                         //获取经纬度
                         latitude = bdLocation.getLatitude();
                         longitude = bdLocation.getLongitude();
-                        Log.e("lcb", "纬度：" + latitude + ";经度：" + longitude);
+                        Log.e("点滴", "纬度：" + latitude + ";经度：" + longitude);
                         //获取当前省
-                        Log.e("lcb", "所在省:" + bdLocation.getProvince());
+                        Log.e("点滴", "所在省:" + bdLocation.getProvince());
                         //获取当前城市
-                        Log.e("lcb ", "所在城市:" + bdLocation.getCity());
+                        Log.e("点滴", "所在城市:" + bdLocation.getCity());
                         location = bdLocation.getProvince() + "·" + bdLocation.getCity()+"·"+bdLocation.getDistrict();
                         Log.e("onReceiveLocation: ", location);
 
@@ -320,8 +318,7 @@ public class DropsFragment extends Fragment {
                         data.setLocation(location);
 
                         selectVisualNote();
-                        msgAdapter.setNoteList(noteList);
-                        msgAdapter.notifyDataSetChanged();
+                        setAdapter();
 
                     }
                 }
