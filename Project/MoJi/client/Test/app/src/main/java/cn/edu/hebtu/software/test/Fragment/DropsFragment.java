@@ -34,6 +34,9 @@ import com.baidu.mapapi.utils.DistanceUtil;
 import com.baidu.mapapi.utils.SpatialRelationUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -72,6 +75,7 @@ public class DropsFragment extends Fragment {
     private TextView tvRangenum;
     private Button btnUp;
     private Button btnDown;
+    private SmartRefreshLayout refreshLayout;
     private CustomOnClickListener listener;
     private List<Note> noteList = new ArrayList<>();
 
@@ -121,6 +125,7 @@ public class DropsFragment extends Fragment {
         init();
 
 
+
         return view;
     }
 
@@ -149,7 +154,39 @@ public class DropsFragment extends Fragment {
         //不显示指南针
         baiduMap.setCompassEnable(false);
 
+        Thread thread = new getMessage();
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
+        locationOption();
+        setAdapter();
+
+    }
+    /**
+     *  @author: 张璐婷
+     *  @time: 2020/5/6  13:34
+     *  @Description: 获取刷新的数据
+     */
+    private void refresh(){
+        //获取数据
+        Log.e("------------", "---------------");
+        Thread thread = new getMessage();
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        selectVisualNote();
+        msgAdapter.setNoteList(noteList);
+        msgAdapter.notifyDataSetChanged();
+    }
+
+    private void setAdapter(){
         //绑定adapter
         final ListView listView = view.findViewById(R.id.lv_msgs);
 
@@ -168,18 +205,24 @@ public class DropsFragment extends Fragment {
                 startActivity(intent);
             }
         });
-
-        //获取数据
-        new getMessage().start();
-
-        locationOption();
-
     }
 
     private void registerListener() {
         listener = new CustomOnClickListener();
         btnUp.setOnClickListener(listener);
         btnDown.setOnClickListener(listener);
+        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(@NonNull final RefreshLayout refreshLayout) {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        refresh();
+                        refreshLayout.finishRefresh();
+                    }
+                },1000);
+            }
+        });
     }
 
     private void getViews() {
@@ -188,6 +231,7 @@ public class DropsFragment extends Fragment {
         tvRangenum = view.findViewById(R.id.tv_rangenum);
         btnUp = view.findViewById(R.id.btnUp);
         btnDown = view.findViewById(R.id.btnDown);
+        refreshLayout = view.findViewById(R.id.refreshlayout);
     }
 
     class CustomOnClickListener implements View.OnClickListener {
@@ -216,18 +260,7 @@ public class DropsFragment extends Fragment {
                     data.setDistance(tvDownNum+"");
                     break;
             }
-            //获取数据
-            Log.e("------------", "---------------");
-            Thread thread = new getMessage();
-            thread.start();
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            selectVisualNote();
-            msgAdapter.setNoteList(noteList);
-            msgAdapter.notifyDataSetChanged();
+            refresh();
         }
     }
 
@@ -311,7 +344,7 @@ public class DropsFragment extends Fragment {
                     InputStream in = conn.getInputStream();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));
                     String str = null;
-                    while ((str = reader.readLine()) != null) {
+                    if ((str = reader.readLine()) != null) {
                         Gson gson = new Gson();
                         Type type = new TypeToken<List<Note>>() {
                         }.getType();

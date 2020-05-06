@@ -61,9 +61,6 @@ public class MileageFragmentItem1 extends MyBaseFragment {
                 case 1001:
                     Toast.makeText(getActivity().getApplicationContext(), (CharSequence) msg.obj, Toast.LENGTH_SHORT).show();
                     break;
-                case 1002:
-                    init();
-                    break;
             }
         }
     };
@@ -84,8 +81,14 @@ public class MileageFragmentItem1 extends MyBaseFragment {
         Log.e("TAG", "onCreateView");
 
         data = (MyApplication)getActivity().getApplication();
-        new getMessage().start();
-
+        Thread thread = new getMessage();
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        init();
 
         return mRootView;
     }
@@ -179,10 +182,6 @@ public class MileageFragmentItem1 extends MyBaseFragment {
                         noteList = gson.fromJson(str, type);
                         Collections.reverse(noteList);
                     }
-                    Message message = Message.obtain();
-                    message.what = 1002;
-//                    message.obj = "未连接到服务器";
-                    handler.sendMessage(message);
                     in.close();
                     reader.close();
                 } else {
