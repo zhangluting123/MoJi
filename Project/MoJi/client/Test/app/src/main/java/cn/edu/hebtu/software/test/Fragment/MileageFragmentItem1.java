@@ -70,6 +70,7 @@ public class MileageFragmentItem1 extends MyBaseFragment {
         super.onCreate(savedInstanceState);
         Log.e("TAG", "onCreate");
         //new getMessage().start();
+        //adapter.notifyDataSetChanged();
         this.mActivity = getActivity();
     }
 
