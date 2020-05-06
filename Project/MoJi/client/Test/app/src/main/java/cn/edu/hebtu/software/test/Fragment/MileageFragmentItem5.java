@@ -78,8 +78,19 @@ public class MileageFragmentItem5 extends MyBaseFragment {
         Log.e("TAG", "onCreateView");
 
         data = (MyApplication)getActivity().getApplication();
-        new getMessage().start();
+        Thread thread = new getMessage();
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        init();
 
+        return mRootView;
+    }
+
+    private void init(){
         refreshlayout = mRootView.findViewById(R.id.refreshlayout);
         mRvPu=(RecyclerView)mRootView.findViewById(R.id.rv_pu);
 
@@ -129,9 +140,7 @@ public class MileageFragmentItem5 extends MyBaseFragment {
             }
         });
 
-        return mRootView;
     }
-
 
     @Override
     protected void lazyLoad() {
