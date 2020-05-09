@@ -10,6 +10,8 @@
         android:text="您一共去过0个地方"
         android:textSize="20dp"
         android:gravity="center_horizontal"
+        android:textColor="#DB7093"
+        android:background="#20B2AA"
         />
     <com.baidu.mapapi.map.TextureMapView
         android:id="@+id/bMapView"
