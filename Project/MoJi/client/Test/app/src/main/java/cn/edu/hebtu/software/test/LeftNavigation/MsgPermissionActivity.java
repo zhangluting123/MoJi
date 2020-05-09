@@ -6,6 +6,7 @@ import cn.edu.hebtu.software.test.Data.User;
 import cn.edu.hebtu.software.test.R;
 import cn.edu.hebtu.software.test.Setting.MyApplication;
 import cn.edu.hebtu.software.test.Util.ActivityManager;
+import cn.edu.hebtu.software.test.Util.SharedUtil;
 import cn.jpush.android.api.JPushInterface;
 
 import android.content.Intent;
@@ -68,11 +69,15 @@ public class MsgPermissionActivity extends AppCompatActivity {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 switch (checkedId){
                     case R.id.rb_open:
+                        data.setMsgPermission("open");
+                        SharedUtil.putString("isGuide",getApplicationContext(),"notimsg","open");
                         if(JPushInterface.isPushStopped(getApplicationContext())){
                             JPushInterface.resumePush(getApplicationContext());
                         }
                         break;
                     case R.id.rb_close:
+                        data.setMsgPermission("close");
+                        SharedUtil.putString("isGuide",getApplicationContext(),"notimsg","close");
                         JPushInterface.stopPush(getApplicationContext());
                         break;
                 }

@@ -38,9 +38,13 @@ public class StartActivity extends AppCompatActivity {
                 if(isFirstIn){
                     intent = new Intent(StartActivity.this, GuidePageActivity.class);
                     SharedUtil.putBoolean("isGuide", getApplicationContext(),"isFirstIn", false);
+                    SharedUtil.putString("isGuide",getApplicationContext(),"notimsg","open");
+                    data.setMsgPermission("open");
                     startActivity(intent);
                     finish();
                 }else{
+                    String notimsg = SharedUtil.getString("isGuide", getApplicationContext(),"notimsg");
+                    data.setMsgPermission(notimsg);
                     intent = new Intent(StartActivity.this, MainActivity.class );//WelcomeActivity.class
                     startActivity(intent);
                     finish();

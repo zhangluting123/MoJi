@@ -24,7 +24,7 @@ public class MyApplication extends Application {
     private String location;
     private String distance;
 
-    private String msgPermission = "open";//默认开启消息通知
+    private String msgPermission;
 
     private int tabId = 0;
     private int mailTabId = 0;
