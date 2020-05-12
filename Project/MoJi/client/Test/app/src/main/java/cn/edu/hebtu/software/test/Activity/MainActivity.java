@@ -49,6 +49,7 @@ import cn.edu.hebtu.software.test.LeftNavigation.TimelineActivity;
 import cn.edu.hebtu.software.test.R;
 import cn.edu.hebtu.software.test.Setting.MyApplication;
 import cn.edu.hebtu.software.test.Util.ActivityManager;
+import cn.edu.hebtu.software.test.Util.SharedPreferencesUtils;
 import cn.edu.hebtu.software.test.Util.SharedUtil;
 import cn.jpush.android.api.JPushInterface;
 
@@ -71,10 +72,9 @@ public class MainActivity extends AppCompatActivity  {
     private TextView user_name;
     private Map<String, ImageView> imageViewMap = new HashMap<>();
     private Map<String, TextView> textViewMap = new HashMap<>();
-
     //退出登录
     private RelativeLayout logout;
-
+    //数据
     private User user;
     private String ip;
 
@@ -92,11 +92,24 @@ public class MainActivity extends AppCompatActivity  {
                     | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
         }
 
+        //从全局变量中获取数据
         final MyApplication data = (MyApplication) getApplication();
         user = data.getUser();
         ip = data.getIp();
         img = findViewById(R.id.img);
         user_name = findViewById(R.id.btn_user_name);
+
+        //保存用户信息到本地
+        SharedPreferencesUtils sharedPreferencesUtils = new SharedPreferencesUtils(this,"userInfo");
+        SharedPreferencesUtils.ContentValue userIdInfo = new SharedPreferencesUtils.ContentValue("userIdInfo",user.getUserId());
+        SharedPreferencesUtils.ContentValue userHeadImgInfo = new SharedPreferencesUtils.ContentValue("userHeadImgInfo",user.getUserHeadImg());
+        SharedPreferencesUtils.ContentValue userNameInfo = new SharedPreferencesUtils.ContentValue("userNameInfo",user.getUserName());
+        SharedPreferencesUtils.ContentValue sexInfo = new SharedPreferencesUtils.ContentValue("sexInfo",user.getSex());
+        SharedPreferencesUtils.ContentValue signatureInfo = new SharedPreferencesUtils.ContentValue("signatureInfo",user.getSignature());
+        SharedPreferencesUtils.ContentValue occupationInfo = new SharedPreferencesUtils.ContentValue("occupationInfo",user.getOccupation());
+        SharedPreferencesUtils.ContentValue passwordInfo = new SharedPreferencesUtils.ContentValue("passwordInfo",user.getPassword());
+        SharedPreferencesUtils.ContentValue phoneInfo = new SharedPreferencesUtils.ContentValue("phoneInfo",user.getPhone());
+        sharedPreferencesUtils.putValues(userIdInfo,userHeadImgInfo,userNameInfo,sexInfo,signatureInfo,occupationInfo,passwordInfo,phoneInfo);
 
         if(null != user.getUserId()){
             RequestOptions options = new RequestOptions().circleCrop();
@@ -227,6 +240,10 @@ public class MainActivity extends AppCompatActivity  {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //清除保存在本地的user信息
+                SharedPreferencesUtils sharedPreferencesUtils = new SharedPreferencesUtils(MainActivity.this,"userInfo");
+                sharedPreferencesUtils.clear();
+
                 SharedUtil.remove("isGuide", getApplicationContext(), user.getUserId());
                 JPushInterface.stopPush(getApplicationContext());
                 user.setUserId(null);

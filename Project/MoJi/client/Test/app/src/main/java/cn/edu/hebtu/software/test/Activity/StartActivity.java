@@ -6,8 +6,10 @@ import android.os.Handler;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import cn.edu.hebtu.software.test.Setting.MyApplication;
+import cn.edu.hebtu.software.test.Data.User;
 import cn.edu.hebtu.software.test.R;
+import cn.edu.hebtu.software.test.Setting.MyApplication;
+import cn.edu.hebtu.software.test.Util.SharedPreferencesUtils;
 import cn.edu.hebtu.software.test.Util.SharedUtil;
 
 /**
@@ -20,6 +22,7 @@ import cn.edu.hebtu.software.test.Util.SharedUtil;
 public class StartActivity extends AppCompatActivity {
     boolean isFirstIn = false;
     private Intent intent ;
+    private User user = new User();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,6 +48,18 @@ public class StartActivity extends AppCompatActivity {
                 }else{
                     String notimsg = SharedUtil.getString("isGuide", getApplicationContext(),"notimsg");
                     data.setMsgPermission(notimsg);
+                    //获取保存在本地的用户信息
+                    SharedPreferencesUtils sharedPreferencesUtils = new SharedPreferencesUtils(StartActivity.this,"userInfo");
+                    user.setUserId(sharedPreferencesUtils.getString("userIdInfo"));
+                    user.setUserHeadImg(sharedPreferencesUtils.getString("userHeadImgInfo"));
+                    user.setUserName(sharedPreferencesUtils.getString("userNameInfo"));
+                    user.setSex(sharedPreferencesUtils.getString("sexInfo"));
+                    user.setSignature(sharedPreferencesUtils.getString("signatureInfo"));
+                    user.setOccupation(sharedPreferencesUtils.getString("occupationInfo"));
+                    user.setPassword(sharedPreferencesUtils.getString("passwordInfo"));
+                    user.setPhone(sharedPreferencesUtils.getString("phoneInfo"));
+                    data.setUser(user);
+
                     intent = new Intent(StartActivity.this, MainActivity.class );//WelcomeActivity.class
                     startActivity(intent);
                     finish();
