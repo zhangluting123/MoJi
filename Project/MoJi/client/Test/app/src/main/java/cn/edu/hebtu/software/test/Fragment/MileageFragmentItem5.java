@@ -150,14 +150,6 @@ public class MileageFragmentItem5 extends MyBaseFragment {
     @Override
     protected void initData() {
         new getMessage().start();
-        for(int i = 0;i<noteList.size();i++){
-            if(noteList.get(i).getTitle().contains("5")){
-                Log.e("筛选：",i+"");
-            }else{
-                Log.e("剔除：",i+"");
-                noteList.remove(i);
-            }
-        }
     }
 
     @Override

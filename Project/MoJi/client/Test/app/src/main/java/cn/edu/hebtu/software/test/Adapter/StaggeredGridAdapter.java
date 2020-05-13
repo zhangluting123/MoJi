@@ -20,7 +20,6 @@ import java.util.List;
 
 import cn.edu.hebtu.software.test.Data.Note;
 import cn.edu.hebtu.software.test.R;
-import cn.edu.hebtu.software.test.Util.ScreenUtils;
 
 import static com.baidu.mapapi.BMapManager.getContext;
 
@@ -67,7 +66,7 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<StaggeredGridAdap
 
     @Override
     public StaggeredGridAdapter.LinearViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new LinearViewHolder(LayoutInflater.from(mContext).inflate(R.layout.layout_staggere_grid_item,parent,false));
+        return new LinearViewHolder(LayoutInflater.from(mContext).inflate(R.layout.layout_staggered_grid_item,parent,false));
     }
 
     @Override
