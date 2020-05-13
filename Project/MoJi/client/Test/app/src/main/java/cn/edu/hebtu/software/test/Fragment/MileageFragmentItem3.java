@@ -153,7 +153,7 @@ public class MileageFragmentItem3 extends MyBaseFragment {
     protected void initData() {
         new getMessage().start();
         for(int i = 0;i<noteList.size();i++){
-            if(noteList.get(i).getTitle().contains("5")){
+            if(noteList.get(i).getTitle().contains("3")){
                 Log.e("筛选：",i+"");
             }else{
                 Log.e("剔除：",i+"");
