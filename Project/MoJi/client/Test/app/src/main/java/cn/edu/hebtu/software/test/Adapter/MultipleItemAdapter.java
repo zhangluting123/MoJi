@@ -1,7 +1,12 @@
 package cn.edu.hebtu.software.test.Adapter;
 
+import android.content.Context;
+import android.net.Uri;
 import android.util.Log;
+import android.view.View;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import java.util.List;
@@ -17,8 +22,10 @@ import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
  */
 public class MultipleItemAdapter extends BaseMultiItemQuickAdapter<MyMultipleItem, BaseViewHolder> {
 
-    public MultipleItemAdapter(List data) {
+    private Context mContext;
+    public MultipleItemAdapter(Context mContext,List data) {
         super(data);
+        this.mContext=mContext;
         //必须绑定type和layout的关系
         addItemType(MyMultipleItem.FIRST_TYPE, R.layout.mileage_layout_item6_recycler_item);
         addItemType(MyMultipleItem.SECOND_TYPE, R.layout.mileage_layout_item6_recycler_item);
@@ -29,25 +36,29 @@ public class MultipleItemAdapter extends BaseMultiItemQuickAdapter<MyMultipleIte
         Log.i("tag","FIRST_TYPE==============="+helper.getLayoutPosition());
         JCVideoPlayerStandard jcVideoPlayerStandard = (JCVideoPlayerStandard) helper.itemView.findViewById(R.id.videoplayer);
         jcVideoPlayerStandard.setUp(item.getData().get("url").toString(), JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "MoJi");
-        //jcVideoPlayerStandard.thumbImageView.setImageURI(Uri.parse("http://pic9.nipic.com/20100826/3320946_024307806453_2.jpg"));
-        /*switch (helper.getItemViewType()) {
-            case MyMultipleItem.FIRST_TYPE:
-                Log.i("tag","FIRST_TYPE==============="+helper.getLayoutPosition());
-                helper.setText(R.id.tv_recy_item_1_desc, item.getData().get("desc").toString());
-                helper.setText(R.id.tv_recy_item_1_name, item.getData().get("name").toString());
-                helper.setImageResource(R.id.img_recy_item_1_pic, (Integer) https://link.jianshu.com/?t=https%3A%2F%2Fwww.w3schools.com%2Fhtml%2Fmovie.mp4);
-                helper.addOnClickListener(R.id.img_recy_item_1_pic);
-                helper.addOnClickListener(R.id.tv_recy_item_1_name);
-                break;
-            case MyMultipleItem.SECOND_TYPE:
-                Log.i("tag","FIRST_TYPE==============="+helper.getLayoutPosition());
-                helper.setText(R.id.tv_recy_item_1_desc, item.getData().get("desc").toString());
-                helper.setText(R.id.tv_recy_item_1_name, item.getData().get("name").toString());
-                helper.setImageResource(R.id.img_recy_item_1_pic, (Integer) item.getData().get("pic"));
-                helper.addOnClickListener(R.id.img_recy_item_1_pic);
-                helper.addOnClickListener(R.id.tv_recy_item_1_name);
-                break;
-        }*/
+
+        Glide.with(mContext)
+                .setDefaultRequestOptions(
+                        new RequestOptions()
+                                .frame(4000000)
+                                .centerCrop()
+                                .error(R.drawable.fail)
+                                .placeholder(R.drawable.fail)
+                )
+                .load(item.getData().get("url").toString())
+                .into(jcVideoPlayerStandard.thumbImageView);
+
+        /*String image = item.getData().get("url").toString();
+        Uri uri = Uri.parse (image);
+        jcVideoPlayerStandard.thumbImageView.setImageURI (uri);
+        Glide.with (mContext).load (uri).into (jcVideoPlayerStandard.thumbImageView);
+
+        jcVideoPlayerStandard.backButton.setOnClickListener (new View.OnClickListener () {
+            @Override
+            public void onClick(View v) {
+                jcVideoPlayerStandard.release ();
+            }
+        });*/
     }
     public void onBackPressed() {
         if (JCVideoPlayer.backPress()) {

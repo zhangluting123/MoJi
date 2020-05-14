@@ -75,7 +75,7 @@ public class MileageFragmentItem6 extends MyBaseFragment {
         // 设置适配器
         //recyclerView.setAdapter(new RecyclerLineAdapter(getContext(), lineData));
         //adapter = new RecyclerCommonAdapter(R.layout.recyclear_item, lineData);
-        adapter = new MultipleItemAdapter(lineData);
+        adapter = new MultipleItemAdapter(getActivity(),lineData);
         adapter.openLoadAnimation();
         adapter.isFirstOnly(false);
         //上拉监听
