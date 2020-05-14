@@ -49,9 +49,10 @@ import cn.edu.hebtu.software.test.Util.DetermineConnServer;
  * @Describe:
  */
 public class MileageFragmentItem3 extends MyBaseFragment {
+
     private MyApplication data;
     private List<Note> noteList = new ArrayList<>();
-
+    private String ip;
     private StaggeredGridAdapter adapter;
     private RecyclerView mRvPu;
     private SmartRefreshLayout refreshlayout;
@@ -80,6 +81,8 @@ public class MileageFragmentItem3 extends MyBaseFragment {
         Log.e("TAG", "onCreateView");
 
         data = (MyApplication)getActivity().getApplication();
+        ip = data.getIp();
+
         Thread thread = new getMessage();
         thread.start();
         try {
@@ -169,7 +172,7 @@ public class MileageFragmentItem3 extends MyBaseFragment {
         public void run() {
             try {
                 if (DetermineConnServer.isConnByHttp(getActivity().getApplicationContext())) {
-                    URL url = new URL("http://123.56.175.200:8080/MoJi/note/query?userId="+data.getUser().getUserId());
+                    URL url = new URL("http://"+ip+":8080/MoJi/note/query?userId="+data.getUser().getUserId());
                     URLConnection conn = url.openConnection();
                     InputStream in = conn.getInputStream();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));
