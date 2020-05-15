@@ -1,9 +1,11 @@
 package cn.edu.hebtu.software.test.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -34,6 +36,11 @@ public class MultipleItemAdapter extends BaseMultiItemQuickAdapter<MyMultipleIte
     @Override
     protected void convert(BaseViewHolder helper, MyMultipleItem item) {
         Log.i("tag","FIRST_TYPE==============="+helper.getLayoutPosition());
+
+        ImageView share = helper.itemView.findViewById(R.id.share);
+        ImageView good = helper.itemView.findViewById(R.id.good);
+        ImageView comment = helper.itemView.findViewById(R.id.comment);
+
         JCVideoPlayerStandard jcVideoPlayerStandard = (JCVideoPlayerStandard) helper.itemView.findViewById(R.id.videoplayer);
         jcVideoPlayerStandard.setUp(item.getData().get("url").toString(), JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "MoJi");
 
@@ -47,6 +54,8 @@ public class MultipleItemAdapter extends BaseMultiItemQuickAdapter<MyMultipleIte
                 )
                 .load(item.getData().get("url").toString())
                 .into(jcVideoPlayerStandard.thumbImageView);
+
+
 
         /*String image = item.getData().get("url").toString();
         Uri uri = Uri.parse (image);
@@ -71,6 +80,5 @@ public class MultipleItemAdapter extends BaseMultiItemQuickAdapter<MyMultipleIte
         this.onPause();
         JCVideoPlayer.releaseAllVideos();
     }
-
 }
 

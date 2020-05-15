@@ -99,6 +99,8 @@ public class MileageFragmentItem3 extends MyBaseFragment {
         refreshlayout = mRootView.findViewById(R.id.refreshlayout);
         mRvPu=(RecyclerView)mRootView.findViewById(R.id.rv_pu);
 
+        //select();
+
         //设置布局方式,2列，垂直
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         mRvPu.setLayoutManager(staggeredGridLayoutManager);
@@ -149,7 +151,6 @@ public class MileageFragmentItem3 extends MyBaseFragment {
 
     @Override
     protected void lazyLoad() {
-
     }
 
     @Override
@@ -163,7 +164,14 @@ public class MileageFragmentItem3 extends MyBaseFragment {
     }
 
     private List<Note>  getData() {
-        new getMessage().start();
+        Thread thread = new getMessage();
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        //select();
         return noteList;
     }
 
@@ -172,7 +180,7 @@ public class MileageFragmentItem3 extends MyBaseFragment {
         public void run() {
             try {
                 if (DetermineConnServer.isConnByHttp(getActivity().getApplicationContext())) {
-                    URL url = new URL("http://"+ip+":8080/MoJi/note/query?userId="+data.getUser().getUserId());
+                    URL url = new URL("http://"+ip+":8080/MoJi/note/select?userId="+data.getUser().getUserId()+"&classify=3");
                     URLConnection conn = url.openConnection();
                     InputStream in = conn.getInputStream();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));
