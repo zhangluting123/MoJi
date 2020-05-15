@@ -217,28 +217,43 @@ public class DropsDetailActivity extends AppCompatActivity implements ViewPager.
         //获得评论
         getComments();
 
-        //插入评论
-        btnSubmitComment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(null != user.getUserId()) {
-                    String content = edtInsertComment.getText().toString().trim();
-                    if (content.length() == 0) {
-                        Toast.makeText(DropsDetailActivity.this, "评论内容不能为空", Toast.LENGTH_SHORT).show();
-                    } else {
-                        if(edtInsertComment.getHint().equals("请输入评论")) {
-                            insertComment(content);
-                        }else{
-                            //回复评论
-                            insertReplyComment();
-                        }
-                    }
-                }else{
-                    Toast.makeText(getApplicationContext(), "请先登录", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
+        //注册监听器
+        CustomMainOnClickListener listener = new CustomMainOnClickListener();
+        btnSubmitComment.setOnClickListener(listener);
+        headImg.setOnClickListener(listener);
 
+    }
+
+
+    class CustomMainOnClickListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.iv_headImg:
+                    Intent intent = new Intent(getApplicationContext(), OtherMsgActivity.class);
+                    intent.putExtra("user",note.getUser());
+                    startActivity(intent);
+                    break;
+                case R.id.btn_submitComment:
+                    if(null != user.getUserId()) {
+                        String content = edtInsertComment.getText().toString().trim();
+                        if (content.length() == 0) {
+                            Toast.makeText(DropsDetailActivity.this, "评论内容不能为空", Toast.LENGTH_SHORT).show();
+                        } else {
+                            if(edtInsertComment.getHint().equals("请输入评论")) {
+                                insertComment(content);
+                            }else{
+                                //回复评论
+                                insertReplyComment();
+                            }
+                        }
+                    }else{
+                        Toast.makeText(getApplicationContext(), "请先登录", Toast.LENGTH_LONG).show();
+                    }
+                    break;
+            }
+        }
     }
 
     private void getViews() {

@@ -2,6 +2,7 @@ package cn.edu.hebtu.software.test.Adapter;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.edu.hebtu.software.test.Data.Note;
+import cn.edu.hebtu.software.test.DetailActivity.OtherMsgActivity;
 import cn.edu.hebtu.software.test.R;
 
 import static com.baidu.mapapi.BMapManager.getContext;
@@ -89,6 +91,15 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<StaggeredGridAdap
                 return true;
             }
         });
+        //点击头像弹出个人信息
+        holder.roundedImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, OtherMsgActivity.class);
+                intent.putExtra("user",noteList.get(position).getUser());
+                mContext.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -128,6 +139,8 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<StaggeredGridAdap
                 petname.setText(note.getUser().getUserName());
             }
         }
+
+
     }
 
     //定义接口

@@ -37,6 +37,7 @@ import cn.edu.hebtu.software.test.R;
 import cn.edu.hebtu.software.test.Util.ActivityManager;
 import cn.edu.hebtu.software.test.Util.DetermineConnServer;
 import cn.edu.hebtu.software.test.Util.PermissionUtils;
+import cn.edu.hebtu.software.test.Util.SharedPreferencesUtils;
 import cn.edu.hebtu.software.test.Util.SharedUtil;
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
@@ -75,17 +76,10 @@ public class LoginInActivity extends AppCompatActivity implements View.OnClickLi
                     user = (User) msg.obj;
                     final MyApplication data = (MyApplication) getApplication();
                     data.setUser(user);
-                    JPushInterface.init(getApplicationContext());
-                    JPushInterface.setDebugMode(true);
-                    //登陆成功,如果退出登录时已关闭推送功能，则再次登录时恢复此功能
-                    if(JPushInterface.isPushStopped(getApplicationContext())){
-                        JPushInterface.resumePush(getApplicationContext());
-                    }
-
-                    if(!"success".equals(SharedUtil.getString("isGuide", getApplicationContext(), user.getUserId()))){
-                        // 调用 Handler 来异步设置别名，一般都是用userId来进行设置别名（唯一性）。
-                        JPushInterface.setAlias(getApplicationContext(),user.getUserId() ,mAliasCallback);
-                    }
+                    //保存用户信息到本地
+                    setPreferencesUserMsg();
+                    //初始化极光服务
+                    initJPushInterface();
                     Intent in = new Intent(LoginInActivity.this,MainActivity.class);
                     startActivity(in);
                     finish();
@@ -175,6 +169,33 @@ public class LoginInActivity extends AppCompatActivity implements View.OnClickLi
         tvSignup = findViewById(R.id.tv_signup);
     }
 
+    private void setPreferencesUserMsg(){
+        //保存用户信息到本地
+        SharedPreferencesUtils sharedPreferencesUtils = new SharedPreferencesUtils(this,"userInfo");
+        SharedPreferencesUtils.ContentValue userIdInfo = new SharedPreferencesUtils.ContentValue("userIdInfo",user.getUserId());
+        SharedPreferencesUtils.ContentValue userHeadImgInfo = new SharedPreferencesUtils.ContentValue("userHeadImgInfo",user.getUserHeadImg());
+        SharedPreferencesUtils.ContentValue userNameInfo = new SharedPreferencesUtils.ContentValue("userNameInfo",user.getUserName());
+        SharedPreferencesUtils.ContentValue sexInfo = new SharedPreferencesUtils.ContentValue("sexInfo",user.getSex());
+        SharedPreferencesUtils.ContentValue signatureInfo = new SharedPreferencesUtils.ContentValue("signatureInfo",user.getSignature());
+        SharedPreferencesUtils.ContentValue occupationInfo = new SharedPreferencesUtils.ContentValue("occupationInfo",user.getOccupation());
+        SharedPreferencesUtils.ContentValue passwordInfo = new SharedPreferencesUtils.ContentValue("passwordInfo",user.getPassword());
+        SharedPreferencesUtils.ContentValue phoneInfo = new SharedPreferencesUtils.ContentValue("phoneInfo",user.getPhone());
+        sharedPreferencesUtils.putValues(userIdInfo,userHeadImgInfo,userNameInfo,sexInfo,signatureInfo,occupationInfo,passwordInfo,phoneInfo);
+    }
+
+    private void initJPushInterface(){
+        JPushInterface.init(getApplicationContext());
+        JPushInterface.setDebugMode(true);
+        //登陆成功,如果退出登录时已关闭推送功能，则再次登录时恢复此功能
+        if(JPushInterface.isPushStopped(getApplicationContext())){
+            JPushInterface.resumePush(getApplicationContext());
+        }
+
+        if(!"success".equals(SharedUtil.getString("isGuide", getApplicationContext(), user.getUserId()))){
+            // 调用 Handler 来异步设置别名，一般都是用userId来进行设置别名（唯一性）。
+            JPushInterface.setAlias(getApplicationContext(),user.getUserId() ,mAliasCallback);
+        }
+    }
     @Override
     public void onClick(View v) {
         switch (v.getId()) {

@@ -1,11 +1,13 @@
 package cn.edu.hebtu.software.test.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
@@ -21,6 +23,7 @@ import java.util.Date;
 import java.util.List;
 
 import cn.edu.hebtu.software.test.Data.Note;
+import cn.edu.hebtu.software.test.DetailActivity.OtherMsgActivity;
 import cn.edu.hebtu.software.test.Setting.MyApplication;
 import cn.edu.hebtu.software.test.R;
 import cn.edu.hebtu.software.test.Util.DateUtil;
@@ -92,6 +95,7 @@ public class MsgAdapter extends BaseAdapter {
             viewHolder.tvTime = convertView.findViewById(R.id.tv_time);
             viewHolder.tvKilo = convertView.findViewById(R.id.tv_kilo);
             viewHolder.tvDate = convertView.findViewById(R.id.tv_preDate);
+            viewHolder.userMsg = convertView.findViewById(R.id.ll_headmsg);
             convertView.setTag(viewHolder);
         }else{
             viewHolder = (ViewHolder) convertView.getTag();
@@ -132,8 +136,9 @@ public class MsgAdapter extends BaseAdapter {
             viewHolder.tvKilo.setText(distance);
             viewHolder.tvDate.setText(noteList.get(position).getTime().substring(0,7));
             viewHolder.tvTime.setText(str);
+            CustomerButtonListener listener = new CustomerButtonListener(position);
+            viewHolder.userMsg.setOnClickListener(listener);
         }
-
 
         return convertView;
     }
@@ -145,6 +150,7 @@ public class MsgAdapter extends BaseAdapter {
         private TextView tvTime;
         private TextView tvKilo;
         private TextView tvDate;
+        private LinearLayout userMsg;
     }
 
     public  String getDistance(double longitude1, double latitude1, double longitude2, double latitude2) {
@@ -157,5 +163,27 @@ public class MsgAdapter extends BaseAdapter {
             d = (int)distance +"m";
         }
         return d+"";
+    }
+
+    /**
+     *  @author: 张璐婷
+     *  @time: 2020/5/15  11:20
+     *  @Description: 区分item中的点击事件
+     */
+    class CustomerButtonListener implements View.OnClickListener{
+        private int position;
+
+        public CustomerButtonListener(int position){
+            this.position = position;
+        }
+
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(context, OtherMsgActivity.class);
+            intent.putExtra("user",noteList.get(position).getUser());
+            context.startActivity(intent);
+
+        }
+
     }
 }

@@ -99,18 +99,6 @@ public class MainActivity extends AppCompatActivity  {
         img = findViewById(R.id.img);
         user_name = findViewById(R.id.btn_user_name);
 
-        //保存用户信息到本地
-        SharedPreferencesUtils sharedPreferencesUtils = new SharedPreferencesUtils(this,"userInfo");
-        SharedPreferencesUtils.ContentValue userIdInfo = new SharedPreferencesUtils.ContentValue("userIdInfo",user.getUserId());
-        SharedPreferencesUtils.ContentValue userHeadImgInfo = new SharedPreferencesUtils.ContentValue("userHeadImgInfo",user.getUserHeadImg());
-        SharedPreferencesUtils.ContentValue userNameInfo = new SharedPreferencesUtils.ContentValue("userNameInfo",user.getUserName());
-        SharedPreferencesUtils.ContentValue sexInfo = new SharedPreferencesUtils.ContentValue("sexInfo",user.getSex());
-        SharedPreferencesUtils.ContentValue signatureInfo = new SharedPreferencesUtils.ContentValue("signatureInfo",user.getSignature());
-        SharedPreferencesUtils.ContentValue occupationInfo = new SharedPreferencesUtils.ContentValue("occupationInfo",user.getOccupation());
-        SharedPreferencesUtils.ContentValue passwordInfo = new SharedPreferencesUtils.ContentValue("passwordInfo",user.getPassword());
-        SharedPreferencesUtils.ContentValue phoneInfo = new SharedPreferencesUtils.ContentValue("phoneInfo",user.getPhone());
-        sharedPreferencesUtils.putValues(userIdInfo,userHeadImgInfo,userNameInfo,sexInfo,signatureInfo,occupationInfo,passwordInfo,phoneInfo);
-
         if(null != user.getUserId()){
             RequestOptions options = new RequestOptions().circleCrop();
             Glide.with(this).load("http://" + ip + ":8080/MoJi/"+user.getUserHeadImg()).apply(options).into(img);

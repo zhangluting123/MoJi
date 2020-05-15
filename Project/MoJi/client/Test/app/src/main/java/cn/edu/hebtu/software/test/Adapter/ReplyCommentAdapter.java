@@ -1,6 +1,7 @@
 package cn.edu.hebtu.software.test.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import com.bumptech.glide.request.RequestOptions;
 import java.util.List;
 
 import cn.edu.hebtu.software.test.Data.ReplyComment;
+import cn.edu.hebtu.software.test.DetailActivity.OtherMsgActivity;
 import cn.edu.hebtu.software.test.R;
 import cn.edu.hebtu.software.test.Setting.MyApplication;
 /**
@@ -100,6 +102,14 @@ public class ReplyCommentAdapter extends BaseAdapter {
             }else{
                 viewHolder.parent.setVisibility(View.GONE);
             }
+            viewHolder.replyHead.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, OtherMsgActivity.class);
+                    intent.putExtra("user",replyCommentList.get(position).getReplyUser());
+                    context.startActivity(intent);
+                }
+            });
         }
 
         return convertView;

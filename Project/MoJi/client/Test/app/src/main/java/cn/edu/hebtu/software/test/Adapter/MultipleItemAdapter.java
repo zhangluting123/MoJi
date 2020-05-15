@@ -1,6 +1,7 @@
 package cn.edu.hebtu.software.test.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 import android.view.View;
@@ -9,9 +10,14 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.makeramen.roundedimageview.RoundedImageView;
+
 import java.util.List;
 import cn.edu.hebtu.software.test.Data.MyMultipleItem;
+import cn.edu.hebtu.software.test.Data.User;
+import cn.edu.hebtu.software.test.DetailActivity.OtherMsgActivity;
 import cn.edu.hebtu.software.test.R;
+import cn.edu.hebtu.software.test.Setting.MyApplication;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
 
@@ -33,6 +39,17 @@ public class MultipleItemAdapter extends BaseMultiItemQuickAdapter<MyMultipleIte
 
     @Override
     protected void convert(BaseViewHolder helper, MyMultipleItem item) {
+        //点击头像个人详情页
+        RoundedImageView head = helper.itemView.findViewById(R.id.head);
+        head.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, OtherMsgActivity.class);
+                intent.putExtra("user",((MyApplication)mContext.getApplicationContext()).getUser());
+                mContext.startActivity(intent);
+            }
+        });
+
         Log.i("tag","FIRST_TYPE==============="+helper.getLayoutPosition());
         JCVideoPlayerStandard jcVideoPlayerStandard = (JCVideoPlayerStandard) helper.itemView.findViewById(R.id.videoplayer);
         jcVideoPlayerStandard.setUp(item.getData().get("url").toString(), JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "MoJi");

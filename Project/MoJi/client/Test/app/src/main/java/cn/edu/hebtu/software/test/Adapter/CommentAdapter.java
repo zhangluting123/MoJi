@@ -2,6 +2,7 @@ package cn.edu.hebtu.software.test.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.edu.hebtu.software.test.Data.Comment;
+import cn.edu.hebtu.software.test.DetailActivity.OtherMsgActivity;
 import cn.edu.hebtu.software.test.DetailActivity.ReplyCommentActivity;
 import cn.edu.hebtu.software.test.R;
 import cn.edu.hebtu.software.test.Setting.MyApplication;
@@ -94,6 +96,7 @@ public class CommentAdapter extends BaseAdapter {
             viewHolder.commentDate.setText(commentList.get(position).getCommentTime());
             CustomerButtonListener listener = new CustomerButtonListener(position);
             viewHolder.replyComment.setOnClickListener(listener);
+            viewHolder.commentHead.setOnClickListener(listener);
             //回复评论个数
             int count = commentList.get(position).getReplyCount();
             if(count > 0){
@@ -120,10 +123,19 @@ public class CommentAdapter extends BaseAdapter {
 
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent(context, ReplyCommentActivity.class);
-            intent.putExtra("comment",commentList.get(position));
-            context.startActivity(intent);
-
+            Intent intent = null;
+            switch (v.getId()){
+                case R.id.iv_commentHead:
+                    intent = new Intent(context, OtherMsgActivity.class);
+                    intent.putExtra("user",commentList.get(position).getUser());
+                    context.startActivity(intent);
+                    break;
+                case R.id.ll_reply_comment:
+                    intent = new Intent(context, ReplyCommentActivity.class);
+                    intent.putExtra("comment",commentList.get(position));
+                    context.startActivity(intent);
+                    break;
+            }
         }
 
     }

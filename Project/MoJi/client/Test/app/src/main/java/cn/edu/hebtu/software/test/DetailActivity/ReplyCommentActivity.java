@@ -139,6 +139,16 @@ public class ReplyCommentActivity extends AppCompatActivity {
         //获取回复的评论
         getReplyComment();
 
+        //点击头像
+        commentHead.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), OtherMsgActivity.class);
+                intent.putExtra("user",comment.getUser());
+                startActivity(intent);
+            }
+        });
+
         //插入评论
         btnSubmitComment.setOnClickListener(new View.OnClickListener() {
             @Override
