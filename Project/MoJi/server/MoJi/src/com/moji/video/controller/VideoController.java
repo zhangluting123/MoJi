@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import javax.management.Query;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.fileupload.FileItem;
@@ -23,8 +24,10 @@ import org.apache.ibatis.annotations.Case;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.gson.Gson;
 import com.moji.entity.Video;
 import com.moji.video.service.VideoService;
 
@@ -41,6 +44,24 @@ public class VideoController {
 
 	@Autowired
 	private VideoService videoService;
+	
+	@RequestMapping(value="/myList",method=RequestMethod.GET, produces="application/json;charset=utf-8")
+	public String listByUserId(@RequestParam("userId")String userId) {
+		List<Video> list = this.videoService.findVideoByUserId(userId);
+		Gson gson = new Gson();
+		String str = gson.toJson(list);
+		return str;
+	}
+	
+	@RequestMapping(value="/delete",method=RequestMethod.GET, produces="application/json;charset=utf-8")
+	public String delete(@RequestParam("videoId")String videoId) {
+		int n = this.videoService.deleteVideoById(videoId);
+		if(n > 0) {
+			return "1";
+		}else {
+			return "0";
+		}
+	}
 	
 	@RequestMapping(value="/upload",method=RequestMethod.POST, produces="application/json;charset=utf-8")
 	public String upload(HttpServletRequest request) {

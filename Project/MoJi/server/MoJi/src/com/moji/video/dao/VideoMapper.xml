@@ -31,4 +31,10 @@
 	<select id="checkVideoId" resultType="java.lang.Integer">
 		select count(*) from video_detail where video_id=#{videoId}
 	</select>
+	<select id="findVideoByUserId" resultMap="videoMap">
+		select * from video_detail where user_id=#{userId}
+	</select>
+	<delete id="deleteVideoById">
+		delete from video_detail where video_id=#{videoId}
+	</delete>
 </mapper>

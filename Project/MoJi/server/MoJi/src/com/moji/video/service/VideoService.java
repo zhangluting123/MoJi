@@ -8,6 +8,8 @@
  */
 package com.moji.video.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -52,5 +54,25 @@ public class VideoService {
 	 */
 	public int checkVideoId(String videoId) {
 		return this.videoMapper.checkVideoId(videoId);
+	}
+	
+	/**
+	 * @Title: findVideoByUserId
+	 * @Description: 根据用户id值查询视频
+	 * @author: 张璐婷 
+	 * @date: 2020年5月16日 上午11:17:07
+	 */
+	public List<Video> findVideoByUserId(String userId) {
+		return this.videoMapper.findVideoByUserId(userId);
+	}
+	
+	/**
+	 * @Title: deleteVideoById
+	 * @Description: 删除video
+	 * @author: 张璐婷 
+	 * @date: 2020年5月16日 上午11:17:50
+	 */
+	public int deleteVideoById(String videoId) {
+		return this.videoMapper.deleteVideoById(videoId);
 	}
 }

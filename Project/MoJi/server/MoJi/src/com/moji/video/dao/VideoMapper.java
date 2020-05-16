@@ -8,6 +8,8 @@
  */
 package com.moji.video.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 import com.moji.entity.Video;
@@ -42,4 +44,20 @@ public interface VideoMapper {
 	 * @throws
 	 */
 	public int checkVideoId(@Param("videoId")String videoId);
+	
+	/**
+	 * @Title: findVideo
+	 * @Description: 查询某用户所有视频
+	 * @author: 张璐婷 
+	 * @date: 2020年5月15日 下午5:35:33
+	 */
+	public List<Video> findVideoByUserId(@Param("userId")String userId);
+	
+	/**
+	 * @Title: deleteVideoById
+	 * @Description: 删除指定视频信息
+	 * @author: 张璐婷 
+	 * @date: 2020年5月16日 上午11:15:57
+	 */
+	public int deleteVideoById(@Param("videoId")String videoId);
 }
