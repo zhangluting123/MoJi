@@ -36,6 +36,7 @@ public class MyFootAdapter extends BaseAdapter {
     private int itemLayoutId;
     private Context context;
     private List<Note> noteList;
+    private boolean flag;
     private String ip;
 
     private Handler handler = new Handler(){
@@ -58,10 +59,11 @@ public class MyFootAdapter extends BaseAdapter {
 
     }
 
-    public MyFootAdapter(int itemLayoutId, Context context, List<Note> noteList) {
+    public MyFootAdapter(int itemLayoutId, Context context, List<Note> noteList,boolean flag) {
         this.itemLayoutId = itemLayoutId;
         this.context = context;
         this.noteList = noteList;
+        this.flag = flag;
     }
 
     @Override
@@ -100,66 +102,6 @@ public class MyFootAdapter extends BaseAdapter {
             viewHolder.noteAddress= convertView.findViewById(R.id.tv_noteAddress);
             viewHolder.noteDelete = convertView.findViewById(R.id.tv_delete);
             viewHolder.linearFootDetail = convertView.findViewById(R.id.linearFootDetail);
-
-            viewHolder.linearFootDetail.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    final MyApplication data = (MyApplication) context.getApplicationContext();
-                    data.setCurrentNoteId(noteList.get(position).getNoteId());
-
-                    Intent intent = new Intent(context, ShowNoteActivity.class);
-                    Gson gson = new Gson();
-                    String noteStr = gson.toJson(noteList.get(position));
-                    intent.putExtra("noteJsonStr", noteStr);
-                    context.startActivity(intent);
-                }
-            });
-
-            viewHolder.noteDelete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    new Thread(){
-                        @Override
-                        public void run() {
-                            try {
-                                boolean b = DetermineConnServer.isConnByHttp(context.getApplicationContext());
-                                if(b){
-                                    URL url = new URL("http://" + ip +":8080/MoJi/note/delete?noteId=" + noteList.get(position).getNoteId());
-                                    URLConnection conn = url.openConnection();
-                                    InputStream in = conn.getInputStream();
-                                    BufferedReader reader = new BufferedReader(new InputStreamReader(in,"utf-8"));
-                                    String str = reader.readLine();
-                                    if("1".equals(str)){
-                                        Message message = new Message();
-                                        message.what = 200;
-                                        int pos = position;
-                                        message.obj = pos;
-                                        handler.sendMessage(message);
-                                    }else {
-                                        Message message = new Message();
-                                        message.what = 100;
-                                        message.obj ="删除足迹出错";
-                                        handler.sendMessage(message);
-                                    }
-                                    in.close();
-                                    reader.close();
-                                }else{
-                                    Message message = new Message();
-                                    message.what = 100;
-                                    message.obj ="未连接到服务器";
-                                    handler.sendMessage(message);
-                                }
-                            } catch (MalformedURLException e) {
-                                e.printStackTrace();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-
-                        }
-                    }.start();
-                }
-            });
-
             convertView.setTag(viewHolder);
         }else{
             viewHolder = (ViewHolder) convertView.getTag();
@@ -172,8 +114,88 @@ public class MyFootAdapter extends BaseAdapter {
         viewHolder.noteTime.setText(noteList.get(position).getTime());
         viewHolder.noteAddress.setText(noteList.get(position).getLocation());
 
+        CustomWordOnClickListener listener = new CustomWordOnClickListener(position);
+        viewHolder.linearFootDetail.setOnClickListener(listener);
+        if(flag) {
+            viewHolder.noteDelete.setOnClickListener(listener);
+        }else{
+            viewHolder.noteDelete.setVisibility(View.GONE);
+        }
+
         return convertView;
     }
+
+    class CustomWordOnClickListener implements View.OnClickListener{
+        private int position;
+
+        public CustomWordOnClickListener(int position) {
+            this.position = position;
+        }
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.tv_delete:
+                    deleteWord(position);
+                    break;
+                case R.id.linearFootDetail:
+                    final MyApplication data = (MyApplication) context.getApplicationContext();
+                    data.setCurrentNoteId(noteList.get(position).getNoteId());
+
+                    Intent intent = new Intent(context, ShowNoteActivity.class);
+                    Gson gson = new Gson();
+                    String noteStr = gson.toJson(noteList.get(position));
+                    intent.putExtra("noteJsonStr", noteStr);
+                    context.startActivity(intent);
+                    break;
+
+            }
+        }
+    }
+
+    private void deleteWord(int position){
+        new Thread(){
+            @Override
+            public void run() {
+                try {
+                    boolean b = DetermineConnServer.isConnByHttp(context.getApplicationContext());
+                    if(b){
+                        URL url = new URL("http://" + ip +":8080/MoJi/note/delete?noteId=" + noteList.get(position).getNoteId());
+                        URLConnection conn = url.openConnection();
+                        InputStream in = conn.getInputStream();
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(in,"utf-8"));
+                        String str = reader.readLine();
+                        if("1".equals(str)){
+                            Message message = new Message();
+                            message.what = 200;
+                            int pos = position;
+                            message.obj = pos;
+                            handler.sendMessage(message);
+                        }else {
+                            Message message = new Message();
+                            message.what = 100;
+                            message.obj ="删除足迹出错";
+                            handler.sendMessage(message);
+                        }
+                        in.close();
+                        reader.close();
+                    }else{
+                        Message message = new Message();
+                        message.what = 100;
+                        message.obj ="未连接到服务器";
+                        handler.sendMessage(message);
+                    }
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }.start();
+
+    }
+
 
     final static class ViewHolder{
         private ImageView noteImg;

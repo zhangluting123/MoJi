@@ -1,7 +1,7 @@
 package cn.edu.hebtu.software.test.Fragment;
 
+import android.content.Intent;
 import android.hardware.Sensor;
-import android.hardware.SensorEvent;
 import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -35,12 +35,12 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import cn.edu.hebtu.software.test.Adapter.MyVideoAdaper;
+import cn.edu.hebtu.software.test.Data.User;
 import cn.edu.hebtu.software.test.Data.Video;
 import cn.edu.hebtu.software.test.R;
 import cn.edu.hebtu.software.test.Setting.MyApplication;
 import cn.edu.hebtu.software.test.Util.DetermineConnServer;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
-import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerManager;
 
 /**
  * @ProjectName:    MoJi
@@ -57,6 +57,9 @@ public class MyFootPrintVideoFragment extends Fragment {
 
     private MyApplication data;
     private String ip;
+    private User nowUser;
+    private boolean flag;//flag=true 自己查看动态
+
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -76,10 +79,20 @@ public class MyFootPrintVideoFragment extends Fragment {
         data = (MyApplication)getActivity().getApplication();
         ip = data.getIp();
 
+        Intent intent = getActivity().getIntent();
+        User otherUser = intent.getParcelableExtra("user");
+        if(null == otherUser){
+            nowUser = data.getUser();
+            flag = true;
+        }else{
+            nowUser = otherUser;
+            flag = false;
+        }
+
         init();
 
         ListView listView = view.findViewById(R.id.video_list);
-        MyVideoAdaper adaper = new MyVideoAdaper(videoList, R.layout.item_foot_print_video, getActivity());
+        MyVideoAdaper adaper = new MyVideoAdaper(videoList, R.layout.item_foot_print_video, getActivity(),flag);
         listView.setAdapter(adaper);
         mSensorManager = (SensorManager) getActivity().getSystemService(getActivity().SENSOR_SERVICE);
         mSensorEventListener = new JCVideoPlayer.JCAutoFullscreenListener();
@@ -118,7 +131,7 @@ public class MyFootPrintVideoFragment extends Fragment {
         public void run() {
             if(DetermineConnServer.isConnByHttp(getActivity().getApplicationContext())){
                 try {
-                    URL url = new URL("http://" + ip + ":8080/MoJi/video/myList?userId="+data.getUser().getUserId());
+                    URL url = new URL("http://" + ip + ":8080/MoJi/video/myList?userId="+nowUser.getUserId());
                     URLConnection conn = url.openConnection();
                     InputStream in = conn.getInputStream();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(in));

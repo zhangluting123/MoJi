@@ -7,12 +7,12 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentTabHost;
 import cn.edu.hebtu.software.test.Activity.MainActivity;
+import cn.edu.hebtu.software.test.Data.User;
 import cn.edu.hebtu.software.test.Fragment.MyFootPrintVideoFragment;
 import cn.edu.hebtu.software.test.Fragment.MyFootPrintWordFragment;
 import cn.edu.hebtu.software.test.Setting.MyApplication;
 import cn.edu.hebtu.software.test.Util.ActivityManager;
 import cn.edu.hebtu.software.test.R;
-import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
 
 import android.Manifest;
@@ -38,6 +38,8 @@ public class MyFootPrintActivity extends AppCompatActivity {
     private int footTabId;
     private Map<String, TextView> textViewMap = new HashMap<>();
 
+    private User otherUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,15 +56,23 @@ public class MyFootPrintActivity extends AppCompatActivity {
         data = (MyApplication)getApplication();
         footTabId = data.getFootTabId();
 
+        Intent intent = getIntent();
+        otherUser = intent.getParcelableExtra("user");
+
         toolbar = findViewById(R.id.foot_toolbar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent response = new Intent(MyFootPrintActivity.this, MainActivity.class);
-                response.putExtra("flag",true);
-                startActivity(response);
-                overridePendingTransition(R.animator.in_from_left, R.animator.out_to_right);
-                finish();
+                if(null == otherUser) {
+                    Intent response = new Intent(MyFootPrintActivity.this, MainActivity.class);
+                    response.putExtra("flag", true);
+                    startActivity(response);
+                    overridePendingTransition(R.animator.in_from_left, R.animator.out_to_right);
+                    finish();
+                }else{
+                    overridePendingTransition(R.animator.in_from_left, R.animator.out_to_right);
+                    finish();
+                }
             }
         });
 

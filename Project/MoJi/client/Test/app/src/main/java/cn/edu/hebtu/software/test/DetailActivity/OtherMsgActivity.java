@@ -116,6 +116,7 @@ public class OtherMsgActivity extends AppCompatActivity {
                 case R.id.btn_other_trends:
                     //TODO 查看动态
                     Intent intent = new Intent(OtherMsgActivity.this, MyFootPrintActivity.class);
+                    intent.putExtra("user", user);
                     startActivity(intent);
                     break;
                 case R.id.btn_send_msg:

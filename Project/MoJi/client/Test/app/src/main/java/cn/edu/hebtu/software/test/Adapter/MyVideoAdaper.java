@@ -14,33 +14,27 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.mob.tools.RxMob;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.Collections;
 import java.util.List;
 
-import cn.edu.hebtu.software.test.Data.Note;
 import cn.edu.hebtu.software.test.Data.Video;
 import cn.edu.hebtu.software.test.R;
 import cn.edu.hebtu.software.test.Setting.MyApplication;
 import cn.edu.hebtu.software.test.Util.DetermineConnServer;
-import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
 
 public class MyVideoAdaper extends BaseAdapter {
     private List<Video> list;
     private int itemLayout;
     private Context context;
+    private boolean flag;
     private String ip;
     private Handler handler = new Handler(){
         @Override
@@ -57,10 +51,11 @@ public class MyVideoAdaper extends BaseAdapter {
         }
     };
 
-    public MyVideoAdaper(List<Video> list, int itemLayout, Context context) {
+    public MyVideoAdaper(List<Video> list, int itemLayout, Context context,boolean flag) {
         this.list = list;
         this.itemLayout = itemLayout;
         this.context = context;
+        this.flag = flag;
         ip = ((MyApplication)context.getApplicationContext()).getIp();
     }
 
@@ -132,7 +127,11 @@ public class MyVideoAdaper extends BaseAdapter {
 
         CustomeOnClickListener listener = new CustomeOnClickListener(position,path);
         viewHolder.share.setOnClickListener(listener);
-        viewHolder.delete.setOnClickListener(listener);
+        if(flag) {
+            viewHolder.delete.setOnClickListener(listener);
+        }else{
+            viewHolder.delete.setVisibility(View.GONE);
+        }
 
         return convertView;
     }

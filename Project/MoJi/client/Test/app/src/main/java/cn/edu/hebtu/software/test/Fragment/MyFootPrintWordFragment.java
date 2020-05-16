@@ -1,5 +1,6 @@
 package cn.edu.hebtu.software.test.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -31,6 +32,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import cn.edu.hebtu.software.test.Adapter.MyFootAdapter;
 import cn.edu.hebtu.software.test.Data.Note;
+import cn.edu.hebtu.software.test.Data.User;
 import cn.edu.hebtu.software.test.R;
 import cn.edu.hebtu.software.test.Setting.MyApplication;
 import cn.edu.hebtu.software.test.Util.DetermineConnServer;
@@ -45,9 +47,11 @@ import cn.edu.hebtu.software.test.Util.DetermineConnServer;
 public class MyFootPrintWordFragment extends Fragment {
     private ListView listView;
     private List<Note> noteList;
-    private String userId;
     private MyApplication data;
     private String ip;
+
+    private User nowUser;
+    private boolean flag;//flag = true,自己查看动态
 
     private MyFootAdapter myFootAdapter;
 
@@ -67,14 +71,25 @@ public class MyFootPrintWordFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_my_foot_print_word,container, false);
         //获取全局变量
         data = (MyApplication) getActivity().getApplication();
-        userId = data.getUser().getUserId();
         ip = data.getIp();
+
+        Intent intent = getActivity().getIntent();
+        User otherUser = intent.getParcelableExtra("user");
+        if(null == otherUser){
+            nowUser = data.getUser();
+            flag = true;
+        }else{
+            nowUser = otherUser;
+            flag = false;
+        }
+
 
         init();
 
+
         if(noteList!=null && noteList.size()>0){
             listView = view.findViewById(R.id.lv_footList);
-            myFootAdapter = new MyFootAdapter(R.layout.item_foot_print_word,getActivity().getApplicationContext(),noteList);
+            myFootAdapter = new MyFootAdapter(R.layout.item_foot_print_word,getActivity().getApplicationContext(),noteList,flag);
             listView.setAdapter(myFootAdapter);
         }
 
@@ -123,7 +138,7 @@ public class MyFootPrintWordFragment extends Fragment {
             try {
                 boolean b = DetermineConnServer.isConnByHttp(getActivity().getApplicationContext());
                 if(b){
-                    URL url = new URL("http://"+ ip +":8080/MoJi/note/download?userId=" + userId);
+                    URL url = new URL("http://"+ ip +":8080/MoJi/note/download?userId=" + nowUser.getUserId()+"&flag="+flag);
                     URLConnection conn = url.openConnection();
                     InputStream in = conn.getInputStream();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(in,"utf-8"));
