@@ -83,6 +83,15 @@ public class NoteService {
 	} 
 	
 	/**
+	 * @Title: queryVisualNoteByUserId
+	 * @Description: 查询某人公开note
+	 * @author: 张璐婷 
+	 * @date: 2020年5月16日 下午2:45:25
+	 */
+	public List<Note> queryVisualNoteByUserId(String userId){
+		return this.noteMapper.queryVisualNoteByUserId(userId);
+	}
+	/**
 	 * 
 	* @author:      张璐婷 
 	* @Description: 查询便签

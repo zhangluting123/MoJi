@@ -66,6 +66,14 @@ public interface NoteMapper {
 	public List<Note> queryNote(@Param("userId")String userId);
 	
 	/**
+	 * @Title: queryVisualNoteByUserId
+	 * @Description: 查询某人公开note
+	 * @author: 张璐婷 
+	 * @date: 2020年5月16日 下午2:42:58
+	 */
+	public List<Note> queryVisualNoteByUserId(@Param("userId")String userId);
+	
+	/**
 	 * 
 	 * @Title: deleteNote
 	 * @Description: 删除指定便签

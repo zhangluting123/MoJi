@@ -214,10 +214,18 @@ public class NoteController {
 	}
 	
 	@RequestMapping(value="/download", method=RequestMethod.GET, produces="application/json;charset=utf-8")
-	public String downloadNote(HttpServletRequest request, @RequestParam(value="userId",required=true)String userId) {
+	public String downloadNote(HttpServletRequest request, 
+			@RequestParam(value="userId",required=true)String userId,
+			@RequestParam(value="flag",required=true)boolean flag) {
 		String str = "";
 		//从数据库查询的数据
-		List<Note> list = this.noteService.downloadNote(userId);
+		List<Note> list = null;
+		if(flag) {
+			list = this.noteService.downloadNote(userId);
+		}else {
+			list = this.noteService.queryVisualNoteByUserId(userId);
+		}
+		
 		//转化成需要返回的类型
 		List<ReturnNote> returnList = new ArrayList<>();
 		for (int i = 0; i < list.size(); i++) {
