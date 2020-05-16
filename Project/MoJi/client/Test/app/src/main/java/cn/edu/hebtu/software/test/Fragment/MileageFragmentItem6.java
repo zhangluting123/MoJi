@@ -1,5 +1,7 @@
 package cn.edu.hebtu.software.test.Fragment;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -95,21 +97,19 @@ public class MileageFragmentItem6 extends MyBaseFragment {
             }
         });
         //item子view
-        /*adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+        adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 switch (view.getId()) {
-                    case R.id.tv_recy_item_1_name:
-                        Toast.makeText(getActivity(), "点击了第" + (position + 1) + "名字", Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.img_recy_item_1_pic:
-                        Toast.makeText(getActivity(), "点击了第" + (position + 1) + "张图片", Toast.LENGTH_SHORT).show();
+                    case R.id.share:
+                        share(getContext(),urls[position]);
+                        //Toast.makeText(getActivity(), "点击了第" + (position + 1) + "名字", Toast.LENGTH_SHORT).show();
                         break;
                     default:
                         break;
                 }
             }
-        });*/
+        });
         recyclerView.setAdapter(adapter);
     }
 
@@ -132,5 +132,12 @@ public class MileageFragmentItem6 extends MyBaseFragment {
                 lineData.add(new MyMultipleItem(2, map));
             }*/
         }
+    }
+
+    public static void share(Context context, String shareText) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT, shareText);
+        context.startActivity(Intent.createChooser(intent, "MoJi分享"));
     }
 }
