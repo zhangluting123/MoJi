@@ -46,7 +46,9 @@
         <activity android:name=".LeftNavigation.MsgPermissionActivity" />
         <activity android:name=".LeftNavigation.SettingActivity" />
         <activity android:name=".LeftNavigation.MyMailActivity" />
-        <activity android:name=".LeftNavigation.MyFootPrintActivity" />
+        <activity android:name=".LeftNavigation.MyFootPrintActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="fullSensor" />
         <activity android:name=".Activity.LoginInActivity" />
         <activity android:name=".Activity.GuidePageActivity" />
         <activity android:name=".Activity.WelcomeActivity" />

@@ -28,6 +28,7 @@ public class MyApplication extends Application {
 
     private int tabId = 0;
     private int mailTabId = 0;
+    private int footTabId = 0;
 
     public void onCreate() {
 
@@ -121,5 +122,13 @@ public class MyApplication extends Application {
 
     public void setMailTabId(int mailTabId) {
         this.mailTabId = mailTabId;
+    }
+
+    public int getFootTabId() {
+        return footTabId;
+    }
+
+    public void setFootTabId(int footTabId) {
+        this.footTabId = footTabId;
     }
 }

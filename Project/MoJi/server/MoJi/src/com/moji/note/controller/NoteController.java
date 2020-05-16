@@ -231,6 +231,7 @@ public class NoteController {
 			returnNote.setTime(list.get(i).getTime());
 			returnNote.setUserId(list.get(i).getUserId());
 			returnNote.setUser(list.get(i).getUser());
+			returnNote.setSelf(list.get(i).getSelf());
 			for(int j = 0; j < list.get(i).getImgList().size(); j++) {
 				returnNote.getImgList().add(list.get(i).getImgList().get(j).getImgPath());
 			}
@@ -261,6 +262,7 @@ public class NoteController {
 			returnNote.setTime(list.get(i).getTime());
 			returnNote.setUserId(list.get(i).getUserId());
 			returnNote.setUser(list.get(i).getUser());
+			returnNote.setSelf(list.get(i).getSelf());
 			for(int j = 0; j < list.get(i).getImgList().size(); j++) {
 				returnNote.getImgList().add(list.get(i).getImgList().get(j).getImgPath());
 			}
@@ -300,6 +302,7 @@ public class NoteController {
 				returnNote.setTime(list.get(i).getTime());
 				returnNote.setUserId(list.get(i).getUserId());
 				returnNote.setUser(list.get(i).getUser());
+				returnNote.setSelf(list.get(i).getSelf());
 				for(int j = 0; j < list.get(i).getImgList().size(); j++) {
 					returnNote.getImgList().add(list.get(i).getImgList().get(j).getImgPath());
 				}

@@ -3,59 +3,41 @@ package cn.edu.hebtu.software.test.LeftNavigation;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentTabHost;
 import cn.edu.hebtu.software.test.Activity.MainActivity;
-import cn.edu.hebtu.software.test.Adapter.MyFootAdapter;
-import cn.edu.hebtu.software.test.Data.Note;
-import cn.edu.hebtu.software.test.DetailActivity.ShowNoteActivity;
+import cn.edu.hebtu.software.test.Fragment.MyFootPrintVideoFragment;
+import cn.edu.hebtu.software.test.Fragment.MyFootPrintWordFragment;
 import cn.edu.hebtu.software.test.Setting.MyApplication;
 import cn.edu.hebtu.software.test.Util.ActivityManager;
-import cn.edu.hebtu.software.test.Util.DetermineConnServer;
 import cn.edu.hebtu.software.test.R;
+import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
+import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.TabHost;
+import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.lang.reflect.Type;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MyFootPrintActivity extends AppCompatActivity {
     private Toolbar toolbar;
-    private ListView listView;
-    private List<Note> noteList;
-    private String userId;
     private MyApplication data;
-    private String ip;
+    private int footTabId;
+    private Map<String, TextView> textViewMap = new HashMap<>();
 
-    private Handler handler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what){
-                case 100:
-                    Toast.makeText(getApplicationContext(), (CharSequence)msg.obj, Toast.LENGTH_SHORT).show();
-                    break;
-            }
-        }
-    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,14 +51,10 @@ public class MyFootPrintActivity extends AppCompatActivity {
             window.setStatusBarColor(getResources().getColor(R.color.MyTheam_color));
 
         }
+        data = (MyApplication)getApplication();
+        footTabId = data.getFootTabId();
 
-        //获取全局变量
-        data = (MyApplication) getApplication();
-        userId = data.getUser().getUserId();
-
-        init();
         toolbar = findViewById(R.id.foot_toolbar);
-
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,64 +66,85 @@ public class MyFootPrintActivity extends AppCompatActivity {
             }
         });
 
-
-        if(noteList!=null && noteList.size()>0){
-            listView = findViewById(R.id.lv_footList);
-            MyFootAdapter myFootAdapter = new MyFootAdapter(R.layout.item_footlist,this,noteList);
-            listView.setAdapter(myFootAdapter);
-
+        //开启读取权限
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
         }
-    }
 
-    private void init() {
-        Thread getNote = new GetNote();
-        getNote.start();
-        try {
-            getNote.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+
+        FragmentTabHost fragmentTabHost = findViewById(android.R.id.tabhost);
+        fragmentTabHost.setup(this,
+                getSupportFragmentManager(),
+                android.R.id.tabcontent);
+
+        //图文
+        TabHost.TabSpec message = fragmentTabHost.newTabSpec("word").setIndicator(getTabSpecView("word","图文"));
+        fragmentTabHost.addTab(message, MyFootPrintWordFragment.class, null);
+        //视频
+        TabHost.TabSpec mycomment = fragmentTabHost.newTabSpec("video").setIndicator(getTabSpecView("video","视频"));
+        fragmentTabHost.addTab(mycomment, MyFootPrintVideoFragment.class, null);
+
+        //默认选中第一项
+        fragmentTabHost.setCurrentTab(footTabId);
+        switch (footTabId) {
+            case 0:
+                textViewMap.get("word").setTextColor(getResources().getColor(R.color.colorActionBarBackground));
+                break;
+            case 1:
+                textViewMap.get("video").setTextColor(getResources().getColor(R.color.colorActionBarBackground));
+                break;
         }
-    }
 
-    class GetNote extends Thread{
-        @Override
-        public void run() {
-
-            try {
-                boolean b = DetermineConnServer.isConnByHttp(getApplicationContext());
-                if(b){
-                    URL url = new URL("http://"+getResources().getString(R.string.internet_ip)+":8080/MoJi/note/download?userId=" + userId);
-                    URLConnection conn = url.openConnection();
-                    InputStream in = conn.getInputStream();
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(in,"utf-8"));
-                    String str = reader.readLine();
-                    if(null != str){
-                        Gson gson = new Gson();
-                        Type type = new TypeToken<List<Note>>(){}.getType();
-                        noteList = gson.fromJson(str,type);
-                    }
-                    in.close();
-                    reader.close();
-                }else{
-                    Message message = new Message();
-                    message.what = 100;
-                    message.obj ="未连接到服务器";
-                    handler.sendMessage(message);
+        //切换选项卡的事件监听器
+        fragmentTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+            @Override
+            public void onTabChanged(String tabId) {
+                switch (tabId){
+                    case "word":
+                        data.setFootTabId(0);
+                        textViewMap.get("word").setTextColor(getResources().getColor(R.color.colorActionBarBackground));
+                        textViewMap.get("video").setTextColor(Color.BLACK);
+                        break;
+                    case "video":
+                        data.setFootTabId(1);
+                        textViewMap.get("word").setTextColor(Color.BLACK);
+                        textViewMap.get("video").setTextColor(getResources().getColor(R.color.colorActionBarBackground));
+                        break;
                 }
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
             }
+        });
 
-        }
+
     }
+
+
+    private View getTabSpecView(String tag, String title) {
+        LayoutInflater layoutInflater = getLayoutInflater();
+        View view = layoutInflater.inflate(R.layout.mail_tabspec_layout,null);
+
+        TextView textView = view.findViewById(R.id.tv_content);
+        textView.setText(title);
+
+        textViewMap.put(tag,textView);
+        return view;
+    }
+
+
+    @Override
+    public void onBackPressed() { //"全屏竖屏切换的时候继续播放"
+        if (JCVideoPlayerStandard.backPress()){
+            return;
+        }
+        super.onBackPressed();
+    }
+
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
             finish();
         }
+
         return super.onKeyDown(keyCode, event);
     }
 }

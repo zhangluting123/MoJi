@@ -7,7 +7,6 @@ import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -43,7 +42,7 @@ import cn.edu.hebtu.software.test.Util.DetermineConnServer;
  * @CreateDate:     2020/4/11 10:50
  * @Version:        1.0
  */
-public class NotificationFragment extends Fragment {
+public class MyMailNotificationFragment extends Fragment {
     private RecyclerView rvTrace;
     private View view;
     public static List<Mail> mailList;
@@ -68,7 +67,7 @@ public class NotificationFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.notification_layout, container, false);
+        view = inflater.inflate(R.layout.fragment_mymail_notification_layout, container, false);
 
 
         data = (MyApplication)getActivity().getApplication();

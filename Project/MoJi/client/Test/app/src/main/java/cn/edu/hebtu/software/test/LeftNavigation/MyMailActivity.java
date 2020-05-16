@@ -4,9 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentTabHost;
 import cn.edu.hebtu.software.test.Activity.MainActivity;
-import cn.edu.hebtu.software.test.Fragment.MyCommentFragment;
-import cn.edu.hebtu.software.test.Fragment.MessageFragment;
-import cn.edu.hebtu.software.test.Fragment.NotificationFragment;
+import cn.edu.hebtu.software.test.Fragment.MyMailCommentFragment;
+import cn.edu.hebtu.software.test.Fragment.MyMailMessageFragment;
+import cn.edu.hebtu.software.test.Fragment.MyMailNotificationFragment;
 import cn.edu.hebtu.software.test.R;
 import cn.edu.hebtu.software.test.Setting.MyApplication;
 import cn.edu.hebtu.software.test.Util.ActivityManager;
@@ -74,13 +74,13 @@ public class MyMailActivity extends AppCompatActivity {
 
         //私信
         TabHost.TabSpec message = fragmentTabHost.newTabSpec("message").setIndicator(getTabSpecView("message","私信"));
-        fragmentTabHost.addTab(message, MessageFragment.class, null);
+        fragmentTabHost.addTab(message, MyMailMessageFragment.class, null);
         //评论
         TabHost.TabSpec mycomment = fragmentTabHost.newTabSpec("mycomment").setIndicator(getTabSpecView("mycomment","评论"));
-        fragmentTabHost.addTab(mycomment, MyCommentFragment.class, null);
+        fragmentTabHost.addTab(mycomment, MyMailCommentFragment.class, null);
         //通知
         TabHost.TabSpec notification = fragmentTabHost.newTabSpec("notification").setIndicator(getTabSpecView("notification","通知"));
-        fragmentTabHost.addTab(notification, NotificationFragment.class, null);
+        fragmentTabHost.addTab(notification, MyMailNotificationFragment.class, null);
 
         //默认选中第一项
         fragmentTabHost.setCurrentTab(mailId);

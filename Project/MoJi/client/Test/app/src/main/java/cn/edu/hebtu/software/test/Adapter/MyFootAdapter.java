@@ -4,11 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -183,5 +181,10 @@ public class MyFootAdapter extends BaseAdapter {
         private TextView noteAddress;
         private TextView noteDelete;
         private LinearLayout linearFootDetail;
+    }
+
+    public void refresh(List<Note> noteList){
+        this.noteList = noteList;
+        notifyDataSetChanged();
     }
 }

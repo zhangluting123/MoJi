@@ -18,13 +18,13 @@ import cn.edu.hebtu.software.test.R;
  * @CreateDate:     2020/4/11 11:27
  * @Version:        1.0
  */
-public class MessageFragment extends Fragment {
+public class MyMailMessageFragment extends Fragment {
     private View view;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.message_layout, container, false);
+        view = inflater.inflate(R.layout.fragment_mymail_message_layout, container, false);
 
 
         return view;

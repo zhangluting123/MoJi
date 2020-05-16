@@ -1,10 +1,6 @@
 package cn.edu.hebtu.software.test.Fragment;
 
-import android.Manifest;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -36,18 +32,11 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import cn.edu.hebtu.software.test.Adapter.MyCommentAdapter;
-import cn.edu.hebtu.software.test.Data.Comment;
-import cn.edu.hebtu.software.test.Data.Mail;
 import cn.edu.hebtu.software.test.Data.MailMyComment;
-import cn.edu.hebtu.software.test.Data.ReplyComment;
-import cn.edu.hebtu.software.test.DetailActivity.DropsDetailActivity;
 import cn.edu.hebtu.software.test.DetailActivity.MailCommentDetailActivity;
 import cn.edu.hebtu.software.test.DetailActivity.MailReplyActivity;
-import cn.edu.hebtu.software.test.LeftNavigation.MyMailActivity;
 import cn.edu.hebtu.software.test.R;
 import cn.edu.hebtu.software.test.Setting.MyApplication;
 import cn.edu.hebtu.software.test.Util.DetermineConnServer;
@@ -58,7 +47,7 @@ import cn.edu.hebtu.software.test.Util.DetermineConnServer;
  * @CreateDate:     2020/4/24 16:31
  * @Version:        1.0
  */
-public class MyCommentFragment extends Fragment {
+public class MyMailCommentFragment extends Fragment {
     private View view;
     private List<MailMyComment> myComments;
     private PopupWindow popupWindow;
@@ -94,7 +83,7 @@ public class MyCommentFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.mycomment_layout, container,false);
+        view = inflater.inflate(R.layout.fragment_mymail_comment_layout, container,false);
 
         data = (MyApplication)getActivity().getApplication();
         ip = data.getIp();

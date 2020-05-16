@@ -41,15 +41,15 @@ public class MultipleItemAdapter extends BaseMultiItemQuickAdapter<MyMultipleIte
     @Override
     protected void convert(BaseViewHolder helper, MyMultipleItem item) {
         //点击头像个人详情页
-        RoundedImageView head = helper.itemView.findViewById(R.id.head);
-        head.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mContext, OtherMsgActivity.class);
-                intent.putExtra("user",((MyApplication)mContext.getApplicationContext()).getUser());
-                mContext.startActivity(intent);
-            }
-        });
+//        RoundedImageView head = helper.itemView.findViewById(R.id.head);
+//        head.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(mContext, OtherMsgActivity.class);
+//                intent.putExtra("user",((MyApplication)mContext.getApplicationContext()).getUser());
+//                mContext.startActivity(intent);
+//            }
+//        });
 
         Log.i("tag","FIRST_TYPE==============="+helper.getLayoutPosition());
 
