@@ -174,9 +174,14 @@ public class DropsFragment extends Fragment {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        selectVisualNote();
-        msgAdapter.setNoteList(noteList);
-        msgAdapter.notifyDataSetChanged();
+
+        if(selectVisualNote()==1){
+            msgAdapter.setNoteList(noteList);
+            msgAdapter.notifyDataSetChanged();
+        }else{
+            locationOption();
+        }
+
     }
 
     /**
@@ -428,17 +433,22 @@ public class DropsFragment extends Fragment {
      *  @time: 2019/12/10  17:44
      *  @Description: 筛选在范围内的note
      */
-    private void selectVisualNote(){
-        for(int i = 0; i < noteList.size();i++){
-            Log.e("location", noteList.get(i).getLocation());
-            if(noteList.get(i).getLatitude() != null && noteList.get(i).getLongitude() != null){
-                if(!isRange(noteList.get(i).getLatitude(), noteList.get(i).getLongitude())){
-                    noteList.remove(i);
-                    i--;
+    private int selectVisualNote(){
+        try {
+            for(int i = 0; i < noteList.size();i++){
+                Log.e("location", noteList.get(i).getLocation());
+                if(noteList.get(i).getLatitude() != null && noteList.get(i).getLongitude() != null){
+                    if(!isRange(noteList.get(i).getLatitude(), noteList.get(i).getLongitude())){
+                        noteList.remove(i);
+                        i--;
+                    }
                 }
-            }
 
+            }
+        }catch (NullPointerException e){
+            return 0;
         }
+        return 1;
     }
 
     /**

@@ -4,11 +4,14 @@ import android.app.Activity;
 import android.app.Application;
 
 import com.baidu.mapapi.SDKInitializer;
+import com.hyphenate.chat.EMOptions;
+import com.hyphenate.easeui.EaseUI;
 import com.mob.MobSDK;
 
 import java.util.LinkedList;
 import java.util.List;
 
+import androidx.multidex.MultiDex;
 import cn.edu.hebtu.software.test.Data.User;
 import cn.jpush.android.api.JPushInterface;
 
@@ -40,6 +43,14 @@ public class MyApplication extends Application {
         //Jpush初始化
         JPushInterface.setDebugMode(true);//允许控制台显示提示信息
         JPushInterface.init(this);
+
+        MultiDex.install(this);
+        initEaseUi();
+    }
+    private void initEaseUi() {
+        EMOptions emOptions = new EMOptions();
+        emOptions.setAcceptInvitationAlways(false);
+        EaseUI.getInstance().init(this, new EMOptions());
     }
 
 

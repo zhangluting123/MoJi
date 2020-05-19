@@ -3,6 +3,7 @@ package cn.edu.hebtu.software.test.DetailActivity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import cn.edu.hebtu.software.test.Activity.MainActivity;
+import cn.edu.hebtu.software.test.ChatIM.ChatActivity;
 import cn.edu.hebtu.software.test.Data.User;
 import cn.edu.hebtu.software.test.LeftNavigation.MineActivity;
 import cn.edu.hebtu.software.test.LeftNavigation.MyFootPrintActivity;
@@ -24,6 +25,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.hyphenate.easeui.EaseConstant;
+
 /**
  * @ProjectName:    MoJi
  * @Description:    个人详情页
@@ -109,18 +112,21 @@ public class OtherMsgActivity extends AppCompatActivity {
 
         @Override
         public void onClick(View v) {
+            Intent intent = null;
             switch (v.getId()){
                 case R.id.btn_add_attention:
-                    //添加关注
+                    //TODO 添加关注
                     break;
                 case R.id.btn_other_trends:
-                    //TODO 查看动态
-                    Intent intent = new Intent(OtherMsgActivity.this, MyFootPrintActivity.class);
+                    intent = new Intent(OtherMsgActivity.this, MyFootPrintActivity.class);
                     intent.putExtra("user", user);
                     startActivity(intent);
                     break;
                 case R.id.btn_send_msg:
                     //发送消息
+                    intent = new Intent(OtherMsgActivity.this, ChatActivity.class);
+                    intent.putExtra(EaseConstant.EXTRA_USER_ID, user.getUserId());
+                    startActivity(intent);
                     break;
             }
 

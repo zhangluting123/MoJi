@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -23,6 +24,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.hyphenate.EMCallBack;
+import com.hyphenate.chat.EMClient;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -231,9 +234,12 @@ public class MainActivity extends AppCompatActivity  {
                 //清除保存在本地的user信息
                 SharedPreferencesUtils sharedPreferencesUtils = new SharedPreferencesUtils(MainActivity.this,"userInfo");
                 sharedPreferencesUtils.clear();
-
+                //删除JPush别名信息
                 SharedUtil.remove("isGuide", getApplicationContext(), user.getUserId());
                 JPushInterface.stopPush(getApplicationContext());
+                //IM退出登录
+                logoutIM();
+
                 user.setUserId(null);
                 img.setImageResource(R.drawable.headportrait);
                 user_name.setText("登录");
@@ -352,6 +358,26 @@ public class MainActivity extends AppCompatActivity  {
         imageViewMap.put(tag,imageView);
         textViewMap.put(tag,textView);
         return view;
+    }
+
+    private void logoutIM(){
+        EMClient.getInstance().logout(true,new EMCallBack(){
+
+            @Override
+            public void onSuccess() {
+                Log.e("chat", user.getUserId()+"退出登录");
+            }
+
+            @Override
+            public void onError(int code, String error) {
+
+            }
+
+            @Override
+            public void onProgress(int progress, String status) {
+
+            }
+        });
     }
 
 

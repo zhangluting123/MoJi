@@ -20,6 +20,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.hyphenate.EMCallBack;
+import com.hyphenate.chat.EMClient;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -37,6 +39,7 @@ import cn.edu.hebtu.software.test.R;
 import cn.edu.hebtu.software.test.Util.ActivityManager;
 import cn.edu.hebtu.software.test.Util.DetermineConnServer;
 import cn.edu.hebtu.software.test.Util.PermissionUtils;
+import cn.edu.hebtu.software.test.Util.SQLiteUtil;
 import cn.edu.hebtu.software.test.Util.SharedPreferencesUtils;
 import cn.edu.hebtu.software.test.Util.SharedUtil;
 import cn.jpush.android.api.JPushInterface;
@@ -78,8 +81,11 @@ public class LoginInActivity extends AppCompatActivity implements View.OnClickLi
                     data.setUser(user);
                     //保存用户信息到本地
                     setPreferencesUserMsg();
+                    //登录聊天服务器
+                    loginIM();
                     //初始化极光服务
                     initJPushInterface();
+                    //页面跳转
                     Intent in = new Intent(LoginInActivity.this,MainActivity.class);
                     startActivity(in);
                     finish();
@@ -181,6 +187,34 @@ public class LoginInActivity extends AppCompatActivity implements View.OnClickLi
         SharedPreferencesUtils.ContentValue passwordInfo = new SharedPreferencesUtils.ContentValue("passwordInfo",user.getPassword());
         SharedPreferencesUtils.ContentValue phoneInfo = new SharedPreferencesUtils.ContentValue("phoneInfo",user.getPhone());
         sharedPreferencesUtils.putValues(userIdInfo,userHeadImgInfo,userNameInfo,sexInfo,signatureInfo,occupationInfo,passwordInfo,phoneInfo);
+    }
+
+    private void loginIM(){
+        EMClient.getInstance().login(edtPhone.getText().toString(),edtPwd.getText().toString(),new EMCallBack() {//回调
+            @Override
+            public void onSuccess() {
+                EMClient.getInstance().groupManager().loadAllGroups();
+                EMClient.getInstance().chatManager().loadAllConversations();
+                Log.d("login", "登录聊天服务器成功！");
+
+                //初始化本地数据库
+                SQLiteUtil sqLiteUtil = new SQLiteUtil(getApplicationContext());
+
+                if(!sqLiteUtil.queryExistUser(user.getUserId())) {
+                    sqLiteUtil.insert(user);
+                }
+            }
+
+            @Override
+            public void onProgress(int progress, String status) {
+
+            }
+
+            @Override
+            public void onError(int code, String message) {
+                Log.d("login", "登录聊天服务器失败！");
+            }
+        });
     }
 
     private void initJPushInterface(){

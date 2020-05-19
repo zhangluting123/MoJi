@@ -19,6 +19,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.exceptions.HyphenateException;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -52,6 +55,7 @@ public class RegistActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             switch (msg.what){
                 case 1001:
+                    registIM((String)msg.obj);
                     Toast.makeText(getApplicationContext(), "注册成功", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(RegistActivity.this,LoginInActivity.class);
                     startActivity(intent);
@@ -185,11 +189,12 @@ public class RegistActivity extends AppCompatActivity {
                         String info = reader.readLine();
                         Message message = Message.obtain();
 
-                        if ("OK".equals(info)) {
-                            message.what = 1001;
-                        }else if("Regist".equals(info)){
+                        if ("Regist".equals(info)) {
                             message.what = 1002;
                             message.obj = "该手机号已被注册";
+                        }else{
+                            message.what = 1001;
+                            message.obj = info;
                         }
                         mHandler.sendMessage(message);
                     }else{
@@ -201,6 +206,26 @@ public class RegistActivity extends AppCompatActivity {
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }.start();
+    }
+
+    /**
+     *  @author: 张璐婷
+     *  @time: 2020/5/19  21:04
+     *  @Description: 极光注册
+     */
+    private void registIM(String userId){
+        String pwd = edtPwd.getText().toString().trim();
+        new Thread(){
+            @Override
+            public void run() {
+                //注册失败会抛出HyphenateException
+                try {
+                    EMClient.getInstance().createAccount(userId, pwd);//同步方法
+                } catch (HyphenateException e) {
                     e.printStackTrace();
                 }
             }
