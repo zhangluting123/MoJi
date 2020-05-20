@@ -190,7 +190,7 @@ public class LoginInActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void loginIM(){
-        EMClient.getInstance().login(edtPhone.getText().toString(),edtPwd.getText().toString(),new EMCallBack() {//回调
+        EMClient.getInstance().login(user.getUserId(),edtPwd.getText().toString(),new EMCallBack() {//回调
             @Override
             public void onSuccess() {
                 EMClient.getInstance().groupManager().loadAllGroups();

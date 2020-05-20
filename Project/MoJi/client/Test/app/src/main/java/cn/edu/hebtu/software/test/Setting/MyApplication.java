@@ -50,7 +50,7 @@ public class MyApplication extends Application {
     private void initEaseUi() {
         EMOptions emOptions = new EMOptions();
         emOptions.setAcceptInvitationAlways(false);
-        EaseUI.getInstance().init(this, new EMOptions());
+        EaseUI.getInstance().init(this, emOptions);
     }
 
 
