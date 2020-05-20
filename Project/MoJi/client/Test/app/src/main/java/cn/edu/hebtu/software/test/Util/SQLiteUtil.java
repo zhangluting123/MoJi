@@ -26,8 +26,6 @@ public class SQLiteUtil {
     }
 
 
-
-
     public  void insert(User user){
         openDB(context);
         ContentValues cv = new ContentValues();
