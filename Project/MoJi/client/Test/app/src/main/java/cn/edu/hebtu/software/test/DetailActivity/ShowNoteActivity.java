@@ -45,6 +45,7 @@ public class ShowNoteActivity extends AppCompatActivity implements ViewPager.OnP
     private Note note;
     //当前便签状态
     private int noteSelf;
+    private boolean flag;
     //ip
     private String ip;
     //控件
@@ -106,6 +107,7 @@ public class ShowNoteActivity extends AppCompatActivity implements ViewPager.OnP
         final MyApplication data = (MyApplication) getApplication();
         ip = data.getIp();
         String str = getIntent().getStringExtra("noteJsonStr");
+        flag = getIntent().getBooleanExtra("flag" , true);
         Gson gson = new Gson();
         note = gson.fromJson(str,Note.class);
         noteSelf = note.getSelf();
@@ -154,7 +156,9 @@ public class ShowNoteActivity extends AppCompatActivity implements ViewPager.OnP
     private void registListener() {
         customListener = new MyCustomListener();
         btnComment.setOnClickListener(customListener);
-        btnChangeSelf.setOnClickListener(customListener);
+        if(flag){
+            btnChangeSelf.setOnClickListener(customListener);
+        }
     }
 
     class MyCustomListener implements View.OnClickListener{
