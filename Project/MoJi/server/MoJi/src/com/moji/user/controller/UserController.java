@@ -10,6 +10,7 @@ package com.moji.user.controller;
 
 import java.io.File;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +31,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.moji.entity.Attention;
 import com.moji.entity.JPushCache;
+import com.moji.entity.Note;
+import com.moji.entity.ReturnNote;
 import com.moji.entity.User;
 import com.moji.jpushcache.service.JpushCacheService;
 import com.moji.user.service.UserService;
@@ -177,6 +180,22 @@ public class UserController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} 
+		return str;
+	}
+	
+	/**
+	 * @author ming
+	 *查询关注列表
+	 */
+	@RequestMapping(value="/queryFollowed", method=RequestMethod.GET, produces="application/json;charset=utf-8")
+	public String queryFollowed(HttpServletRequest request, @RequestParam(value="oneId",required=true)String oneId) {
+		String str = "";
+		//从数据库查询的数据
+		List<User> list = this.userService.queryFollowed(oneId);
+		if(list.size() > 0) {
+			Gson gson = new Gson();
+			str = gson.toJson(list);
+		}
 		return str;
 	}
 	
