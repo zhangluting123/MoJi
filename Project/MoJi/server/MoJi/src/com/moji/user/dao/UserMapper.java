@@ -10,6 +10,7 @@ package com.moji.user.dao;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.moji.entity.Attention;
 import com.moji.entity.User;
 
 /**
@@ -27,6 +28,22 @@ public interface UserMapper {
 	 * @throws
 	 */
 	public User queryUser(@Param("userId")String userId);
+	
+	/**
+	 * @author:      ming
+	 * @Description: 根据ID值查询关注信息
+	 * @return       Attention    
+	 * @throws
+	 */
+	public Attention queryAttention(@Param("attention")Attention attention);
+	
+	/**
+	 * @author:      ming
+	 * @Description: 删除关注信息
+	 * @return       Attention    
+	 * @throws
+	 */
+	public int deleteAttention(@Param("attention")Attention attention);
 	
 	/**
 	* @author:      张璐婷 
@@ -72,6 +89,14 @@ public interface UserMapper {
 	* @throws
 	 */
 	public int addUsers(@Param("user")User user);
+	
+	/**
+	* @author:      ming
+	* @Description: 添加关注条目
+	* @return       void    
+	* @throws
+	 */
+	public int addAttention(@Param("attention")Attention attention);
 	
 	/**
 	* @author:      王佳成 

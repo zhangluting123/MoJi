@@ -16,6 +16,10 @@
 	<select id="queryUser" resultMap="userMap">
 		select * from user_detail where user_id=#{userId}
 	</select>
+	<!-- 根据ID值查询关注信息 -->
+	<select id="queryAttention" parameterType="com.moji.entity.Attention" resultType="com.moji.entity.Attention">
+		select * from attention where oneId=#{attention.oneId} and twoId=#{attention.twoId}
+	</select>
 	<!-- 更新用户信息 -->
 	<update id="updateMsgOfUser">
 		update user_detail 
@@ -42,6 +46,16 @@
 		user_detail(user_id,user_name,password,phone) 
 		values (#{user.userId},#{user.userName},#{user.password},#{user.phone})
 	</insert>
+	<!-- 添加关注条目 -->
+	<insert id="addAttention" parameterType="com.moji.entity.Attention">
+		insert into 
+		attention(id,oneId,twoId) 
+		values (#{attention.id},#{attention.oneId},#{attention.twoId})
+	</insert>
+	<!-- 删除关注条目 -->
+	<delete id="deleteAttention" parameterType="com.moji.entity.Attention">
+		delete from attention where oneId=#{attention.oneId} and twoId=#{attention.twoId} 
+	</delete>
 	<!-- 修改密码 -->
 	<update id="changeUserPwd">
 		update user_detail set password=#{newPwd} where user_id=#{userId}

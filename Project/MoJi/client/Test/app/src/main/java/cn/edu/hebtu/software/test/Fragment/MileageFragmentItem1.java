@@ -169,6 +169,7 @@ public class MileageFragmentItem1 extends MyBaseFragment {
             try {
                 if (DetermineConnServer.isConnByHttp(getActivity().getApplicationContext())) {
                     URL url = new URL("http://"+ip+":8080/MoJi/note/query?userId="+data.getUser().getUserId());
+                    Log.e("****getUserId():",data.getUser().getUserId()+"");
                     URLConnection conn = url.openConnection();
                     InputStream in = conn.getInputStream();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));

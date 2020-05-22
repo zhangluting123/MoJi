@@ -11,6 +11,7 @@ package com.moji.user.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.moji.entity.Attention;
 import com.moji.entity.User;
 import com.moji.user.dao.UserMapper;
 
@@ -30,6 +31,14 @@ public class UserService {
 	public User queryUser(String userId) {
 		return this.userMapper.queryUser(userId);
 	}
+	//@author ming
+	public Attention queryAttention(Attention attention) {
+		return this.userMapper.queryAttention(attention);
+	}
+	//@author ming
+	public int deleteAttention(Attention attention) {
+		return this.userMapper.deleteAttention(attention);
+	}
 	public int updateUserMsg(User user) {
 		return this.userMapper.updateMsgOfUser(user);
 	}
@@ -41,6 +50,10 @@ public class UserService {
 	}
 	public int addUsers(User user) {
 		return this.userMapper.addUsers(user);
+	}
+	//@author ming
+	public int addAttention(Attention attention) {
+		return this.userMapper.addAttention(attention);
 	}
 	public int changeUserPwd(String user,String newPwd) {
 		return this.userMapper.changeUserPwd(user, newPwd);

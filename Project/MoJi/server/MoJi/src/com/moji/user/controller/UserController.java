@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.moji.entity.Attention;
 import com.moji.entity.JPushCache;
 import com.moji.entity.User;
 import com.moji.jpushcache.service.JpushCacheService;
@@ -39,8 +40,8 @@ import com.moji.util.JPushUtil;
  * @Description: TODO(这里用一句话描述这个类的作用)
  * @author 春波
  * @date 2020年4月8日
- *
  */
+
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -176,6 +177,82 @@ public class UserController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} 
+		return str;
+	}
+	
+	/**
+	 * @author ming
+	 *查询是否关注
+	 */
+	@RequestMapping(value="/checkFollow", method=RequestMethod.GET, produces="application/json;charset=utf-8")
+	public String checkFollow(HttpServletRequest request, 
+			@RequestParam(value="oneId",required=true)String oneId,
+			@RequestParam(value="twoId",required=true)String twoId) {
+		
+		String str = "";
+		
+		Attention newAttention = new Attention();
+		newAttention.setId(0);
+		newAttention.setOneId(oneId);
+		newAttention.setTwoId(twoId);
+		
+		Attention ifFollowed = this.userService.queryAttention(newAttention);
+		if(null == ifFollowed) {
+			str = "no record";
+		}else {
+			str = "followed";
+		}
+		return str;
+	}
+	
+	/**
+	 * @author ming
+	 *添加一条关注
+	 */
+	@RequestMapping(value="/follow", method=RequestMethod.GET, produces="application/json;charset=utf-8")
+	public String follow(HttpServletRequest request, 
+			@RequestParam(value="oneId",required=true)String oneId,
+			@RequestParam(value="twoId",required=true)String twoId) {
+		
+		String str = "";
+		
+		Attention newAttention = new Attention();
+		newAttention.setId(0);
+		newAttention.setOneId(oneId);
+		newAttention.setTwoId(twoId);
+		
+		Attention ifFollowed = this.userService.queryAttention(newAttention);
+		if(null == ifFollowed) {
+			int x = this.userService.addAttention(newAttention);
+			str = "no record";
+		}else {
+			str = "followed";
+		}
+		return str;
+	}
+	
+	/**
+	 * @author ming
+	 *删除一条关注
+	 */
+	@RequestMapping(value="/noFollow", method=RequestMethod.GET, produces="application/json;charset=utf-8")
+	public String noFollow(HttpServletRequest request, 
+			@RequestParam(value="oneId",required=true)String oneId,
+			@RequestParam(value="twoId",required=true)String twoId) {
+		
+		String str = "0";
+		
+		Attention newAttention = new Attention();
+		newAttention.setId(0);
+		newAttention.setOneId(oneId);
+		newAttention.setTwoId(twoId);
+		
+		if (this.userService.deleteAttention(newAttention) > 0) {
+			str = "1";
+			System.out.println("取关成功");
+		}else {
+			System.out.println("取关失败");
+		}
 		return str;
 	}
 	
