@@ -123,6 +123,7 @@ public class OtherMsgActivity extends AppCompatActivity {
                 checkFollow();
             }
         }
+
         //点击返回按钮返回主页面
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override

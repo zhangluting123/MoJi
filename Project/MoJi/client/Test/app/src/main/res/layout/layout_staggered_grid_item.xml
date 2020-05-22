@@ -59,6 +59,7 @@
             android:layout_height="wrap_content"
             android:text="pet name"></TextView>
         <TextView
+            android:id="@+id/tv_love_count"
             android:layout_alignParentBottom="true"
             android:layout_toLeftOf="@+id/love"
             android:layout_width="wrap_content"
@@ -73,6 +74,6 @@
             android:layout_alignParentRight="true"
             android:layout_width="21dp"
             android:layout_height="21dp"
-            android:src="@drawable/nolove"></ImageView>
+            android:src="@drawable/love"></ImageView>
     </RelativeLayout>
 </LinearLayout>

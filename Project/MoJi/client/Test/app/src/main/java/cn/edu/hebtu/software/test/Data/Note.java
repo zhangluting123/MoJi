@@ -27,12 +27,13 @@ public class Note implements Parcelable{
     private String userId;
     private String time;
     private int self;
+    private int like;
 
     public Note(){
 
     }
 
-    public Note(User user, List<String> imgList, String noteId, Double latitude, Double longitude, String title, String content, String location, String userId, String time, int self) {
+    public Note(User user, List<String> imgList, String noteId, Double latitude, Double longitude, String title, String content, String location, String userId, String time, int self, int like) {
         this.user = user;
         this.imgList = imgList;
         this.noteId = noteId;
@@ -44,6 +45,7 @@ public class Note implements Parcelable{
         this.userId = userId;
         this.time = time;
         this.self = self;
+        this.like = like;
     }
 
     public String getUserId() {
@@ -78,6 +80,7 @@ public class Note implements Parcelable{
         userId = in.readString();
         time = in.readString();
         self = in.readInt();
+        like = in.readInt();
     }
 
     public static final Creator<Note> CREATOR = new Creator<Note>() {
@@ -172,11 +175,18 @@ public class Note implements Parcelable{
         this.time = time;
     }
 
+    public int getLike() {
+        return like;
+    }
+
+    public void setLike(int like) {
+        this.like = like;
+    }
 
     @Override
     public String toString() {
         return "Note{" +
-                user.toString()+
+                "user=" + user +
                 ", imgList=" + imgList +
                 ", noteId='" + noteId + '\'' +
                 ", latitude=" + latitude +
@@ -184,9 +194,10 @@ public class Note implements Parcelable{
                 ", title='" + title + '\'' +
                 ", content='" + content + '\'' +
                 ", location='" + location + '\'' +
-                ", userName='" + userId + '\'' +
+                ", userId='" + userId + '\'' +
                 ", time='" + time + '\'' +
                 ", self=" + self +
+                ", like=" + like +
                 '}';
     }
 
@@ -218,5 +229,6 @@ public class Note implements Parcelable{
         dest.writeString(userId);
         dest.writeString(time);
         dest.writeInt(self);
+        dest.writeInt(like);
     }
 }

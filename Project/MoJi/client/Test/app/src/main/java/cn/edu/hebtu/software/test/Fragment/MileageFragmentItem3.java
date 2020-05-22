@@ -38,6 +38,7 @@ import java.util.TimerTask;
 
 import cn.edu.hebtu.software.test.Adapter.StaggeredGridAdapter;
 import cn.edu.hebtu.software.test.Data.Note;
+import cn.edu.hebtu.software.test.Data.UserLike;
 import cn.edu.hebtu.software.test.DetailActivity.DropsDetailActivity;
 import cn.edu.hebtu.software.test.R;
 import cn.edu.hebtu.software.test.Setting.MyApplication;
@@ -52,11 +53,11 @@ public class MileageFragmentItem3 extends MyBaseFragment {
 
     private MyApplication data;
     private List<Note> noteList = new ArrayList<>();
+    private List<UserLike> userLikes = new ArrayList<>();
     private String ip;
     private StaggeredGridAdapter adapter;
     private RecyclerView mRvPu;
     private SmartRefreshLayout refreshlayout;
-
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -84,9 +85,12 @@ public class MileageFragmentItem3 extends MyBaseFragment {
         ip = data.getIp();
 
         Thread thread = new getMessage();
+        Thread getUserLike = new GetUserLike();
         thread.start();
+        getUserLike.start();
         try {
             thread.join();
+            getUserLike.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -99,12 +103,10 @@ public class MileageFragmentItem3 extends MyBaseFragment {
         refreshlayout = mRootView.findViewById(R.id.refreshlayout);
         mRvPu=(RecyclerView)mRootView.findViewById(R.id.rv_pu);
 
-        //select();
-
         //设置布局方式,2列，垂直
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         mRvPu.setLayoutManager(staggeredGridLayoutManager);
-        adapter = new StaggeredGridAdapter(getActivity(),noteList);
+        adapter = new StaggeredGridAdapter(getActivity(),noteList,userLikes);
 
         adapter.setOnItemClickListener(new StaggeredGridAdapter.OnItemClickListener() {
             @Override
@@ -127,7 +129,7 @@ public class MileageFragmentItem3 extends MyBaseFragment {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        adapter.replaceAll(getData());
+                        adapter.replaceAll(getData(),getUserLike());
                         refreshLayout.finishRefresh();
                     }
                 },1000);
@@ -151,6 +153,7 @@ public class MileageFragmentItem3 extends MyBaseFragment {
 
     @Override
     protected void lazyLoad() {
+
     }
 
     @Override
@@ -164,15 +167,12 @@ public class MileageFragmentItem3 extends MyBaseFragment {
     }
 
     private List<Note>  getData() {
-        Thread thread = new getMessage();
-        thread.start();
-        try {
-            thread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        //select();
+        new getMessage().start();
         return noteList;
+    }
+    private List<UserLike> getUserLike(){
+        new GetUserLike().start();
+        return userLikes;
     }
 
     class getMessage extends Thread{
@@ -180,7 +180,8 @@ public class MileageFragmentItem3 extends MyBaseFragment {
         public void run() {
             try {
                 if (DetermineConnServer.isConnByHttp(getActivity().getApplicationContext())) {
-                    URL url = new URL("http://"+ip+":8080/MoJi/note/select?userId="+data.getUser().getUserId()+"&classify=3");
+                    URL url = new URL("http://"+ip+":8080/MoJi/note/queryAttentionNote?userId="+data.getUser().getUserId());
+                    Log.e("****getUserId():",data.getUser().getUserId()+"");
                     URLConnection conn = url.openConnection();
                     InputStream in = conn.getInputStream();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));
@@ -191,6 +192,41 @@ public class MileageFragmentItem3 extends MyBaseFragment {
                         }.getType();
                         noteList = gson.fromJson(str, type);
                         Collections.reverse(noteList);
+                    }
+                    in.close();
+                    reader.close();
+                } else {
+                    Message message = Message.obtain();
+                    message.what = 1001;
+                    message.obj = "未连接到服务器";
+                    handler.sendMessage(message);
+                }
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    /**
+     *  @author: 张璐婷
+     *  @time: 2020/5/22  14:59
+     *  @Description: 获取用户点赞信息
+     */
+    class GetUserLike extends Thread{
+        @Override
+        public void run() {
+            try {
+                if (DetermineConnServer.isConnByHttp(getActivity().getApplicationContext())) {
+                    URL url = new URL("http://"+ip+":8080/MoJi/userLike/list?userId="+data.getUser().getUserId());
+                    URLConnection conn = url.openConnection();
+                    InputStream in = conn.getInputStream();
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));
+                    String str = null;
+                    if ((str = reader.readLine()) != null) {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<List<UserLike>>() {}.getType();
+                        userLikes = gson.fromJson(str,type);
                     }
                     in.close();
                     reader.close();
