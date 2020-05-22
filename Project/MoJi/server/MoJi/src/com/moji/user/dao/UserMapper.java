@@ -8,6 +8,8 @@
  */
 package com.moji.user.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 import com.moji.entity.Attention;
@@ -28,6 +30,14 @@ public interface UserMapper {
 	 * @throws
 	 */
 	public User queryUser(@Param("userId")String userId);
+	
+	/**
+	 * @author:      邸祯策
+	 * @Description: 查询关注列表
+	 * @return       User    
+	 * @throws
+	 */
+	public List<User> queryFollowed(@Param("userId")String userId);
 	
 	/**
 	 * @author:      ming

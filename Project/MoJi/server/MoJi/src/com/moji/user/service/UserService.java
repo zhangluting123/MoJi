@@ -8,6 +8,8 @@
  */
 package com.moji.user.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +32,10 @@ public class UserService {
 	
 	public User queryUser(String userId) {
 		return this.userMapper.queryUser(userId);
+	}
+	//@author ming
+	public List<User> queryFollowed(String userId) {
+		return this.userMapper.queryFollowed(userId);
 	}
 	//@author ming
 	public Attention queryAttention(Attention attention) {

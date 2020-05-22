@@ -7,6 +7,7 @@ import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -31,9 +32,12 @@ import java.net.URLConnection;
 import java.util.Collections;
 import java.util.List;
 
+import cn.edu.hebtu.software.test.Adapter.MyFollowAdapter;
 import cn.edu.hebtu.software.test.Adapter.MyFootAdapter;
+import cn.edu.hebtu.software.test.Data.Follow;
 import cn.edu.hebtu.software.test.Data.Note;
 import cn.edu.hebtu.software.test.Data.User;
+import cn.edu.hebtu.software.test.DetailActivity.OtherMsgActivity;
 import cn.edu.hebtu.software.test.R;
 import cn.edu.hebtu.software.test.Setting.MyApplication;
 import cn.edu.hebtu.software.test.Util.DetermineConnServer;
@@ -47,14 +51,14 @@ import cn.edu.hebtu.software.test.Util.DetermineConnServer;
  */
 public class MyFollowPrintFolledFragment extends Fragment {
     private ListView listView;
-    private List<Note> noteList;
+    private List<User> followList;
     private MyApplication data;
     private String ip;
 
     private User nowUser;
     private boolean flag;//flag = true,自己查看动态
 
-    private MyFootAdapter myFootAdapter;
+    private MyFollowAdapter myFollowAdapter;
 
     private Handler handler = new Handler(){
         @Override
@@ -88,10 +92,18 @@ public class MyFollowPrintFolledFragment extends Fragment {
         init();
 
 
-        if(noteList!=null && noteList.size()>0){
+        if(followList!=null && followList.size()>0){
             listView = view.findViewById(R.id.lv_footList);
-            myFootAdapter = new MyFootAdapter(R.layout.item_foot_print_word,getActivity().getApplicationContext(),noteList,flag);
-            listView.setAdapter(myFootAdapter);
+            myFollowAdapter = new MyFollowAdapter(R.layout.item_follow_print_followed,getActivity().getApplicationContext(),followList,flag);
+            listView.setAdapter(myFollowAdapter);
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    Intent intent = new Intent(getContext(), OtherMsgActivity.class);
+                    intent.putExtra("user",followList.get(i));
+                    getContext().startActivity(intent);
+                }
+            });
         }
 
         SmartRefreshLayout refreshLayout = view.findViewById(R.id.refreshlayout);
@@ -129,7 +141,7 @@ public class MyFollowPrintFolledFragment extends Fragment {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        myFootAdapter.refresh(noteList);
+        myFollowAdapter.refresh(followList);
     }
 
     class GetNote extends Thread{
@@ -139,16 +151,16 @@ public class MyFollowPrintFolledFragment extends Fragment {
             try {
                 boolean b = DetermineConnServer.isConnByHttp(getActivity().getApplicationContext());
                 if(b){
-                    URL url = new URL("http://"+ ip +":8080/MoJi/user/queryFollowed?userId=" + nowUser.getUserId()+"&flag="+flag);
+                    URL url = new URL("http://"+ ip +":8080/MoJi/user/queryFollowed?oneId=" + nowUser.getUserId());
                     URLConnection conn = url.openConnection();
                     InputStream in = conn.getInputStream();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(in,"utf-8"));
                     String str = reader.readLine();
                     if(null != str){
                         Gson gson = new Gson();
-                        Type type = new TypeToken<List<Note>>(){}.getType();
-                        noteList = gson.fromJson(str,type);
-                        Collections.reverse(noteList);
+                        Type type = new TypeToken<List<User>>(){}.getType();
+                        followList = gson.fromJson(str,type);
+                        Collections.reverse(followList);
                     }
                     in.close();
                     reader.close();

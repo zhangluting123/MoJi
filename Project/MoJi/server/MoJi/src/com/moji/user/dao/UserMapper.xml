@@ -16,7 +16,11 @@
 	<select id="queryUser" resultMap="userMap">
 		select * from user_detail where user_id=#{userId}
 	</select>
-	<!-- 根据ID值查询关注信息 -->
+	<!-- 查询关注列表 -->
+	<select id="queryFollowed" resultMap="userMap">
+		select * from user_detail where user_id in(select twoId from attention where oneId = #{userId})
+	</select>
+	<!-- 根据ID值查询是否关注 -->
 	<select id="queryAttention" parameterType="com.moji.entity.Attention" resultType="com.moji.entity.Attention">
 		select * from attention where oneId=#{attention.oneId} and twoId=#{attention.twoId}
 	</select>

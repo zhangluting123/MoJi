@@ -21,7 +21,7 @@ public class MileageFragment extends MyBaseFragment {
 
     ArrayList<MyBaseFragment> mFagments;
     SlidingTabLayout tablayout;
-    private String[] mTitles = {"推荐", "关注", "景点", "小街","小店","Vlog"};
+    private String[] mTitles = {"推荐", "关注", "景点","Vlog"};
 
     @Override
     protected int getContentViewId() {
@@ -43,8 +43,8 @@ public class MileageFragment extends MyBaseFragment {
         mFagments.add(new MileageFragmentItem1());
         mFagments.add(new MileageFragmentItem2());
         mFagments.add(new MileageFragmentItem3());
-        mFagments.add(new MileageFragmentItem4());
-        mFagments.add(new MileageFragmentItem5());
+        //mFagments.add(new MileageFragmentItem4());
+        //mFagments.add(new MileageFragmentItem5());
         mFagments.add(new MileageFragmentItem6());
         // 在activity中FragmentManager通过getSupportFragmentManager()去获取，如果在是在fragment中就需要通过getChildFragmentManager()去获取
         MyPagerAdapter adapter = new MyPagerAdapter(getChildFragmentManager(),mFagments,mTitles);
