@@ -45,6 +45,7 @@ import cn.edu.hebtu.software.test.Fragment.FootprintFragment;
 import cn.edu.hebtu.software.test.Fragment.MileageFragment;
 import cn.edu.hebtu.software.test.LeftNavigation.AboutUsActivity;
 import cn.edu.hebtu.software.test.LeftNavigation.MineActivity;
+import cn.edu.hebtu.software.test.LeftNavigation.MyFollowActivity;
 import cn.edu.hebtu.software.test.LeftNavigation.MyFootPrintActivity;
 import cn.edu.hebtu.software.test.LeftNavigation.MyMailActivity;
 import cn.edu.hebtu.software.test.LeftNavigation.SettingActivity;
@@ -274,6 +275,10 @@ public class MainActivity extends AppCompatActivity  {
         map2.put("img",R.mipmap.foot1);
         map2.put("msg", "我的足迹");
         list.add(map2);
+        Map map6 = new HashMap<String,String>();
+        map6.put("img", R.drawable.follow);
+        map6.put("msg", "我的关注");
+        list.add(map6);
         Map map3 = new HashMap<String,String>();
         map3.put("img", R.mipmap.mail2);
         map3.put("msg", "我的消息");
@@ -310,14 +315,18 @@ public class MainActivity extends AppCompatActivity  {
                         startActivity(intent);
                         break;
                     case 2:
-                        intent = new Intent(MainActivity.this, MyMailActivity.class);
+                        intent = new Intent(MainActivity.this, MyFollowActivity.class);
                         startActivity(intent);
                         break;
                     case 3:
-                        intent = new Intent(MainActivity.this, SettingActivity.class);
+                        intent = new Intent(MainActivity.this, MyMailActivity.class);
                         startActivity(intent);
                         break;
                     case 4:
+                        intent = new Intent(MainActivity.this, SettingActivity.class);
+                        startActivity(intent);
+                        break;
+                    case 5:
                         intent = new Intent(MainActivity.this, AboutUsActivity.class);
                         startActivity(intent);
                         break;

@@ -23,13 +23,11 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" /> <!-- 这个权限用于进行网络定位 -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
-    <!-- Required -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- Required -->
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" />
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
@@ -43,17 +41,16 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="label,allowBackup,icon,theme">
-
-        <!-- EaseUi-->
-        <activity android:name="com.hyphenate.easeui.ui.EaseDingAckUserListActivity"/>
-        <activity android:name="com.hyphenate.easeui.ui.EaseBaseActivity"/>
-        <activity android:name="com.hyphenate.easeui.ui.EaseDingMsgSendActivity"/>
-        <activity android:name="com.hyphenate.easeui.ui.EaseShowBigImageActivity"/>
-        <activity android:name="com.hyphenate.easeui.ui.EaseShowNormalFileActivity"/>
-        <activity android:name="com.hyphenate.easeui.ui.EaseShowVideoActivity"/>
-        <activity android:name=".ChatIM.ChatActivity"/>
-
-        <activity android:name=".DetailActivity.OtherMsgActivity"/>
+        <activity android:name=".LeftNavigation.MyFollowActivity"></activity>
+        <!-- EaseUi -->
+        <activity android:name="com.hyphenate.easeui.ui.EaseDingAckUserListActivity" />
+        <activity android:name="com.hyphenate.easeui.ui.EaseBaseActivity" />
+        <activity android:name="com.hyphenate.easeui.ui.EaseDingMsgSendActivity" />
+        <activity android:name="com.hyphenate.easeui.ui.EaseShowBigImageActivity" />
+        <activity android:name="com.hyphenate.easeui.ui.EaseShowNormalFileActivity" />
+        <activity android:name="com.hyphenate.easeui.ui.EaseShowVideoActivity" />
+        <activity android:name=".ChatIM.ChatActivity" />
+        <activity android:name=".DetailActivity.OtherMsgActivity" />
         <activity android:name=".DetailActivity.MailCommentDetailActivity" />
         <activity android:name=".DetailActivity.MailReplyActivity" />
         <activity android:name=".DetailActivity.UploadVideoActivity" />
@@ -64,7 +61,8 @@
         <activity android:name=".LeftNavigation.MsgPermissionActivity" />
         <activity android:name=".LeftNavigation.SettingActivity" />
         <activity android:name=".LeftNavigation.MyMailActivity" />
-        <activity android:name=".LeftNavigation.MyFootPrintActivity"
+        <activity
+            android:name=".LeftNavigation.MyFootPrintActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="fullSensor" />
         <activity android:name=".Activity.LoginInActivity" />
@@ -121,31 +119,34 @@
                 <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED" /> <!-- 默认收到推送 -->
                 <category android:name="cn.edu.hebtu.software.test" />
             </intent-filter>
-        </receiver>
-
-        <!-- EaseUi-->
+        </receiver> <!-- EaseUi -->
         <!-- 设置环信应用的AppKey -->
-        <meta-data android:name="EASEMOB_APPKEY"  android:value="1104200430113065#test" />
-        <!-- 声明SDK所需的service SDK核心功能-->
-        <service android:name="com.hyphenate.chat.EMChatService" android:exported="true"/>
-        <service android:name="com.hyphenate.chat.EMJobService"
-            android:permission="android.permission.BIND_JOB_SERVICE"
+        <meta-data
+            android:name="EASEMOB_APPKEY"
+            android:value="1104200430113065#test" /> <!-- 声明SDK所需的service SDK核心功能 -->
+        <service
+            android:name="com.hyphenate.chat.EMChatService"
+            android:exported="true" />
+        <service
+            android:name="com.hyphenate.chat.EMJobService"
             android:exported="true"
-            />
-        <!-- 声明SDK所需的receiver -->
+            android:permission="android.permission.BIND_JOB_SERVICE" /> <!-- 声明SDK所需的receiver -->
         <receiver android:name="com.hyphenate.chat.EMMonitorReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_REMOVED"/>
-                <data android:scheme="package"/>
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+
+                <data android:scheme="package" />
             </intent-filter>
             <!-- 可选filter -->
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.USER_PRESENT" />
             </intent-filter>
         </receiver>
 
-        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
     </application>
 
 </manifest>
