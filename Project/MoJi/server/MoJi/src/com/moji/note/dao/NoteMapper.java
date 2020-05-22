@@ -57,6 +57,16 @@ public interface NoteMapper {
 	
 	/**
 	 * 
+	* @author:      ming
+	* @Description: 查询关注note
+	* @param        @throws SQLException  
+	* @return       List<Note>    
+	* @throws
+	 */
+	public List<Note> queryAttentionNote(@Param("userId")String userId);
+	
+	/**
+	 * 
 	* @author:      张璐婷 
 	* @Description: 查询便签
 	* @param        @throws SQLException  

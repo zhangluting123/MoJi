@@ -282,6 +282,37 @@ public class NoteController {
 		}
 		return str;
 	}
+	//查询关注人Note-Ming
+	@RequestMapping(value="/queryAttentionNote", method=RequestMethod.GET, produces="application/json;charset=utf-8")
+	public String queryAttentionNote(HttpServletRequest request,@RequestParam(value="userId",required=true)String userId) {
+		String str = "";
+		//从数据库查询的数据
+		List<Note> list = this.noteService.queryAttentionNote(userId);
+		//转化成需要返回的类型
+		List<ReturnNote> returnList = new ArrayList<>();
+		for (int i = 0; i < list.size(); i++) {
+			ReturnNote returnNote = new ReturnNote();
+			returnNote.setNoteId(list.get(i).getNoteId());
+			returnNote.setLatitude(list.get(i).getLatitude());
+			returnNote.setLongitude(list.get(i).getLongitude());
+			returnNote.setTitle(list.get(i).getTitle());
+			returnNote.setContent(list.get(i).getContent());
+			returnNote.setLocation(list.get(i).getLocation());
+			returnNote.setTime(list.get(i).getTime());
+			returnNote.setUserId(list.get(i).getUserId());
+			returnNote.setUser(list.get(i).getUser());
+			returnNote.setSelf(list.get(i).getSelf());
+			for(int j = 0; j < list.get(i).getImgList().size(); j++) {
+				returnNote.getImgList().add(list.get(i).getImgList().get(j).getImgPath());
+			}
+			returnList.add(returnNote);
+		}
+		if(list.size() > 0) {
+			Gson gson = new Gson();
+			str = gson.toJson(returnList);
+		}
+		return str;
+	}
 	
 	//分类查询-Ming
 	@RequestMapping(value="/select", method=RequestMethod.GET, produces="application/json;charset=utf-8")

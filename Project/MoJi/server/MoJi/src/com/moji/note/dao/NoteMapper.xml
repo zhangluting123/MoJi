@@ -55,6 +55,17 @@
 			 or u.user_id = #{userId}
 		</if> 
 	</select>
+	<!-- 查询关注note -->
+	<select id="queryAttentionNote" resultMap="noteMap">
+		select * 
+		from note_detail n
+		left join user_detail u
+		on n.user_id=u.user_id
+		left join note_img i
+		on n.note_id=i.noteId
+		where n.user_id in(select twoId from attention where oneId=#{userId}) and n.self=0 
+		
+	</select>
 	<!-- 查询便签 -->
 	<select id="queryNote" resultMap="noteMap">
 		select * 

@@ -70,6 +70,18 @@ public class NoteService {
 	
 	/**
 	 * 
+	* @author:      ming
+	* @Description: 查询关注note
+	* @param        @throws SQLException  
+	* @return       List<Note>    
+	* @throws
+	 */
+	public List<Note> queryAttentionNote(String userId){
+		return this.noteMapper.queryAttentionNote(userId);
+	}
+	
+	/**
+	 * 
 	 * @Title: DownloadNote
 	 * @Description: 查询便签
 	 * @param @param userId
