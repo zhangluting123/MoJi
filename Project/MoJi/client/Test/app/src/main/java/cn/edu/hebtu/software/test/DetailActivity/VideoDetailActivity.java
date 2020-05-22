@@ -105,14 +105,6 @@ public class VideoDetailActivity extends AppCompatActivity{
     private RequestOptions options = new RequestOptions().circleCrop();
 
     private JCVideoPlayerStandard jcVideoPlayerStandard;
-    private List<View> viewList;//图片资源的集合
-    private ViewGroup vg;//放置圆点
-
-    //实例化圆点View
-    private ImageView point;
-    private ImageView[] ivPointArray;
-
-    private LinearLayout.LayoutParams layoutParams;
     private PopupWindow popupWindow;
 
     private MyApplication data;
@@ -264,7 +256,6 @@ public class VideoDetailActivity extends AppCompatActivity{
         btnSubmitComment = findViewById(R.id.btn_submitComment);
         noComment = findViewById(R.id.ll_noComment);
         jcVideoPlayerStandard = findViewById(R.id.videoplayer);
-        vg = findViewById(R.id.guide_ll_point);
     }
 
     /**
