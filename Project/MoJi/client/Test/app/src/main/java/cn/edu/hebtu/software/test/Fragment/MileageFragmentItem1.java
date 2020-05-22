@@ -35,6 +35,7 @@ import java.util.List;
 
 import cn.edu.hebtu.software.test.Adapter.StaggeredGridAdapter;
 import cn.edu.hebtu.software.test.Data.Note;
+import cn.edu.hebtu.software.test.Data.UserLike;
 import cn.edu.hebtu.software.test.DetailActivity.DropsDetailActivity;
 import cn.edu.hebtu.software.test.R;
 import cn.edu.hebtu.software.test.Setting.MyApplication;
@@ -49,6 +50,7 @@ public class MileageFragmentItem1 extends MyBaseFragment {
 
     private MyApplication data;
     private List<Note> noteList = new ArrayList<>();
+    private List<UserLike> userLikes = new ArrayList<>();
     private String ip;
     private StaggeredGridAdapter adapter;
     private RecyclerView mRvPu;
@@ -80,9 +82,12 @@ public class MileageFragmentItem1 extends MyBaseFragment {
         ip = data.getIp();
 
         Thread thread = new getMessage();
+        Thread getUserLike = new GetUserLike();
         thread.start();
+        getUserLike.start();
         try {
             thread.join();
+            getUserLike.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -98,7 +103,7 @@ public class MileageFragmentItem1 extends MyBaseFragment {
         //设置布局方式,2列，垂直
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         mRvPu.setLayoutManager(staggeredGridLayoutManager);
-        adapter = new StaggeredGridAdapter(getActivity(),noteList);
+        adapter = new StaggeredGridAdapter(getActivity(),noteList,userLikes);
 
         adapter.setOnItemClickListener(new StaggeredGridAdapter.OnItemClickListener() {
             @Override
@@ -121,7 +126,7 @@ public class MileageFragmentItem1 extends MyBaseFragment {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        adapter.replaceAll(getData());
+                        adapter.replaceAll(getData(),getUserLike());
                         refreshLayout.finishRefresh();
                     }
                 },1000);
@@ -163,6 +168,17 @@ public class MileageFragmentItem1 extends MyBaseFragment {
         return noteList;
     }
 
+    private List<UserLike> getUserLike(){
+        Thread getUserLike = new GetUserLike();
+        getUserLike.start();
+        try {
+            getUserLike.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return userLikes;
+    }
+
     class getMessage extends Thread{
         @Override
         public void run() {
@@ -180,6 +196,42 @@ public class MileageFragmentItem1 extends MyBaseFragment {
                         }.getType();
                         noteList = gson.fromJson(str, type);
                         Collections.reverse(noteList);
+                    }
+                    in.close();
+                    reader.close();
+                } else {
+                    Message message = Message.obtain();
+                    message.what = 1001;
+                    message.obj = "未连接到服务器";
+                    handler.sendMessage(message);
+                }
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     *  @author: 张璐婷
+     *  @time: 2020/5/22  14:59
+     *  @Description: 获取用户点赞信息
+     */
+    class GetUserLike extends Thread{
+        @Override
+        public void run() {
+            try {
+                if (DetermineConnServer.isConnByHttp(getActivity().getApplicationContext())) {
+                    URL url = new URL("http://"+ip+":8080/MoJi/userLike/list?userId="+data.getUser().getUserId());
+                    URLConnection conn = url.openConnection();
+                    InputStream in = conn.getInputStream();
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));
+                    String str = null;
+                    if ((str = reader.readLine()) != null) {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<List<UserLike>>() {}.getType();
+                        userLikes = gson.fromJson(str,type);
                     }
                     in.close();
                     reader.close();

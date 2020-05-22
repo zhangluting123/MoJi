@@ -116,7 +116,7 @@ public class OtherMsgActivity extends AppCompatActivity {
         userJob.setText(user.getOccupation());
         userSign.setText(user.getSignature());
 
-        if(data.getUser()!=null){
+        if(null != data.getUser().getUserId()){
             if(data.getUser().getUserId().equals(user.getUserId())){
                 btnAddAttentaion.setText("myself");
             }else {

@@ -56,7 +56,7 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<StaggeredGridAdap
     private Context mContext;
     private AdapterView.OnItemClickListener mListener;
     private List<Note> noteList = new ArrayList<>();//数据源
-    private List<UserLike> userLikes;
+    private List<UserLike> userLikes = new ArrayList<>();
     private Map<Integer,String> map = new HashMap<>();
     private User user;
     private String ip;
@@ -71,29 +71,31 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<StaggeredGridAdap
                 case 1002:
                     map.put(pos, (String) msg.obj);
                     break;
+                case 1003:
+                    Toast.makeText(mContext, (CharSequence) msg.obj, Toast.LENGTH_SHORT).show();
+                    map.remove(pos);
+                    break;
             }
         }
     };
 
-    public StaggeredGridAdapter(Context mContext,List<Note> noteList) {
+    public StaggeredGridAdapter(Context mContext,List<Note> noteList,List<UserLike> userLikes) {
         this.mContext = mContext;
         this.noteList = noteList;
+        this.userLikes = userLikes;
         MyApplication data = (MyApplication)mContext.getApplicationContext();
         ip = data.getIp();
         user = data.getUser();
-        GetUserLike getUserLike = new GetUserLike();
-        getUserLike.start();
-        try {
-            getUserLike.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
-    public void replaceAll(List<Note> newNoteList) {
+    public void replaceAll(List<Note> newNoteList,List<UserLike> likeList) {
         noteList.clear();
+        userLikes.clear();
         if (newNoteList != null && newNoteList.size() > 0) {
             noteList.addAll(newNoteList);
+        }
+        if(likeList != null && likeList.size() > 0){
+            userLikes.addAll(likeList);
         }
         notifyDataSetChanged();
     }
@@ -152,19 +154,24 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<StaggeredGridAdap
         holder.love.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(holder.love.getDrawable().getCurrent().getConstantState() == mContext.getResources().getDrawable(R.drawable.love).getConstantState()){
-                    //点赞
+                if(null != user.getUserId()){
                     pos = position;
-                    changeLove(true,noteList.get(position).getNoteId(),null);
-                    holder.love.setImageResource(R.drawable.nolove);
-                    noteList.get(position).setLike(noteList.get(position).getLike()+1);
-                    holder.loveCount.setText(noteList.get(position).getLike()+"");
-                }else{//取消点赞
-                    changeLove(false, noteList.get(position).getNoteId(),map.get(position));
-                    holder.love.setImageResource(R.drawable.love);
-                    noteList.get(position).setLike(noteList.get(position).getLike()-1);
-                    holder.loveCount.setText(noteList.get(position).getLike()+"");
+                    if(holder.love.getDrawable().getCurrent().getConstantState() == mContext.getResources().getDrawable(R.drawable.love).getConstantState()){
+                        //点赞
+                        changeLove(true,noteList.get(position).getNoteId(),null);
+                        holder.love.setImageResource(R.drawable.nolove);
+                        noteList.get(position).setLike(noteList.get(position).getLike()+1);
+                        holder.loveCount.setText(noteList.get(position).getLike()+"");
+                    }else{//取消点赞
+                        changeLove(false, noteList.get(position).getNoteId(),map.get(position));
+                        holder.love.setImageResource(R.drawable.love);
+                        noteList.get(position).setLike(noteList.get(position).getLike()-1);
+                        holder.loveCount.setText(noteList.get(position).getLike()+"");
+                    }
+                }else{
+                    Toast.makeText(mContext, "请先登录", Toast.LENGTH_SHORT).show();
                 }
+
 
             }
         });
@@ -213,7 +220,8 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<StaggeredGridAdap
                 for(int i = 0;i < userLikes.size();i++){
                     if(userLikes.get(i).getNoteLike().getNoteId().equals(note.getNoteId())){
                         love.setImageResource(R.drawable.nolove);
-
+                        map.put(position, userLikes.get(i).getId());
+                        break;
                     }
                 }
             }
@@ -248,41 +256,7 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<StaggeredGridAdap
         return noteList;
     }
 
-    /**
-     *  @author: 张璐婷
-     *  @time: 2020/5/22  14:59
-     *  @Description: 获取用户点赞信息
-     */
-    class GetUserLike extends Thread{
-        @Override
-        public void run() {
-            try {
-                if (DetermineConnServer.isConnByHttp(mContext.getApplicationContext())) {
-                    URL url = new URL("http://"+ip+":8080/MoJi/userLike/list?userId="+user.getUserId());
-                    URLConnection conn = url.openConnection();
-                    InputStream in = conn.getInputStream();
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));
-                    String str = null;
-                    if ((str = reader.readLine()) != null) {
-                        Gson gson = new Gson();
-                        Type type = new TypeToken<List<UserLike>>() {}.getType();
-                        userLikes = gson.fromJson(str,type);
-                    }
-                    in.close();
-                    reader.close();
-                } else {
-                    Message message = Message.obtain();
-                    message.what = 1001;
-                    message.obj = "未连接到服务器";
-                    handler.sendMessage(message);
-                }
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+
 
     /**
      *  @author: 张璐婷
@@ -310,7 +284,7 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<StaggeredGridAdap
                         String str = reader.readLine();
                         Message message = Message.obtain();
                         if (str.equals("OK")) {
-                            message.what = 1001;
+                            message.what = 1003;
                             message.obj = "取消成功";
                         } else if (str.equals("ERROR")) {
                             message.what = 1001;
