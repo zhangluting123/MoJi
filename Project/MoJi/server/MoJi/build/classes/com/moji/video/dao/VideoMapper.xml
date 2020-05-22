@@ -34,6 +34,13 @@
 	<select id="findVideoByUserId" resultMap="videoMap">
 		select * from video_detail where user_id=#{userId}
 	</select>
+	<!--ming-->
+	<select id="queryAll" resultMap="videoMap">
+		select * 
+		from video_detail n
+		left join user_detail u
+		on n.user_id=u.user_id
+	</select>
 	<delete id="deleteVideoById">
 		delete from video_detail where video_id=#{videoId}
 	</delete>

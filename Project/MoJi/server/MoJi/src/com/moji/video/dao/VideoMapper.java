@@ -54,6 +54,12 @@ public interface VideoMapper {
 	public List<Video> findVideoByUserId(@Param("userId")String userId);
 	
 	/**
+	 * @Description: 查询所有视频
+	 * @author: 邸祯策
+	 */
+	public List<Video> queryAll();
+	
+	/**
 	 * @Title: deleteVideoById
 	 * @Description: 删除指定视频信息
 	 * @author: 张璐婷 

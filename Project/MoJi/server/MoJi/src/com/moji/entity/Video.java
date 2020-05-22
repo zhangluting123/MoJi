@@ -27,6 +27,25 @@ public class Video {
 	 private String tag;//分类
 	 private int like;//点赞数量
 	 private User user;//用户信息
+	 
+	 public Video() {
+		// TODO Auto-generated constructor stub
+	}
+	 
+	public Video(String videoId, String path, String title, String content, String duration, String size,
+			String uploadTime, String tag, int like, User user) {
+		super();
+		this.videoId = videoId;
+		this.path = path;
+		this.title = title;
+		this.content = content;
+		this.duration = duration;
+		this.size = size;
+		this.uploadTime = uploadTime;
+		this.tag = tag;
+		this.like = like;
+		this.user = user;
+	}
 	public String getVideoId() {
 		return videoId;
 	}

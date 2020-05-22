@@ -67,6 +67,14 @@ public class VideoService {
 	}
 	
 	/**
+	 * @Description: 查询所有视频
+	 * @author: ming
+	 */
+	public List<Video> queryAll() {
+		return this.videoMapper.queryAll();
+	}
+	
+	/**
 	 * @Title: deleteVideoById
 	 * @Description: 删除video
 	 * @author: 张璐婷 
