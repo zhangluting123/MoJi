@@ -116,14 +116,13 @@ public class OtherMsgActivity extends AppCompatActivity {
         userJob.setText(user.getOccupation());
         userSign.setText(user.getSignature());
 
-        if(data.getUser()!=null){
+        if(data.getUser().getUserId()!=null){
             if(data.getUser().getUserId().equals(user.getUserId())){
                 btnAddAttentaion.setText("myself");
             }else {
                 checkFollow();
             }
         }
-
         //点击返回按钮返回主页面
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,21 +161,18 @@ public class OtherMsgActivity extends AppCompatActivity {
             switch (v.getId()){
                 case R.id.btn_add_attention:
                     //TODO 添加关注 @author ming
-                    //Log.e("******",btnAddAttentaion.toString());
-                    if(!data.getUser().getUserId().equals(user.getUserId())){
-                        if(tag==0){
-                            if(data.getUser() == null){
-                                Toast.makeText(getApplicationContext(), "请先登录", Toast.LENGTH_SHORT).show();
-                            }else {
-                                if(data.getUser().getUserId().equals(user.getUserId())){
-                                    //btnAddAttentaion.setText("myself");
-                                }else {
+                    if(data.getUser().getUserId()!=null){
+                        if(!data.getUser().getUserId().equals(user.getUserId())){
+                            if(tag==0){
+                                if(!data.getUser().getUserId().equals(user.getUserId())){
                                     follow();
                                 }
+                            }else {
+                                noFollow();
                             }
-                        }else {
-                            noFollow();
                         }
+                    }else {
+                        Toast.makeText(getApplicationContext(), "请先登录", Toast.LENGTH_SHORT).show();
                     }
                     break;
                 case R.id.btn_other_trends:
