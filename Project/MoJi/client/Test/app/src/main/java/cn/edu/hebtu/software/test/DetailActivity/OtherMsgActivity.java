@@ -14,6 +14,7 @@ import cn.edu.hebtu.software.test.LeftNavigation.UserInfoActivity;
 import cn.edu.hebtu.software.test.R;
 import cn.edu.hebtu.software.test.Setting.MyApplication;
 import cn.edu.hebtu.software.test.Util.DetermineConnServer;
+import cn.edu.hebtu.software.test.Util.SQLiteUtil;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -185,6 +186,10 @@ public class OtherMsgActivity extends AppCompatActivity {
                     break;
                 case R.id.btn_send_msg:
                     //发送消息
+                    SQLiteUtil sqLiteUtil = new SQLiteUtil(getApplicationContext());
+                    if(!sqLiteUtil.queryExistUser(user.getUserId())) {
+                        sqLiteUtil.insert(user);
+                    }
                     intent = new Intent(OtherMsgActivity.this, ChatActivity.class);
                     intent.putExtra(EaseConstant.EXTRA_USER_ID, user.getUserId());
                     startActivity(intent);

@@ -146,6 +146,9 @@ public class MyFootAdapter extends BaseAdapter {
                     Gson gson = new Gson();
                     String noteStr = gson.toJson(noteList.get(position));
                     intent.putExtra("noteJsonStr", noteStr);
+                    if(!flag){
+                        intent.putExtra("flag", false);
+                    }
                     context.startActivity(intent);
                     break;
 
