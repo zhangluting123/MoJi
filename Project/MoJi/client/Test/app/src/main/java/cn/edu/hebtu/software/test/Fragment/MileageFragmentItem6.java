@@ -42,7 +42,7 @@ import cn.edu.hebtu.software.test.Setting.MyApplication;
 import cn.edu.hebtu.software.test.Util.DetermineConnServer;
 
 /**
- * @Author: 邸凯扬
+ * @Author: ming
  * @Date: 2020/05/05
  * @Describe: 视频推荐
  */
@@ -115,7 +115,7 @@ public class MileageFragmentItem6 extends MyBaseFragment {
         // 设置适配器
         //recyclerView.setAdapter(new RecyclerLineAdapter(getContext(), lineData));
         //adapter = new RecyclerCommonAdapter(R.layout.recyclear_item, lineData);
-        adapter = new MultipleItemAdapter(getActivity(),lineData);
+        adapter = new MultipleItemAdapter(getActivity(),lineData,videoList);
         adapter.openLoadAnimation();
         adapter.isFirstOnly(false);
         //上拉监听
@@ -128,26 +128,26 @@ public class MileageFragmentItem6 extends MyBaseFragment {
             }
         }, recyclerView);
         //item监听
-        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+        /*adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Toast.makeText(getActivity(), "点击了第" + (position + 1) + "条条目", Toast.LENGTH_SHORT).show();
             }
-        });
+        });*/
         //item子view
-        adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+        /*adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 switch (view.getId()) {
                     case R.id.share:
-                        //share(getContext(),urls[position]);
-                        //Toast.makeText(getActivity(), "点击了第" + (position + 1) + "名字", Toast.LENGTH_SHORT).show();
+                        //不明原因失效
+                        //share(getContext(),videoList.get(position).getPath());
                         break;
                     default:
                         break;
                 }
             }
-        });
+        });*/
         recyclerView.setAdapter(adapter);
     }
 
@@ -160,6 +160,8 @@ public class MileageFragmentItem6 extends MyBaseFragment {
             map.put("UserHeadImg", videoList.get(i).getUser().getUserHeadImg());
             map.put("UserName", videoList.get(i).getUser().getUserName());
             map.put("videoTitle", videoList.get(i).getTitle());
+            map.put("User", videoList.get(i).getUser());
+            map.put("Video", videoList.get(i));
             lineData.add(new MyMultipleItem(1, map));
         }
     }

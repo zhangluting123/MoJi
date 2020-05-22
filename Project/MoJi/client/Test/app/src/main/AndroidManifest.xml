@@ -85,6 +85,10 @@
             android:configChanges="keyboardHidden"
             android:windowSoftInputMode="stateHidden" />
         <activity
+            android:name=".DetailActivity.VideoDetailActivity"
+            android:configChanges="keyboardHidden"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
             android:name=".LeftNavigation.UserInfoActivity"
             android:windowSoftInputMode="stateHidden" />
         <activity
