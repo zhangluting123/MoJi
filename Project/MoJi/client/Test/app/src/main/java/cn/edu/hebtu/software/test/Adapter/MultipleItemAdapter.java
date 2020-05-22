@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -14,6 +15,8 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.makeramen.roundedimageview.RoundedImageView;
 
 import java.util.List;
+
+import cn.edu.hebtu.software.test.Activity.MainActivity;
 import cn.edu.hebtu.software.test.Data.MyMultipleItem;
 import cn.edu.hebtu.software.test.Data.User;
 import cn.edu.hebtu.software.test.DetailActivity.OtherMsgActivity;
@@ -30,6 +33,7 @@ import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
 public class MultipleItemAdapter extends BaseMultiItemQuickAdapter<MyMultipleItem, BaseViewHolder> {
 
     private Context mContext;
+
     public MultipleItemAdapter(Context mContext,List data) {
         super(data);
         this.mContext=mContext;
@@ -50,15 +54,26 @@ public class MultipleItemAdapter extends BaseMultiItemQuickAdapter<MyMultipleIte
 //                mContext.startActivity(intent);
 //            }
 //        });
+        String ip = item.getData().get("ip").toString();
+        String videoPath = item.getData().get("videoPath").toString();
+        String UserHeadImg = item.getData().get("UserHeadImg").toString();
+        String UserName = item.getData().get("UserName").toString();
+        String videoTitle = item.getData().get("videoTitle").toString();
 
-        Log.i("tag","FIRST_TYPE==============="+helper.getLayoutPosition());
+        RoundedImageView head = helper.itemView.findViewById(R.id.head);
+        Glide.with(mContext).load("http://"+ ip +":8080/MoJi/" + UserHeadImg).into(head);
+        TextView petname = helper.itemView.findViewById(R.id.petname);
+        petname.setText(UserName);
+        TextView title = helper.itemView.findViewById(R.id.title);
+        title.setText(videoTitle);
 
         ImageView share = helper.itemView.findViewById(R.id.share);
         ImageView good = helper.itemView.findViewById(R.id.good);
         ImageView comment = helper.itemView.findViewById(R.id.comment);
 
+        String path = "http://"+ ip +":8080/MoJi/"+item.getData().get("videoPath").toString();
         JCVideoPlayerStandard jcVideoPlayerStandard = (JCVideoPlayerStandard) helper.itemView.findViewById(R.id.videoplayer);
-        jcVideoPlayerStandard.setUp(item.getData().get("url").toString(), JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "MoJi");
+        jcVideoPlayerStandard.setUp(item.getData().get("videoPath").toString(), JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "MoJi");
 
         Glide.with(mContext)
                 .setDefaultRequestOptions(
@@ -68,7 +83,7 @@ public class MultipleItemAdapter extends BaseMultiItemQuickAdapter<MyMultipleIte
                                 .error(R.drawable.fail)
                                 .placeholder(R.drawable.fail)
                 )
-                .load(item.getData().get("url").toString())
+                .load(item.getData().get("videoPath").toString())
                 .into(jcVideoPlayerStandard.thumbImageView);
 
 

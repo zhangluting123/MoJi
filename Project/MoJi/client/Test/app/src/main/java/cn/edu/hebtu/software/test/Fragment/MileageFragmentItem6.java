@@ -3,6 +3,8 @@ package cn.edu.hebtu.software.test.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,16 +14,32 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.lang.reflect.Type;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import cn.edu.hebtu.software.test.Adapter.MultipleItemAdapter;
 import cn.edu.hebtu.software.test.Data.MyMultipleItem;
+import cn.edu.hebtu.software.test.Data.Note;
+import cn.edu.hebtu.software.test.Data.Video;
 import cn.edu.hebtu.software.test.R;
 import cn.edu.hebtu.software.test.Setting.MyApplication;
+import cn.edu.hebtu.software.test.Util.DetermineConnServer;
 
 /**
  * @Author: 邸凯扬
@@ -30,14 +48,20 @@ import cn.edu.hebtu.software.test.Setting.MyApplication;
  */
 public class MileageFragmentItem6 extends MyBaseFragment {
     private MyApplication data;
+    private String ip;
+    private List<Video> videoList = new ArrayList<>();
     RecyclerView recyclerView;
     List<MyMultipleItem> lineData;
     MultipleItemAdapter adapter;
-
-    String[] urls = {
-            "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4",
-            "http://vjs.zencdn.net/v/oceans.mp4",
-            "https://media.w3.org/2010/05/sintel/trailer.mp4",
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 1001:
+                    Toast.makeText(getActivity().getApplicationContext(), (CharSequence) msg.obj, Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        }
     };
 
     @Override
@@ -53,6 +77,15 @@ public class MileageFragmentItem6 extends MyBaseFragment {
         Log.e("TAG", "onCreateView");
 
         data = (MyApplication)getActivity().getApplication();
+        ip = data.getIp();
+
+        Thread thread = new getMessage();
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         init();
 
         return mRootView;
@@ -66,6 +99,11 @@ public class MileageFragmentItem6 extends MyBaseFragment {
     @Override
     protected void lazyLoad() {
 
+    }
+
+    @Override
+    protected void initData() {
+        new getMessage().start();
     }
 
     private void init(){
@@ -102,7 +140,7 @@ public class MileageFragmentItem6 extends MyBaseFragment {
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 switch (view.getId()) {
                     case R.id.share:
-                        share(getContext(),urls[position]);
+                        //share(getContext(),urls[position]);
                         //Toast.makeText(getActivity(), "点击了第" + (position + 1) + "名字", Toast.LENGTH_SHORT).show();
                         break;
                     default:
@@ -113,24 +151,16 @@ public class MileageFragmentItem6 extends MyBaseFragment {
         recyclerView.setAdapter(adapter);
     }
 
-    @Override
-    protected void initData() {
-    }
-
     private void addData() {
         Map<String, Object> map = null;
-        Random random = new Random();
-        for (int i = 0; i < urls.length; i++) {
+        for (int i = 0; i < videoList.size(); i++) {
             map = new HashMap<>();
-            map.put("url", urls[i]);
-            //map.put("name", names[i]);
-            //map.put("desc", "我是一只" + names[i]);
+            map.put("ip", ip);
+            map.put("videoPath", videoList.get(i).getPath());
+            map.put("UserHeadImg", videoList.get(i).getUser().getUserHeadImg());
+            map.put("UserName", videoList.get(i).getUser().getUserName());
+            map.put("videoTitle", videoList.get(i).getTitle());
             lineData.add(new MyMultipleItem(1, map));
-            /*if (i % 2 == 0) {
-                lineData.add(new MyMultipleItem(1, map));
-            } else {
-                lineData.add(new MyMultipleItem(2, map));
-            }*/
         }
     }
 
@@ -139,5 +169,38 @@ public class MileageFragmentItem6 extends MyBaseFragment {
         intent.setType("text/plain");
         intent.putExtra(Intent.EXTRA_TEXT, shareText);
         context.startActivity(Intent.createChooser(intent, "MoJi分享"));
+    }
+
+    class getMessage extends Thread{
+        @Override
+        public void run() {
+            try {
+                if (DetermineConnServer.isConnByHttp(getActivity().getApplicationContext())) {
+                    URL url = new URL("http://"+ip+":8080/MoJi/video/queryAll?userId="+data.getUser().getUserId());
+                    URLConnection conn = url.openConnection();
+                    InputStream in = conn.getInputStream();
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));
+                    String str = null;
+                    while ((str = reader.readLine()) != null) {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<List<Video>>() {
+                        }.getType();
+                        videoList = gson.fromJson(str, type);
+                        Collections.reverse(videoList);
+                    }
+                    in.close();
+                    reader.close();
+                } else {
+                    Message message = Message.obtain();
+                    message.what = 1001;
+                    message.obj = "未连接到服务器";
+                    handler.sendMessage(message);
+                }
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
