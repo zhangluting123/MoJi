@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.FutureTarget;
@@ -29,10 +30,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import cn.edu.hebtu.software.test.Data.Scene;
-import cn.edu.hebtu.software.test.Data.Video;
 import cn.edu.hebtu.software.test.R;
 import cn.edu.hebtu.software.test.Setting.MyApplication;
 import cn.edu.hebtu.software.test.Util.DetermineConnServer;
@@ -50,7 +49,6 @@ public class SceneAdapter extends BaseAdapter {
     private List<Scene> sceneList;
     private int itemLayout;
     private String ip;
-    private ViewHolder viewHolder;
 
     public SceneAdapter() {
     }
@@ -88,80 +86,72 @@ public class SceneAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        if(null == convertView){
-            viewHolder = new ViewHolder();
-            convertView = LayoutInflater.from(context).inflate(itemLayout, null);
-            viewHolder.left= convertView.findViewById(R.id.left);
-            viewHolder.right = convertView.findViewById(R.id.right);
-            viewHolder.scene = convertView.findViewById(R.id.iv_scene);
-            viewHolder.place = convertView.findViewById(R.id.tv_scene_place);
-            viewHolder.content = convertView.findViewById(R.id.tv_scene_content);
-            viewHolder.share = convertView.findViewById(R.id.iv_share_scene);
-            viewHolder.loveCount = convertView.findViewById(R.id.tv_love_count);
-            viewHolder.love = convertView.findViewById(R.id.iv_love);
-            viewHolder.comment = convertView.findViewById(R.id.iv_comment);
-            viewHolder.scene2 = convertView.findViewById(R.id.iv_scene2);
-            viewHolder.place2 = convertView.findViewById(R.id.tv_scene_place_2);
-            viewHolder.content2 = convertView.findViewById(R.id.tv_scene_content2);
-            convertView.setTag(viewHolder);
-        }else{
-            viewHolder = (ViewHolder) convertView.getTag();
-        }
+
+        convertView = LayoutInflater.from(context).inflate(itemLayout, null);
+
+        RelativeLayout left= convertView.findViewById(R.id.left);
+        RelativeLayout right= convertView.findViewById(R.id.right);
+        ImageView scene= convertView.findViewById(R.id.iv_scene);
+        TextView place = convertView.findViewById(R.id.tv_scene_place);
+        TextView content= convertView.findViewById(R.id.tv_scene_content);
+        ImageView share = convertView.findViewById(R.id.iv_share_scene);
+        TextView loveCount= convertView.findViewById(R.id.tv_love_count);
+        ImageView love = convertView.findViewById(R.id.iv_love);
+        ImageView comment = convertView.findViewById(R.id.iv_comment);
+        ImageView scene2= convertView.findViewById(R.id.iv_scene2);
+        TextView place2 = convertView.findViewById(R.id.tv_scene_place_2);
+        TextView content2 = convertView.findViewById(R.id.tv_scene_content2);
 
         //设置位置
         if(position % 2 == 0){
-            viewHolder.left.setVisibility(View.VISIBLE);
-            viewHolder.right.setVisibility(View.GONE);
-            Glide.with(context).load("http://"+ip+":8080/MoJi/"+sceneList.get(position).getPath()).into(viewHolder.scene);
-            viewHolder.place.setText(sceneList.get(position).getPlace());
-            viewHolder.content.setText(sceneList.get(position).getContent());
+            left.setVisibility(View.VISIBLE);
+            right.setVisibility(View.GONE);
+            Glide.with(context).load("http://"+ip+":8080/MoJi/"+sceneList.get(position).getPath()).into(scene);
+            place.setText(sceneList.get(position).getPlace());
+            content.setText(sceneList.get(position).getContent());
 
         }else{
-            viewHolder.left.setVisibility(View.GONE);
-            viewHolder.right.setVisibility(View.VISIBLE);
-            Glide.with(context).load("http://"+ip+":8080/MoJi/"+sceneList.get(position).getPath()).into(viewHolder.scene2);
-            viewHolder.place2.setText(sceneList.get(position).getPlace());
-            viewHolder.content2.setText(sceneList.get(position).getContent());
+            left.setVisibility(View.GONE);
+            right.setVisibility(View.VISIBLE);
+            Glide.with(context).load("http://"+ip+":8080/MoJi/"+sceneList.get(position).getPath()).into(scene2);
+            place2.setText(sceneList.get(position).getPlace());
+            content2.setText(sceneList.get(position).getContent());
         }
 
-        viewHolder.loveCount.setText(NumStrUtil.getNumStr(sceneList.get(position).getLike()));
-        CustomOnClickListener listener = new CustomOnClickListener(position);
-        viewHolder.share.setOnClickListener(listener);
-        viewHolder.love.setOnClickListener(listener);
+        love.setImageResource(R.drawable.love);
+        loveCount.setText(NumStrUtil.getNumStr(sceneList.get(position).getLike()));
+
+        love.setImageResource(R.drawable.love);
+        loveCount.setText(NumStrUtil.getNumStr(sceneList.get(position).getLike()));
+
+        share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                shareScene(position);
+            }
+        });
+
+        love.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Scene scene = sceneList.get(position);
+                if (love.getDrawable().getCurrent().getConstantState() == context.getResources().getDrawable(R.drawable.love).getConstantState()) {
+                    love.setImageResource(R.drawable.nolove);
+                    scene.setLike(scene.getLike()+1);
+                    loveCount.setText(NumStrUtil.getNumStr(scene.getLike()));
+                    changeLove(true,scene.getId());
+                }else{
+                    love.setImageResource(R.drawable.love);
+                    scene.setLike(scene.getLike()-1);
+                    loveCount.setText(NumStrUtil.getNumStr(scene.getLike()));
+                    changeLove(false,scene.getId());
+                }
+            }
+        });
 
         return convertView;
     }
 
-    class CustomOnClickListener implements View.OnClickListener {
-        private int position;
-
-        public CustomOnClickListener(int position) {
-            this.position = position;
-        }
-
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.iv_share_scene:
-                    shareScene(position);
-                    break;
-                case R.id.iv_love:
-                    Scene scene = sceneList.get(position);
-                    if (viewHolder.love.getDrawable().getCurrent().getConstantState() == context.getResources().getDrawable(R.drawable.love).getConstantState()) {
-                        changeLove(true,scene.getId());
-                        viewHolder.love.setImageResource(R.drawable.nolove);
-                        scene.setLike(scene.getLike()+1);
-                        viewHolder.loveCount.setText(NumStrUtil.getNumStr(scene.getLike()));
-                    }else{
-                        changeLove(false,scene.getId());
-                        viewHolder.love.setImageResource(R.drawable.love);
-                        scene.setLike(scene.getLike()-1);
-                        viewHolder.loveCount.setText(NumStrUtil.getNumStr(scene.getLike()));
-                    }
-                    break;
-            }
-        }
-    }
 
 
     /**
@@ -181,21 +171,6 @@ public class SceneAdapter extends BaseAdapter {
         context.startActivity(shareIntent);
     }
 
-    final static class ViewHolder{
-        RelativeLayout left;
-        RelativeLayout right;
-        ImageView scene;
-        TextView place;
-        TextView content;
-        ImageView share;
-        TextView loveCount;
-        ImageView love;
-        ImageView comment;
-        ImageView scene2;
-        TextView place2;
-        TextView content2;
-
-    }
 
     private void changeLove(boolean flag, Integer id) {
         new Thread() {
