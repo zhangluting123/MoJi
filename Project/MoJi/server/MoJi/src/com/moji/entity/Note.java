@@ -28,17 +28,18 @@ public class Note {
 	private String time;
 	private String userId;
 	private int self;
+	private int like;
 	private User user;
 	private List<Img> imgList = new ArrayList<>();
 
 	public Note() {
 	}
 
-	public Note(User user, List<Img> imgList, String noteId, Double latitude, Double longitude, String title,
-			String content, String location, String time, String userId, int self) {
+	
+
+	public Note(String noteId, Double latitude, Double longitude, String title, String content, String location,
+			String time, String userId, int self, int like, User user, List<Img> imgList) {
 		super();
-		this.user = user;
-		this.imgList = imgList;
 		this.noteId = noteId;
 		this.latitude = latitude;
 		this.longitude = longitude;
@@ -48,7 +49,12 @@ public class Note {
 		this.time = time;
 		this.userId = userId;
 		this.self = self;
+		this.like = like;
+		this.user = user;
+		this.imgList = imgList;
 	}
+
+
 
 	public User getUser() {
 		return user;
@@ -138,11 +144,20 @@ public class Note {
 		this.time = time;
 	}
 
+	public int getLike() {
+		return like;
+	}
+
+	public void setLike(int like) {
+		this.like = like;
+	}
+
 	@Override
 	public String toString() {
 		return "Note [" + user.toString() + "latitude=" + latitude + ", longitude=" + longitude + ", content=" + content + ", time=" + time
 				+ "]";
 	}
+	
 	
 	
 

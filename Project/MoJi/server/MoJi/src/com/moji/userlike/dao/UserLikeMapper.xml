@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.moji.userlike.dao.UserLikeMapper">
+	<resultMap type="com.moji.entity.UserLike" id="likeMap">
+		<id property="id" column="like_id"/>
+		<result property="userId" column="userId"/>
+		<association property="dbNote" column="{noteId=note_id}" 
+			select="com.moji.note.dao.NoteMapper.queryNoteById">
+		</association>
+		<association property="videoLike" column="{videoId=video_id}"
+			select="com.moji.video.dao.VideoMapper.findVideoById">
+		</association>
+	</resultMap>
+	
+	<insert id="insertUserLike">
+		insert into user_like(like_id,user_id,note_id,video_id)
+		values(#{id},#{userId},#{noteId},#{videoId})
+	</insert>
+	
+	<delete id="deleteUserLike">
+		delete from user_like 
+		where like_id=#{likeId}
+	</delete>
+	
+	<select id="queryUserLikeByUserId" resultMap="likeMap">
+		select *
+		from user_like rl
+		left join note_detail n on n.note_id = rl.note_id
+		left join video_detail v on v.video_id = rl.video_id
+		where rl.user_id = #{userId}
+	</select>
+</mapper>

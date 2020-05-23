@@ -46,6 +46,7 @@ public class Video {
 		this.like = like;
 		this.user = user;
 	}
+	 
 	public String getVideoId() {
 		return videoId;
 	}

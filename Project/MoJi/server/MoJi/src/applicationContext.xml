@@ -46,7 +46,9 @@
 				com.moji.replycomment.dao;
 				com.moji.video.dao;
 				com.moji.mailmycomment.dao;
-				com.moji.jpushcache.dao"/>
+				com.moji.jpushcache.dao;
+				com.moji.userlike.dao;
+				com.moji.scene.dao"/>
 	</bean>
 
 </beans>

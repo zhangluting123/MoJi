@@ -229,7 +229,7 @@ public class JPushUtil {
                         //此字段是给开发者自己给推送编号，方便推送者分辨推送记录
                         .setSendno(1)
                         //此字段的值是用来指定本推送的离线保存时长，如果不传此字段则默认保存一天，最多指定保留十天；
-                        .setTimeToLive(864000)
+                        .setTimeToLive(0)
                         .build())
  
                 .build();

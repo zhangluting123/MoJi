@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.moji.scene.dao.SceneMapper">
+	<resultMap type="com.moji.entity.Scene" id="sceneMap">
+		<id property="id" column="scene_id"/>
+		<result property="place" column="scene_place"/>
+		<result property="content" column="scene_content"/>
+		<result property="time" column="scene_time"/>
+		<result property="path" column="scene_path"/>
+		<result property="like" column="scene_like"/>
+	</resultMap>
+	
+	<select id="findAllScene" resultMap="sceneMap">
+		select * from moji_scene
+	</select>
+	
+	<update id="addLike">
+		update moji_scene
+		set scene_like = scene_like + 1
+		where scene_id=#{id}
+	</update>
+	
+	<update id="deleteLike">
+		update moji_scene
+		set scene_like = scene_like - 1
+		where scene_id=#{id}
+	</update>
+</mapper>

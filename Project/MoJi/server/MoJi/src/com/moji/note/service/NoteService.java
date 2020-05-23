@@ -11,6 +11,7 @@ package com.moji.note.service;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -165,6 +166,26 @@ public class NoteService {
 	 */
 	public List<Note> checkNote(String userId, double left, double right, double top, double bottom) {
 		return this.noteMapper.checkNote(userId, left, right, top, bottom);
+	}
+	
+	/**
+	 * @Title: addLikeByNoteId
+	 * @Description: 添加点赞数量
+	 * @author: 张璐婷 
+	 * @date: 2020年5月22日 上午10:48:50
+	 */
+	public int addLikeByNoteId(String noteId) {
+		return this.noteMapper.addLikeByNoteId(noteId);
+	}
+	
+	/**
+	 * @Title: deleteLikeByNoteId
+	 * @Description: 取消点赞
+	 * @author: 张璐婷 
+	 * @date: 2020年5月22日 上午10:50:36
+	 */
+	public int deleteLikeByNoteId(@Param("noteId")String noteId) {
+		return this.noteMapper.deleteLikeByNoteId(noteId);
 	}
 	
 

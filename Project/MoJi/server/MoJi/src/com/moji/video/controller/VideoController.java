@@ -52,14 +52,6 @@ public class VideoController {
 		String str = gson.toJson(list);
 		return str;
 	}
-	//@author ming
-	@RequestMapping(value="/queryAll",method=RequestMethod.GET, produces="application/json;charset=utf-8")
-	public String queryAll(@RequestParam("userId")String userId) {
-		List<Video> list = this.videoService.queryAll();
-		Gson gson = new Gson();
-		String str = gson.toJson(list);
-		return str;
-	}
 	
 	@RequestMapping(value="/delete",method=RequestMethod.GET, produces="application/json;charset=utf-8")
 	public String delete(@RequestParam("videoId")String videoId) {
@@ -139,6 +131,15 @@ public class VideoController {
 			re = "SUCCESS";
 		}
 		return re;
+	}
+	
+	//@author ming
+	@RequestMapping(value="/queryAll",method=RequestMethod.GET, produces="application/json;charset=utf-8")
+	public String queryAll(@RequestParam("userId")String userId) {
+		List<Video> list = this.videoService.queryAll();
+		Gson gson = new Gson();
+		String str = gson.toJson(list);
+		return str;
 	}
 
 }

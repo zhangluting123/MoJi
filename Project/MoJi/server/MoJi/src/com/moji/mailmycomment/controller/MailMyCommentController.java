@@ -1,6 +1,5 @@
 package com.moji.mailmycomment.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -11,12 +10,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
-import com.moji.entity.Comment;
 import com.moji.entity.MailMyComment;
 import com.moji.entity.Note;
 import com.moji.entity.ReturnNote;
 import com.moji.mailmycomment.service.MailMyCommentService;
-import com.sun.org.apache.xerces.internal.impl.xs.SchemaSymbols;
 
 /**   
  * @ClassName: MailMyCommentController   

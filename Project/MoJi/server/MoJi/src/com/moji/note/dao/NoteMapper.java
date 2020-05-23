@@ -172,4 +172,20 @@ public interface NoteMapper {
 	 */
 	public Note queryNoteById(String noteId);
 	
+	/**
+	 * @Title: addLikeByNoteId
+	 * @Description: 添加点赞数量
+	 * @author: 张璐婷 
+	 * @date: 2020年5月22日 上午10:48:50
+	 */
+	public int addLikeByNoteId(@Param("noteId")String noteId);
+	
+	/**
+	 * @Title: deleteLikeByNoteId
+	 * @Description: 取消点赞
+	 * @author: 张璐婷 
+	 * @date: 2020年5月22日 上午10:50:36
+	 */
+	public int deleteLikeByNoteId(@Param("noteId")String noteId);
+	
 }

@@ -30,14 +30,16 @@ public class ReturnNote {
 	private String time;
 	private String userId;
 	private int self;
+	private int like;
 	private User user;
 	private List<String> imgList = new ArrayList<>();
 
 	public ReturnNote() {
 	}
 
-	public ReturnNote(String noteId, Double latitude, Double longitude, String title,
-			String content, String location, String time, String userId, int self, User user, List<String> imgList) {
+	
+	public ReturnNote(String noteId, Double latitude, Double longitude, String title, String content, String location,
+			String time, String userId, int self, User user, int like, List<String> imgList) {
 		super();
 		this.noteId = noteId;
 		this.latitude = latitude;
@@ -49,8 +51,10 @@ public class ReturnNote {
 		this.userId = userId;
 		this.self = self;
 		this.user = user;
+		this.like = like;
 		this.imgList = imgList;
 	}
+
 
 	public User getUser() {
 		return user;
@@ -139,6 +143,15 @@ public class ReturnNote {
 	public void setTime(String time) {
 		this.time = time;
 	}
+
+	public int getLike() {
+		return like;
+	}
+
+	public void setLike(int like) {
+		this.like = like;
+	}
+
 
 	@Override
 	public String toString() {

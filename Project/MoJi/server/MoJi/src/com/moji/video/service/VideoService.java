@@ -10,6 +10,7 @@ package com.moji.video.service;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -67,14 +68,6 @@ public class VideoService {
 	}
 	
 	/**
-	 * @Description: 查询所有视频
-	 * @author: ming
-	 */
-	public List<Video> queryAll() {
-		return this.videoMapper.queryAll();
-	}
-	
-	/**
 	 * @Title: deleteVideoById
 	 * @Description: 删除video
 	 * @author: 张璐婷 
@@ -82,5 +75,33 @@ public class VideoService {
 	 */
 	public int deleteVideoById(String videoId) {
 		return this.videoMapper.deleteVideoById(videoId);
+	}
+	
+	/**
+	 * @Title: addLikeByVideoId
+	 * @Description: 点赞
+	 * @author: 张璐婷 
+	 * @date: 2020年5月22日 下午12:26:57
+	 */
+	public int addLikeByVideoId(String videoId) {
+		return this.videoMapper.addLikeByVideoId(videoId);
+	}
+	
+	/**
+	 * @Title: deleteLikeByVideoId
+	 * @Description: 取消点赞
+	 * @author: 张璐婷 
+	 * @date: 2020年5月22日 下午12:27:22
+	 */
+	public int deleteLikeByVideoId(String videoId) {
+		return this.videoMapper.deleteLikeByVideoId(videoId);
+	}
+	
+	/**
+	 * @Description: 查询所有视频
+	 * @author: ming
+	 */
+	public List<Video> queryAll() {
+		return this.videoMapper.queryAll();
 	}
 }

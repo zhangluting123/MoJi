@@ -54,16 +54,33 @@ public interface VideoMapper {
 	public List<Video> findVideoByUserId(@Param("userId")String userId);
 	
 	/**
-	 * @Description: 查询所有视频
-	 * @author: 邸祯策
-	 */
-	public List<Video> queryAll();
-	
-	/**
 	 * @Title: deleteVideoById
 	 * @Description: 删除指定视频信息
 	 * @author: 张璐婷 
 	 * @date: 2020年5月16日 上午11:15:57
 	 */
 	public int deleteVideoById(@Param("videoId")String videoId);
+	
+	/**
+	 * @Title: addLikeByVideoId
+	 * @Description: 点赞
+	 * @author: 张璐婷 
+	 * @date: 2020年5月22日 下午12:26:57
+	 */
+	public int addLikeByVideoId(@Param("videoId")String videoId);
+	
+	/**
+	 * @Title: deleteLikeByVideoId
+	 * @Description: 取消点赞
+	 * @author: 张璐婷 
+	 * @date: 2020年5月22日 下午12:27:22
+	 */
+	public int deleteLikeByVideoId(@Param("videoId")String videoId);
+	
+	/**
+	 * @Description: 查询所有视频
+	 * @author: 邸祯策
+	 */
+	public List<Video> queryAll();
+	
 }

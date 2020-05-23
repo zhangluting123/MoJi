@@ -1,11 +1,3 @@
-/**
- * @Title: NoteController.java
- * @Package com.moji.note.controller
- * @Description: TODO(用一句话描述该文件做什么)
- * @author 春波
- * @date 2020年4月8日
- * @version V1.0
- */
 package com.moji.note.controller;
 
 import java.io.File;
@@ -32,6 +24,8 @@ import com.moji.entity.Img;
 import com.moji.entity.Note;
 import com.moji.entity.ReturnNote;
 import com.moji.note.service.NoteService;
+import com.moji.userlike.service.UserLikeService;
+import com.sun.org.apache.regexp.internal.recompile;
 
 /**
  * @ClassName: NoteController
@@ -240,6 +234,7 @@ public class NoteController {
 			returnNote.setUserId(list.get(i).getUserId());
 			returnNote.setUser(list.get(i).getUser());
 			returnNote.setSelf(list.get(i).getSelf());
+			returnNote.setLike(list.get(i).getLike());
 			for(int j = 0; j < list.get(i).getImgList().size(); j++) {
 				returnNote.getImgList().add(list.get(i).getImgList().get(j).getImgPath());
 			}
@@ -271,6 +266,7 @@ public class NoteController {
 			returnNote.setUserId(list.get(i).getUserId());
 			returnNote.setUser(list.get(i).getUser());
 			returnNote.setSelf(list.get(i).getSelf());
+			returnNote.setLike(list.get(i).getLike());
 			for(int j = 0; j < list.get(i).getImgList().size(); j++) {
 				returnNote.getImgList().add(list.get(i).getImgList().get(j).getImgPath());
 			}
@@ -302,6 +298,7 @@ public class NoteController {
 			returnNote.setUserId(list.get(i).getUserId());
 			returnNote.setUser(list.get(i).getUser());
 			returnNote.setSelf(list.get(i).getSelf());
+			returnNote.setLike(list.get(i).getLike());
 			for(int j = 0; j < list.get(i).getImgList().size(); j++) {
 				returnNote.getImgList().add(list.get(i).getImgList().get(j).getImgPath());
 			}
@@ -337,6 +334,7 @@ public class NoteController {
 				returnNote.setTime(list.get(i).getTime());
 				returnNote.setUserId(list.get(i).getUserId());
 				returnNote.setUser(list.get(i).getUser());
+				returnNote.setLike(list.get(i).getLike());
 				for(int j = 0; j < list.get(i).getImgList().size(); j++) {
 					returnNote.getImgList().add(list.get(i).getImgList().get(j).getImgPath());
 				}
@@ -378,6 +376,7 @@ public class NoteController {
 				returnNote.setUserId(list.get(i).getUserId());
 				returnNote.setUser(list.get(i).getUser());
 				returnNote.setSelf(list.get(i).getSelf());
+				returnNote.setLike(list.get(i).getLike());
 				for(int j = 0; j < list.get(i).getImgList().size(); j++) {
 					returnNote.getImgList().add(list.get(i).getImgList().get(j).getImgPath());
 				}

@@ -12,6 +12,7 @@
 		<result property="time" column="time"/>
 		<result property="userId" column="user_id"/>
 		<result property="self" column="self"/>
+		<result property="like" column="note_like"/>
 		<association property="user">
 			<id property="userId" column="user_id"/>
 			<result property="userHeadImg" column="avatar_path"/>
@@ -138,4 +139,16 @@
 		left join note_img i on n.note_id=i.noteId
 		where n.note_id = #{noteId}
 	</select>
+	<!-- 点赞 -->
+	<update id="addLikeByNoteId">
+		update note_detail
+		set note_like = note_like + 1
+		where note_id=#{noteId}
+	</update>
+	<!-- 取消点赞 -->
+	<update id="deleteLikeByNoteId">
+		update note_detail
+		set note_like = note_like - 1
+		where note_id=#{noteId}
+	</update>
 </mapper>
