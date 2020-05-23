@@ -42,6 +42,7 @@ import cn.edu.hebtu.software.test.DetailActivity.OtherMsgActivity;
 import cn.edu.hebtu.software.test.R;
 import cn.edu.hebtu.software.test.Setting.MyApplication;
 import cn.edu.hebtu.software.test.Util.DetermineConnServer;
+import cn.edu.hebtu.software.test.Util.NumStrUtil;
 
 import static com.baidu.mapapi.BMapManager.getContext;
 
@@ -161,12 +162,12 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<StaggeredGridAdap
                         changeLove(true,noteList.get(position).getNoteId(),null);
                         holder.love.setImageResource(R.drawable.nolove);
                         noteList.get(position).setLike(noteList.get(position).getLike()+1);
-                        holder.loveCount.setText(noteList.get(position).getLike()+"");
+                        holder.loveCount.setText(NumStrUtil.getNumStr(noteList.get(position).getLike()));
                     }else{//取消点赞
                         changeLove(false, noteList.get(position).getNoteId(),map.get(position));
                         holder.love.setImageResource(R.drawable.love);
                         noteList.get(position).setLike(noteList.get(position).getLike()-1);
-                        holder.loveCount.setText(noteList.get(position).getLike()+"");
+                        holder.loveCount.setText(NumStrUtil.getNumStr(noteList.get(position).getLike()));
                     }
                 }else{
                     Toast.makeText(mContext, "请先登录", Toast.LENGTH_SHORT).show();
@@ -216,9 +217,10 @@ public class StaggeredGridAdapter extends RecyclerView.Adapter<StaggeredGridAdap
                 }
                 title.setText(note.getTitle());
                 petname.setText(note.getUser().getUserName());
-                loveCount.setText(note.getLike()+"");
+                loveCount.setText(NumStrUtil.getNumStr(note.getLike()));
                 for(int i = 0;i < userLikes.size();i++){
-                    if(userLikes.get(i).getNoteLike().getNoteId().equals(note.getNoteId())){
+                    String noteId = userLikes.get(i).getNoteLike().getNoteId();
+                    if(null != noteId && noteId.equals(note.getNoteId())){
                         love.setImageResource(R.drawable.nolove);
                         map.put(position, userLikes.get(i).getId());
                         break;

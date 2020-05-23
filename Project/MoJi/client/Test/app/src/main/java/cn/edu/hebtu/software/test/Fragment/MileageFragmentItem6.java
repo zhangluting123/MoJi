@@ -9,8 +9,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,10 +38,12 @@ import java.util.Random;
 import cn.edu.hebtu.software.test.Adapter.MultipleItemAdapter;
 import cn.edu.hebtu.software.test.Data.MyMultipleItem;
 import cn.edu.hebtu.software.test.Data.Note;
+import cn.edu.hebtu.software.test.Data.UserLike;
 import cn.edu.hebtu.software.test.Data.Video;
 import cn.edu.hebtu.software.test.R;
 import cn.edu.hebtu.software.test.Setting.MyApplication;
 import cn.edu.hebtu.software.test.Util.DetermineConnServer;
+import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
 
 /**
  * @Author: ming
@@ -50,6 +54,7 @@ public class MileageFragmentItem6 extends MyBaseFragment {
     private MyApplication data;
     private String ip;
     private List<Video> videoList = new ArrayList<>();
+    private List<UserLike> userLikes = new ArrayList<>();
     RecyclerView recyclerView;
     List<MyMultipleItem> lineData;
     MultipleItemAdapter adapter;
@@ -80,9 +85,12 @@ public class MileageFragmentItem6 extends MyBaseFragment {
         ip = data.getIp();
 
         Thread thread = new getMessage();
+        Thread getUserLike = new GetUserLike();
         thread.start();
+        getUserLike.start();
         try {
             thread.join();
+            getUserLike.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -115,7 +123,7 @@ public class MileageFragmentItem6 extends MyBaseFragment {
         // 设置适配器
         //recyclerView.setAdapter(new RecyclerLineAdapter(getContext(), lineData));
         //adapter = new RecyclerCommonAdapter(R.layout.recyclear_item, lineData);
-        adapter = new MultipleItemAdapter(getActivity(),lineData,videoList);
+        adapter = new MultipleItemAdapter(getActivity(),lineData,videoList,userLikes);
         adapter.openLoadAnimation();
         adapter.isFirstOnly(false);
         //上拉监听
@@ -127,27 +135,6 @@ public class MileageFragmentItem6 extends MyBaseFragment {
                 adapter.loadMoreComplete();
             }
         }, recyclerView);
-        //item监听
-        /*adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Toast.makeText(getActivity(), "点击了第" + (position + 1) + "条条目", Toast.LENGTH_SHORT).show();
-            }
-        });*/
-        //item子view
-        /*adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
-            @Override
-            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                switch (view.getId()) {
-                    case R.id.share:
-                        //不明原因失效
-                        //share(getContext(),videoList.get(position).getPath());
-                        break;
-                    default:
-                        break;
-                }
-            }
-        });*/
         recyclerView.setAdapter(adapter);
     }
 
@@ -155,23 +142,17 @@ public class MileageFragmentItem6 extends MyBaseFragment {
         Map<String, Object> map = null;
         for (int i = 0; i < videoList.size(); i++) {
             map = new HashMap<>();
-            map.put("ip", ip);
             map.put("videoPath", videoList.get(i).getPath());
             map.put("UserHeadImg", videoList.get(i).getUser().getUserHeadImg());
             map.put("UserName", videoList.get(i).getUser().getUserName());
             map.put("videoTitle", videoList.get(i).getTitle());
             map.put("User", videoList.get(i).getUser());
             map.put("Video", videoList.get(i));
+            map.put("position", i);
             lineData.add(new MyMultipleItem(1, map));
         }
     }
 
-    public static void share(Context context, String shareText) {
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_TEXT, shareText);
-        context.startActivity(Intent.createChooser(intent, "MoJi分享"));
-    }
 
     class getMessage extends Thread{
         @Override
@@ -204,5 +185,53 @@ public class MileageFragmentItem6 extends MyBaseFragment {
                 e.printStackTrace();
             }
         }
+    }
+
+    /**
+     *  @author: 张璐婷
+     *  @time: 2020/5/22  14:59
+     *  @Description: 获取用户点赞信息
+     */
+    class GetUserLike extends Thread{
+        @Override
+        public void run() {
+            try {
+                if (DetermineConnServer.isConnByHttp(getActivity().getApplicationContext())) {
+                    URL url = new URL("http://"+ip+":8080/MoJi/userLike/list?userId="+data.getUser().getUserId());
+                    URLConnection conn = url.openConnection();
+                    InputStream in = conn.getInputStream();
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));
+                    String str = null;
+                    if ((str = reader.readLine()) != null) {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<List<UserLike>>() {}.getType();
+                        userLikes = gson.fromJson(str,type);
+                    }
+                    in.close();
+                    reader.close();
+                } else {
+                    Message message = Message.obtain();
+                    message.what = 1001;
+                    message.obj = "未连接到服务器";
+                    handler.sendMessage(message);
+                }
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        JCVideoPlayer.releaseAllVideos();
     }
 }

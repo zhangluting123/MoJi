@@ -183,7 +183,7 @@ public class TimelineActivity extends AppCompatActivity {
             try {
                 boolean b = DetermineConnServer.isConnByHttp(getApplicationContext());
                 if(b){
-                    URL url = new URL("http://"+getResources().getString(R.string.internet_ip)+":8080/MoJi/note/download?userId=" + data.getUser().getUserId());
+                    URL url = new URL("http://" + ip + ":8080/MoJi/note/download?userId=" + data.getUser().getUserId()+"&flag="+true);
                     URLConnection conn = url.openConnection();
                     InputStream in = conn.getInputStream();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(in,"utf-8"));

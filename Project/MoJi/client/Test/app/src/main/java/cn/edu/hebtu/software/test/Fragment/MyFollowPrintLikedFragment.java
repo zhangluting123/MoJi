@@ -10,6 +10,7 @@ import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -32,12 +33,14 @@ import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import cn.edu.hebtu.software.test.Adapter.MyVideoAdaper;
-import cn.edu.hebtu.software.test.Data.User;
+import cn.edu.hebtu.software.test.Adapter.MyLikeAdapter;
+import cn.edu.hebtu.software.test.Data.UserLike;
 import cn.edu.hebtu.software.test.Data.Video;
+import cn.edu.hebtu.software.test.DetailActivity.DropsDetailActivity;
 import cn.edu.hebtu.software.test.R;
 import cn.edu.hebtu.software.test.Setting.MyApplication;
 import cn.edu.hebtu.software.test.Util.DetermineConnServer;
@@ -45,21 +48,18 @@ import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
 
 /**
  * @ProjectName:    MoJi
- * @Description:    我的喜欢
- * @Author:         邸祯策
+ * @Description:    我的点赞
+ * @Author:         张璐婷
  * @CreateDate:     2020/5/22
  * @Version:        1.0
  */
 public class MyFollowPrintLikedFragment extends Fragment {
-    private List<Video> videoList;
+    private List<UserLike> userLikes = new ArrayList<>();
+    private MyLikeAdapter adaper;
 
-    private JCVideoPlayer.JCAutoFullscreenListener mSensorEventListener;
-    private SensorManager mSensorManager;
 
     private MyApplication data;
     private String ip;
-    private User nowUser;
-    private boolean flag;//flag=true 自己查看动态
 
     private Handler handler = new Handler(){
         @Override
@@ -80,23 +80,25 @@ public class MyFollowPrintLikedFragment extends Fragment {
         data = (MyApplication)getActivity().getApplication();
         ip = data.getIp();
 
-        Intent intent = getActivity().getIntent();
-        User otherUser = intent.getParcelableExtra("user");
-        if(null == otherUser){
-            nowUser = data.getUser();
-            flag = true;
-        }else{
-            nowUser = otherUser;
-            flag = false;
-        }
-
         init();
 
         ListView listView = view.findViewById(R.id.video_list);
-        MyVideoAdaper adaper = new MyVideoAdaper(videoList, R.layout.item_foot_print_video, getActivity(),flag);
+        adaper = new MyLikeAdapter(getActivity(),userLikes);
         listView.setAdapter(adaper);
-        mSensorManager = (SensorManager) getActivity().getSystemService(getActivity().SENSOR_SERVICE);
-        mSensorEventListener = new JCVideoPlayer.JCAutoFullscreenListener();
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(null != userLikes.get(position).getNoteLike().getNoteId()){
+                    Intent intent = new Intent(getActivity(), DropsDetailActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("note", userLikes.get(position).getNoteLike());
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }
+
+            }
+        });
 
         SmartRefreshLayout refreshLayout = view.findViewById(R.id.refreshlayout);
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
@@ -106,7 +108,7 @@ public class MyFollowPrintLikedFragment extends Fragment {
                     @Override
                     public void run() {
                         init();
-                        adaper.refresh(videoList);
+                        adaper.refresh(userLikes);
                         refreshLayout.finishRefresh();
                     }
                 },1000);
@@ -116,7 +118,7 @@ public class MyFollowPrintLikedFragment extends Fragment {
     }
 
     private void init(){
-        Thread thread = new getVideoList();
+        Thread thread = new GetUserLike();
         thread.start();
         try {
             thread.join();
@@ -125,51 +127,49 @@ public class MyFollowPrintLikedFragment extends Fragment {
         }
     }
 
-
-
-    class getVideoList extends Thread{
+    /**
+     *  @author: 张璐婷
+     *  @time: 2020/5/22  14:59
+     *  @Description: 获取用户点赞信息
+     */
+    class GetUserLike extends Thread{
         @Override
         public void run() {
-            if(DetermineConnServer.isConnByHttp(getActivity().getApplicationContext())){
-                try {
-                    URL url = new URL("http://" + ip + ":8080/MoJi/video/myList?userId="+nowUser.getUserId());
+            try {
+                if (DetermineConnServer.isConnByHttp(getActivity().getApplicationContext())) {
+                    URL url = new URL("http://"+ip+":8080/MoJi/userLike/list?userId="+data.getUser().getUserId());
                     URLConnection conn = url.openConnection();
                     InputStream in = conn.getInputStream();
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));
                     String str = null;
-                    if((str = reader.readLine())!=null){
+                    if ((str = reader.readLine()) != null) {
                         Gson gson = new Gson();
-                        Type type = new TypeToken<List<Video>>() {}.getType();
-                        videoList = gson.fromJson(str,type);
-                        Collections.reverse(videoList);
+                        Type type = new TypeToken<List<UserLike>>() {}.getType();
+                        userLikes = gson.fromJson(str,type);
                     }
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    in.close();
+                    reader.close();
+                } else {
+                    Message message = Message.obtain();
+                    message.what = 1001;
+                    message.obj = "未连接到服务器";
+                    handler.sendMessage(message);
                 }
-
-            }else{
-                Message msg = Message.obtain();
-                msg.what = 1001;
-                msg.obj = "未连接到服务器";
-                handler.sendMessage(msg);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
 
-
     @Override
     public void onResume() {
         super.onResume();
-        Sensor mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        mSensorManager.registerListener(mSensorEventListener, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        mSensorManager.unregisterListener(mSensorEventListener);
-        JCVideoPlayer.releaseAllVideos();
     }
 }

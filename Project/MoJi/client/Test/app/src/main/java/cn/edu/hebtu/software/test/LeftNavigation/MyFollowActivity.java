@@ -97,7 +97,7 @@ public class MyFollowActivity extends AppCompatActivity {
         TabHost.TabSpec message = fragmentTabHost.newTabSpec("followed").setIndicator(getTabSpecView("followed","我的关注"));
         fragmentTabHost.addTab(message, MyFollowPrintFolledFragment.class, null);
         //视频
-        TabHost.TabSpec mycomment = fragmentTabHost.newTabSpec("liked").setIndicator(getTabSpecView("liked","我的喜欢"));
+        TabHost.TabSpec mycomment = fragmentTabHost.newTabSpec("liked").setIndicator(getTabSpecView("liked","我的点赞"));
         fragmentTabHost.addTab(mycomment, MyFollowPrintLikedFragment.class, null);
 
         //默认选中第一项
