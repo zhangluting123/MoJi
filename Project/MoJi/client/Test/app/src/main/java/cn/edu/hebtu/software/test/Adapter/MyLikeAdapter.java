@@ -2,6 +2,7 @@ package cn.edu.hebtu.software.test.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -40,6 +41,7 @@ import cn.edu.hebtu.software.test.Setting.MyApplication;
 import cn.edu.hebtu.software.test.Util.DetermineConnServer;
 import cn.edu.hebtu.software.test.Util.NumStrUtil;
 import cn.edu.hebtu.software.test.Util.ShareImage;
+import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
 
 /**
@@ -121,22 +123,26 @@ public class MyLikeAdapter extends BaseAdapter {
 
         switch (getItemViewType(position)) {
             case TYPE_FIRST:
-                convertView = LayoutInflater.from(context).inflate(R.layout.item_my_like_first, null);
-                TextView videoTitle = convertView.findViewById(R.id.tv_video_title);
-                JCVideoPlayerStandard videoPlayer = convertView.findViewById(R.id.video_player);
-                ImageView comment = convertView.findViewById(R.id.comment);
-                ImageView share = convertView.findViewById(R.id.share);
-                TextView goodNum = convertView.findViewById(R.id.tv_good_num);
-                ImageView good = convertView.findViewById(R.id.good);
+                FirstViewHolder firstViewHolder = null;
+                if (convertView == null) {
+                    firstViewHolder = new FirstViewHolder();
+                    convertView = LayoutInflater.from(context).inflate(R.layout.item_my_like_first, null);
+                    firstViewHolder.videoTitle = convertView.findViewById(R.id.tv_video_title);
+                    firstViewHolder.videoPlayer = convertView.findViewById(R.id.video_player);
+                    firstViewHolder.share = convertView.findViewById(R.id.share);
+                    firstViewHolder.comment = convertView.findViewById(R.id.comment);
+                    convertView.setTag(firstViewHolder);
+                } else {
+                    firstViewHolder = (FirstViewHolder) convertView.getTag();
+                }
+
                 Video video = userLikeList.get(position).getVideoLike();
                 String path = "http://"+ ip +":8080/MoJi/"+ video.getPath();
-                videoTitle.setText(video.getTitle());
-                good.setImageResource(R.drawable.nogood);
+                firstViewHolder.videoTitle.setText(video.getTitle());
 
-                String numStr = NumStrUtil.getNumStr(video.getLike());
-                goodNum.setText(numStr);
-
-                videoPlayer.setUp(path, JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "MoJi");
+                JCVideoPlayer.FULLSCREEN_ORIENTATION = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;//横向
+                JCVideoPlayer.NORMAL_ORIENTATION = ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT;//纵向
+                firstViewHolder.videoPlayer.setUp(path, JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "MoJi");
                 Glide.with(context)
                         .setDefaultRequestOptions(
                                 new RequestOptions()
@@ -146,14 +152,20 @@ public class MyLikeAdapter extends BaseAdapter {
                                         .placeholder(R.drawable.fail)
                         )
                         .load(path)
-                        .into(videoPlayer.thumbImageView);
+                        .into(firstViewHolder.videoPlayer.thumbImageView);
 
-                share.setOnClickListener(new View.OnClickListener() {
+                firstViewHolder.share.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         shareVideo(path);
                     }
                 });
+
+                TextView goodNum = convertView.findViewById(R.id.tv_good_num);
+                ImageView good = convertView.findViewById(R.id.good);
+                good.setImageResource(R.drawable.nogood);
+                String numStr = NumStrUtil.getNumStr(video.getLike());
+                goodNum.setText(numStr);
                 good.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -175,46 +187,53 @@ public class MyLikeAdapter extends BaseAdapter {
 
                 break;
             case TYPE_SECOND:
-                convertView = LayoutInflater.from(context).inflate(R.layout.item_my_like_second, null);
-                TextView noteTitle = convertView.findViewById(R.id.tv_note_title);
-                TextView noteContent = convertView.findViewById(R.id.tv_note_content);
-                ImageView img1 = convertView.findViewById(R.id.img1);
-                ImageView img2 = convertView.findViewById(R.id.img2);
-                ImageView img3 = convertView.findViewById(R.id.img3);
-                ImageView shareNote = convertView.findViewById(R.id.iv_share_note);
-                TextView loveCount = convertView.findViewById(R.id.tv_love_count);
-                ImageView love = convertView.findViewById(R.id.iv_love);
-//                secondViewHolder.img1.setImageDrawable(null);
-//                secondViewHolder.img2.setImageDrawable(null);
-//                secondViewHolder.img3.setImageDrawable(null);
+                SecondViewHolder secondViewHolder = null;
+                if (convertView == null) {
+                    convertView = LayoutInflater.from(context).inflate(R.layout.item_my_like_second, null);
+                    secondViewHolder = new SecondViewHolder();
+                    secondViewHolder.noteTitle = convertView.findViewById(R.id.tv_note_title);
+                    secondViewHolder.noteContent = convertView.findViewById(R.id.tv_note_content);
+                    secondViewHolder.img1 = convertView.findViewById(R.id.img1);
+                    secondViewHolder.img2 = convertView.findViewById(R.id.img2);
+                    secondViewHolder.img3 = convertView.findViewById(R.id.img3);
+                    secondViewHolder.shareNote = convertView.findViewById(R.id.iv_share_note);
+                    convertView.setTag(secondViewHolder);
+                } else {
+                    secondViewHolder = (SecondViewHolder) convertView.getTag();
+                    secondViewHolder.img1.setImageDrawable(null);
+                    secondViewHolder.img2.setImageDrawable(null);
+                    secondViewHolder.img3.setImageDrawable(null);
+                }
 
                 Note note = userLikeList.get(position).getNoteLike();
-                noteTitle.setText(note.getTitle());
-                noteContent.setText(note.getContent());
-
-                String numStr2 = NumStrUtil.getNumStr(note.getLike());
-                loveCount.setText(numStr2);
+                secondViewHolder.noteTitle.setText(note.getTitle());
+                secondViewHolder.noteContent.setText(note.getContent());
                 for(int i = 0; i < note.getImgList().size() && i < 3;i++){
                     switch (i){
                         case 0:
-                            Glide.with(context).load("http://"+ ip +":8080/MoJi/"+note.getImgList().get(0)).into(img1);
+                            Glide.with(context).load("http://"+ ip +":8080/MoJi/"+note.getImgList().get(0)).into(secondViewHolder.img1);
                             break;
                         case 1:
-                            Glide.with(context).load("http://"+ ip +":8080/MoJi/"+note.getImgList().get(1)).into(img2);
+                            Glide.with(context).load("http://"+ ip +":8080/MoJi/"+note.getImgList().get(1)).into(secondViewHolder.img2);
                             break;
                         case 2:
-                            Glide.with(context).load("http://"+ ip +":8080/MoJi/"+note.getImgList().get(2)).into(img3);
+                            Glide.with(context).load("http://"+ ip +":8080/MoJi/"+note.getImgList().get(2)).into(secondViewHolder.img3);
                             break;
                     }
                 }
-                love.setImageResource(R.drawable.nolove);
-
-                shareNote.setOnClickListener(new View.OnClickListener() {
+                secondViewHolder.shareNote.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         shareNote(position);
                     }
                 });
+
+                TextView loveCount = convertView.findViewById(R.id.tv_love_count);
+                ImageView love = convertView.findViewById(R.id.iv_love);
+                love.setImageResource(R.drawable.nolove);
+                String numStr2 = NumStrUtil.getNumStr(note.getLike());
+                loveCount.setText(numStr2);
+
                 love.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -402,5 +421,26 @@ public class MyLikeAdapter extends BaseAdapter {
     public void refresh(List<UserLike> userLikes){
         this.userLikeList = userLikes;
         notifyDataSetChanged();
+    }
+
+    final static class FirstViewHolder{
+        TextView videoTitle;
+        JCVideoPlayerStandard videoPlayer;
+        ImageView share;
+        TextView goodNum;
+        ImageView good;
+        ImageView comment;
+    }
+
+    final static class SecondViewHolder{
+        TextView noteTitle;
+        TextView noteContent;
+        ImageView img1;
+        ImageView img2;
+        ImageView img3;
+        ImageView shareNote;
+        TextView loveCount;
+        ImageView love;
+        ImageView comment;
     }
 }

@@ -1,7 +1,9 @@
 package cn.edu.hebtu.software.test.Adapter;
 
+import android.app.AlarmManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Handler;
 import android.os.Message;
 import android.view.LayoutInflater;
@@ -28,6 +30,7 @@ import cn.edu.hebtu.software.test.Data.Video;
 import cn.edu.hebtu.software.test.R;
 import cn.edu.hebtu.software.test.Setting.MyApplication;
 import cn.edu.hebtu.software.test.Util.DetermineConnServer;
+import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
 
 public class MyVideoAdaper extends BaseAdapter {
@@ -113,6 +116,8 @@ public class MyVideoAdaper extends BaseAdapter {
             numStr = count/10000 + "万";
         }
         viewHolder.goodNum.setText(numStr+"");
+        JCVideoPlayer.FULLSCREEN_ORIENTATION = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;//横向
+        JCVideoPlayer.NORMAL_ORIENTATION = ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT;//纵向
         viewHolder.video.setUp(path, JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "MoJi");
         Glide.with(context)
                 .setDefaultRequestOptions(

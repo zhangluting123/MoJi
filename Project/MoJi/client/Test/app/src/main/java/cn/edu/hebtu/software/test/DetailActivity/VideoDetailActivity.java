@@ -11,6 +11,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -79,6 +81,7 @@ import cn.edu.hebtu.software.test.Util.ActivityManager;
 import cn.edu.hebtu.software.test.Util.DetermineConnServer;
 import cn.edu.hebtu.software.test.Util.ShareImage;
 import cn.edu.hebtu.software.test.Util.SoftKeyBoardListener;
+import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
 
 /**
@@ -113,6 +116,9 @@ public class VideoDetailActivity extends AppCompatActivity{
 
     private CommentAdapter commentAdapter;
     private String commentId;//当前选中评论ID
+
+    private JCVideoPlayer.JCAutoFullscreenListener mSensorEventListener;
+    private SensorManager mSensorManager;
 
     private Handler handler = new Handler(){
         @Override
@@ -197,7 +203,9 @@ public class VideoDetailActivity extends AppCompatActivity{
         noteTime.setText(video.getUploadTime());
         //Glide.with(this).load("http://"+ip+":8080/MoJi/"+note.getUser().getUserHeadImg()).apply(options).into(headImg);
         String path = "http://"+ ip +":8080/MoJi/"+video.getPath();
-        jcVideoPlayerStandard.setUp(video.getPath(), JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "MoJi");
+        mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
+        mSensorEventListener = new JCVideoPlayer.JCAutoFullscreenListener();
+        jcVideoPlayerStandard.setUp(path, JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "MoJi");
         //noteAddress.setText(note.getLocation());
         noteContent.setText(video.getContent());
         userName.setText(video.getUser().getUserName());
@@ -617,5 +625,27 @@ public class VideoDetailActivity extends AppCompatActivity{
             finish();
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (JCVideoPlayerStandard.backPress()){
+            return;
+        }
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mSensorManager.unregisterListener(mSensorEventListener);
+        JCVideoPlayer.releaseAllVideos();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Sensor mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mSensorManager.registerListener(mSensorEventListener, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
     }
 }

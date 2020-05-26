@@ -51,10 +51,6 @@ import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
  */
 public class MyFootPrintVideoFragment extends Fragment {
     private List<Video> videoList;
-
-    private JCVideoPlayer.JCAutoFullscreenListener mSensorEventListener;
-    private SensorManager mSensorManager;
-
     private MyApplication data;
     private String ip;
     private User nowUser;
@@ -94,8 +90,6 @@ public class MyFootPrintVideoFragment extends Fragment {
         ListView listView = view.findViewById(R.id.video_list);
         MyVideoAdaper adaper = new MyVideoAdaper(videoList, R.layout.item_foot_print_video, getActivity(),flag);
         listView.setAdapter(adaper);
-        mSensorManager = (SensorManager) getActivity().getSystemService(getActivity().SENSOR_SERVICE);
-        mSensorEventListener = new JCVideoPlayer.JCAutoFullscreenListener();
 
         SmartRefreshLayout refreshLayout = view.findViewById(R.id.refreshlayout);
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
@@ -161,14 +155,11 @@ public class MyFootPrintVideoFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Sensor mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        mSensorManager.registerListener(mSensorEventListener, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        mSensorManager.unregisterListener(mSensorEventListener);
         JCVideoPlayer.releaseAllVideos();
     }
 }

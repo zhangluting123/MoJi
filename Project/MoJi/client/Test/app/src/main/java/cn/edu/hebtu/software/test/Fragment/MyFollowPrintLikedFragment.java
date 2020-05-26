@@ -57,7 +57,6 @@ public class MyFollowPrintLikedFragment extends Fragment {
     private List<UserLike> userLikes = new ArrayList<>();
     private MyLikeAdapter adaper;
 
-
     private MyApplication data;
     private String ip;
 
@@ -171,5 +170,6 @@ public class MyFollowPrintLikedFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
+        JCVideoPlayer.releaseAllVideos();
     }
 }
