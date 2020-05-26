@@ -1,6 +1,7 @@
 package cn.edu.hebtu.software.test.Fragment;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import com.google.gson.Gson;
@@ -29,6 +31,7 @@ import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -51,7 +54,7 @@ import cn.edu.hebtu.software.test.Util.DetermineConnServer;
  */
 public class MyFollowPrintFolledFragment extends Fragment {
     private ListView listView;
-    private List<User> followList;
+    private List<User> followList = new ArrayList<>();
     private MyApplication data;
     private String ip;
 
@@ -70,6 +73,7 @@ public class MyFollowPrintFolledFragment extends Fragment {
             }
         }
     };
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -88,23 +92,21 @@ public class MyFollowPrintFolledFragment extends Fragment {
             flag = false;
         }
 
-
         init();
 
 
-        if(followList!=null && followList.size()>0){
-            listView = view.findViewById(R.id.lv_footList);
-            myFollowAdapter = new MyFollowAdapter(R.layout.item_follow_print_followed,getActivity().getApplicationContext(),followList,flag);
-            listView.setAdapter(myFollowAdapter);
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    Intent intent = new Intent(getContext(), OtherMsgActivity.class);
-                    intent.putExtra("user",followList.get(i));
-                    getContext().startActivity(intent);
-                }
-            });
-        }
+        listView = view.findViewById(R.id.lv_footList);
+        myFollowAdapter = new MyFollowAdapter(R.layout.item_follow_print_followed,getActivity().getApplicationContext(),followList,flag);
+        listView.setAdapter(myFollowAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(getContext(), OtherMsgActivity.class);
+                intent.putExtra("user",followList.get(i));
+                getContext().startActivity(intent);
+            }
+        });
+
 
         SmartRefreshLayout refreshLayout = view.findViewById(R.id.refreshlayout);
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
@@ -113,7 +115,9 @@ public class MyFollowPrintFolledFragment extends Fragment {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        refresh();
+                        followList.clear();
+                        init();
+                        myFollowAdapter.refresh(followList);
                         refreshLayout.finishRefresh();
                     }
                 },1000);
@@ -131,17 +135,6 @@ public class MyFollowPrintFolledFragment extends Fragment {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-    }
-
-    private void refresh(){
-        Thread thread = new GetNote();
-        thread.start();
-        try {
-            thread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        myFollowAdapter.refresh(followList);
     }
 
     class GetNote extends Thread{

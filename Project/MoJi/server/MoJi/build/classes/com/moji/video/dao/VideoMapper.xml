@@ -34,9 +34,6 @@
 	<select id="findVideoByUserId" resultMap="videoMap">
 		select * from video_detail where user_id=#{userId}
 	</select>
-	<select id="findVideoById" resultType="com.moji.entity.Video">
-		select * from video_detail where video_id=#{Id}
-	</select>
 	<delete id="deleteVideoById">
 		delete from video_detail where video_id=#{videoId}
 	</delete>
