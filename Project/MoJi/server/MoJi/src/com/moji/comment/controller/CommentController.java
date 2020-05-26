@@ -31,6 +31,7 @@ import com.moji.entity.Mail;
 import com.moji.entity.MailMyComment;
 import com.moji.entity.Note;
 import com.moji.entity.User;
+import com.moji.entity.Video;
 import com.moji.jpushcache.service.JpushCacheService;
 import com.moji.mail.dao.MailMapper;
 import com.moji.mail.service.MailService;
@@ -39,6 +40,7 @@ import com.moji.note.service.NoteService;
 import com.moji.replycomment.service.ReplyCommentService;
 import com.moji.user.service.UserService;
 import com.moji.util.JPushUtil;
+import com.moji.video.service.VideoService;
 
 import sun.tools.jar.resources.jar;
 
@@ -59,6 +61,8 @@ public class CommentController {
 	private ReplyCommentService replyCommentService;
 	@Autowired
 	private NoteService noteService;
+	@Autowired
+	private VideoService videoService;
 	@Autowired
 	private UserService userService;
 	@Autowired
@@ -89,6 +93,7 @@ public class CommentController {
 			@RequestParam(value="noteId",required=true)String noteId,
 			@RequestParam(value="userId",required=true)String userId,
 			@RequestParam(value="commentContent",required=true)String commentContent) throws SQLException {
+		System.out.println("*****************进入addComment方法");
 		Date date = new Date();
 		//将日期格式化
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("ddmmss");
@@ -101,30 +106,45 @@ public class CommentController {
 		String re = "0";
 		String msgId = "";
 		Note note = null;
+		Video video = null;
 		User user = null;
 		if(i > 0) {
 			re = "1";
 			System.out.println("评论增加成功");
-			note = this.noteService.queryUserId(noteId);//收到评论的人
 			user = this.userService.queryUser(userId);//发布评论的人
-			
-			if(!note.getUserId().equals(user.getUserId())) {
-				int b = this.mailMyCommentService.addMailMyCommentService(note.getUserId(), commentId, null, 'C');
-				if(b > 0) {
-					System.out.println("通知消息写入成功！");
+			video = this.videoService.findVideoById(noteId);
+			if(video != null) {
+				if(!video.getUser().getUserId().equals(user.getUserId())) {
+					int b = this.mailMyCommentService.addMailMyCommentService(video.getUser().getUserId(), commentId, null, 'C');
+					if(b > 0) {
+						System.out.println("通知消息写入成功！");
+					}
+		
+					msgId = JPushUtil.sendToBieMing(video.getUser().getUserId(),"叮咚~","新消息",user.getUserName()+"评论你发布的动态啦,快去看看吧！",null);
+					if(msgId.equals("")) {
+						addJpushCacheForVideo(video, user);
+					}else {
+						testForVideo(msgId, video, user);
+					}	
 				}
-	
-				msgId = JPushUtil.sendToBieMing(note.getUserId(),"叮咚~","新消息",user.getUserName()+"评论你发布的动态啦,快去看看吧！",null);
-				if(msgId.equals("")) {
-					addJpushCache(note, user);
-				}else {
-					test(msgId, note, user);
+			}else {
+				note = this.noteService.queryUserId(noteId);//收到评论的人
+				if(!note.getUserId().equals(user.getUserId())) {
+					int b = this.mailMyCommentService.addMailMyCommentService(note.getUserId(), commentId, null, 'C');
+					if(b > 0) {
+						System.out.println("通知消息写入成功！");
+					}
+		
+					msgId = JPushUtil.sendToBieMing(note.getUserId(),"叮咚~","新消息",user.getUserName()+"评论你发布的动态啦,快去看看吧！",null);
+					if(msgId.equals("")) {
+						addJpushCache(note, user);
+					}else {
+						test(msgId, note, user);
+					}
 				}
-					
-			}
+			}		
 		}
 		return re+","+commentId;
-	
 	}
 	/**
 	 * @Title: test
@@ -151,6 +171,30 @@ public class CommentController {
 	}
 	
 	/**
+	 * @Title: test
+	 * @Description: 测试通知是否发送成功
+	 * @author: 张璐婷 
+	 * @date: 2020年4月26日 下午6:38:11
+	 */
+	private void testForVideo(String msgId,Video video,User user) {
+		new Thread() {
+			public void run() {
+				try {
+					Thread.sleep(1000*20);
+					int count = JPushUtil.testGetReport(msgId);
+					if(count > 0) {
+						System.out.println("通知发送成功");
+					}else {
+						addJpushCacheForVideo(video, user);
+					}
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}.start();
+	}
+	
+	/**
 	 * @Title: addJpushCache
 	 * @Description: 添加缓存，登录重新发送
 	 * @author: 张璐婷 
@@ -159,6 +203,20 @@ public class CommentController {
 	private void addJpushCache(Note note,User user) {
 		JPushCache jPushCache = new JPushCache();
 		jPushCache.setReceiveId(note.getUserId());
+		jPushCache.setSendUserName(user.getUserName());
+		jPushCache.setJpushFlag('D');
+		this.jpushCacheService.addJpushCacheMsg(jPushCache);
+	}
+	
+	/**
+	 * @Title: addJpushCache
+	 * @Description: 添加缓存，登录重新发送
+	 * @author: ming 
+	 * @date: 2020年4月26日 
+	 */
+	private void addJpushCacheForVideo(Video video,User user) {
+		JPushCache jPushCache = new JPushCache();
+		jPushCache.setReceiveId(video.getUser().getUserId());
 		jPushCache.setSendUserName(user.getUserName());
 		jPushCache.setJpushFlag('D');
 		this.jpushCacheService.addJpushCacheMsg(jPushCache);

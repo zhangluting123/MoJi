@@ -133,6 +133,7 @@ public class CommentAdapter extends BaseAdapter {
                 case R.id.ll_reply_comment:
                     intent = new Intent(context, ReplyCommentActivity.class);
                     intent.putExtra("comment",commentList.get(position));
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent);
                     break;
             }

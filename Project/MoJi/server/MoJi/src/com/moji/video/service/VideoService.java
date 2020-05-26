@@ -68,6 +68,16 @@ public class VideoService {
 	}
 	
 	/**
+	 * @Title: findVideoById
+	 * @Description: 根据id查询视频
+	 * @author: ming
+	 * @date: 2020年5月16日 
+	 */
+	public Video findVideoById(String Id) {
+		return this.videoMapper.findVideoById(Id);
+	}
+	
+	/**
 	 * @Title: deleteVideoById
 	 * @Description: 删除video
 	 * @author: 张璐婷 

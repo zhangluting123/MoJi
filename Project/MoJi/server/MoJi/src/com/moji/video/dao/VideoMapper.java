@@ -54,6 +54,14 @@ public interface VideoMapper {
 	public List<Video> findVideoByUserId(@Param("userId")String userId);
 	
 	/**
+	 * @Title: findVideo
+	 * @Description: id查询视频
+	 * @author: ming
+	 * @date: 2020年5月15日 下午5:35:33
+	 */
+	public Video findVideoById(@Param("videoId")String Id);
+	
+	/**
 	 * @Title: deleteVideoById
 	 * @Description: 删除指定视频信息
 	 * @author: 张璐婷 
