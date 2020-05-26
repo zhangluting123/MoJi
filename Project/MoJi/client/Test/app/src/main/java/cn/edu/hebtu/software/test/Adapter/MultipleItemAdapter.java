@@ -47,7 +47,7 @@ import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
 
 /**
- * @Author: 邸凯扬
+ * @Author: ming
  * @Date: 2020/05/12
  * @Describe:
  */

@@ -505,7 +505,7 @@ public class VideoDetailActivity extends AppCompatActivity{
             public void run() {
                 if(DetermineConnServer.isConnByHttp(getApplicationContext())){
                     try {
-                        URL url = new URL("http://"+ip+":8080/MoJi/comment/add?noteId="+video.getVideoId()+"&userId="+data.getUser().getUserId()+"&commentContent="+content);
+                        URL url = new URL("http://"+ip+":8080/MoJi/comment/add?noteId="+video.getVideoId()+"&userId="+data.getUser().getUserId()+"&commentContent="+content+"&ifVideo=1");
                         URLConnection conn = url.openConnection();
                         InputStream in = conn.getInputStream();
                         BufferedReader reader = new BufferedReader(new InputStreamReader(in));
