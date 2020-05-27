@@ -83,7 +83,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="河北省·石家庄市"
-                android:textSize="15sp" />
+                android:textSize="14sp" />
         </RelativeLayout>
         <LinearLayout
             android:id="@+id/ll_content"

@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.LayoutInflater;
@@ -27,6 +28,7 @@ import java.net.URLConnection;
 import java.util.List;
 
 import cn.edu.hebtu.software.test.Data.Video;
+import cn.edu.hebtu.software.test.DetailActivity.VideoDetailActivity;
 import cn.edu.hebtu.software.test.R;
 import cn.edu.hebtu.software.test.Setting.MyApplication;
 import cn.edu.hebtu.software.test.Util.DetermineConnServer;
@@ -132,6 +134,7 @@ public class MyVideoAdaper extends BaseAdapter {
 
         CustomeOnClickListener listener = new CustomeOnClickListener(position,path);
         viewHolder.share.setOnClickListener(listener);
+        viewHolder.comment.setOnClickListener(listener);
         if(flag) {
             viewHolder.delete.setOnClickListener(listener);
         }else{
@@ -158,6 +161,13 @@ public class MyVideoAdaper extends BaseAdapter {
                     break;
                 case R.id.tv_delete:
                     deleteVideo(position);
+                    break;
+                case R.id.comment:
+                    Intent intent = new Intent(context, VideoDetailActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("video", list.get(position));
+                    intent.putExtras(bundle);
+                    context.startActivity(intent);
                     break;
             }
         }

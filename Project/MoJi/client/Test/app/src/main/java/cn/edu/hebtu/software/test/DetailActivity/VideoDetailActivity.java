@@ -97,7 +97,6 @@ public class VideoDetailActivity extends AppCompatActivity{
     private TextView userName;
     private TextView noteTime;
     private ImageView headImg;
-    private TextView noteAddress;
     private TextView noteContent;
     private TextView commentCount;
     private EditText edtInsertComment;
@@ -176,7 +175,7 @@ public class VideoDetailActivity extends AppCompatActivity{
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(Color.parseColor("#22000000"));
+            window.setStatusBarColor(Color.BLACK);
             window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                     | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
 
@@ -201,14 +200,23 @@ public class VideoDetailActivity extends AppCompatActivity{
         Bundle bundle = intent.getExtras();
         video = bundle.getParcelable("video");
         noteTime.setText(video.getUploadTime());
-        //Glide.with(this).load("http://"+ip+":8080/MoJi/"+note.getUser().getUserHeadImg()).apply(options).into(headImg);
+        Glide.with(this).load("http://"+ip+":8080/MoJi/"+video.getUser().getUserHeadImg()).apply(options).into(headImg);
         String path = "http://"+ ip +":8080/MoJi/"+video.getPath();
         mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
         mSensorEventListener = new JCVideoPlayer.JCAutoFullscreenListener();
-        jcVideoPlayerStandard.setUp(path, JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "MoJi");
-        //noteAddress.setText(note.getLocation());
         noteContent.setText(video.getContent());
         userName.setText(video.getUser().getUserName());
+        jcVideoPlayerStandard.setUp(path, JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "");
+        Glide.with(this)
+                .setDefaultRequestOptions(
+                        new RequestOptions()
+                                .frame(4000000)
+                                .centerCrop()
+                                .error(R.drawable.fail)
+                                .placeholder(R.drawable.fail)
+                )
+                .load(path)
+                .into(jcVideoPlayerStandard.thumbImageView);
 
         //获得评论
         getComments();
@@ -257,7 +265,6 @@ public class VideoDetailActivity extends AppCompatActivity{
         userName = findViewById(R.id.tv_userName);
         noteTime = findViewById(R.id.tv_noteTime);
         headImg = findViewById(R.id.iv_headImg);
-        //noteAddress = findViewById(R.id.tv_noteAddress);
         noteContent = findViewById(R.id.iv_noteContent);
         commentCount = findViewById(R.id.tv_commentCount);
         edtInsertComment = findViewById(R.id.edt_insertComment);
