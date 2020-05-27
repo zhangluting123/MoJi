@@ -206,7 +206,9 @@ public class VideoDetailActivity extends AppCompatActivity{
         mSensorEventListener = new JCVideoPlayer.JCAutoFullscreenListener();
         noteContent.setText(video.getContent());
         userName.setText(video.getUser().getUserName());
-        jcVideoPlayerStandard.setUp(path, JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "");
+        //最终版本应由video.getPath()---》path
+        jcVideoPlayerStandard.setUp(video.getPath(), JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "");
+        //同上
         Glide.with(this)
                 .setDefaultRequestOptions(
                         new RequestOptions()
@@ -215,7 +217,7 @@ public class VideoDetailActivity extends AppCompatActivity{
                                 .error(R.drawable.fail)
                                 .placeholder(R.drawable.fail)
                 )
-                .load(path)
+                .load(video.getPath())
                 .into(jcVideoPlayerStandard.thumbImageView);
 
         //获得评论
