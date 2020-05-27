@@ -178,7 +178,7 @@ public class DropsDetailActivity extends AppCompatActivity implements ViewPager.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(Color.parseColor("#22000000"));
+            window.setStatusBarColor(Color.BLACK);
             window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                     | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
 

@@ -6,6 +6,7 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.FitCenter;
 import com.bumptech.glide.request.RequestOptions;
 import com.zhy.base.fileprovider.FileProvider7;
 
@@ -33,9 +35,11 @@ import java.net.URLConnection;
 import java.util.List;
 
 import androidx.core.widget.ImageViewCompat;
+import cn.edu.hebtu.software.test.Data.Comment;
 import cn.edu.hebtu.software.test.Data.Note;
 import cn.edu.hebtu.software.test.Data.UserLike;
 import cn.edu.hebtu.software.test.Data.Video;
+import cn.edu.hebtu.software.test.DetailActivity.VideoDetailActivity;
 import cn.edu.hebtu.software.test.R;
 import cn.edu.hebtu.software.test.Setting.MyApplication;
 import cn.edu.hebtu.software.test.Util.DetermineConnServer;
@@ -184,7 +188,16 @@ public class MyLikeAdapter extends BaseAdapter {
                         }
                     }
                 });
-
+                firstViewHolder.comment.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(context, VideoDetailActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable("video", userLikeList.get(position).getVideoLike());
+                        intent.putExtras(bundle);
+                        context.startActivity(intent);
+                    }
+                });
                 break;
             case TYPE_SECOND:
                 SecondViewHolder secondViewHolder = null;

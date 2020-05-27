@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +37,8 @@ import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.map.TextureMapView;
 import com.baidu.mapapi.map.UiSettings;
 import com.baidu.mapapi.model.LatLng;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -71,6 +74,8 @@ public class FootprintFragment extends Fragment {
     private View view;
     private TextureMapView mapView = null;
     private TextView placeNum;
+    private ImageView placeImg;
+    private String addrNum;
     //百度地图控制器
     private BaiduMap baiduMap;
     //UI控制器
@@ -114,8 +119,7 @@ public class FootprintFragment extends Fragment {
                     Toast.makeText(getActivity().getApplicationContext(), (CharSequence)msg.obj, Toast.LENGTH_SHORT).show();
                     break;
                 case 3:
-                    String num = (String)msg.obj;
-                    placeNum.setText("您一共去过"+num+"个地方");
+                    addrNum = (String)msg.obj;
             }
         }
     };
@@ -149,6 +153,7 @@ public class FootprintFragment extends Fragment {
         baiduMap = mapView.getMap();
         uiSettings = baiduMap.getUiSettings();
         placeNum = view.findViewById(R.id.text_num_place);
+        placeImg = view.findViewById(R.id.iv_img_place);
     }
 
     /**
@@ -178,6 +183,22 @@ public class FootprintFragment extends Fragment {
         registListener();
         //统计去过的地方数并显示
         countPlace();
+//        Glide.with(getActivity().getApplicationContext())
+//                .asGif()
+//                .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+//                .load(R.mipmap.address1)
+//                .into(placeImg);
+        placeImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(placeNum.getVisibility() == View.GONE){
+                    placeNum.setVisibility(View.VISIBLE);
+                    placeNum.setText("您一共去过"+addrNum+"个地方");
+                }else{
+                    placeNum.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
     /**

@@ -1,32 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
+<ScrollView android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     xmlns:android="http://schemas.android.com/apk/res/android" >
-    <TextView
-        android:layout_margin="@dimen/dp_10"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="图文评论："></TextView>
-    <ListView
-        android:id="@+id/lv_mycomment"
-        android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:background="@drawable/card"
-        android:divider="@drawable/list_divider"
-        android:dividerHeight="1dp"
-        android:scrollbars="none"/>
-    <TextView
-        android:layout_margin="@dimen/dp_10"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="视频评论："></TextView>
-    <ListView
-        android:id="@+id/lv_myvideocomment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/card"
-        android:divider="@drawable/list_divider"
-        android:dividerHeight="1dp"
-        android:scrollbars="none"/>
-</LinearLayout>
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        xmlns:android="http://schemas.android.com/apk/res/android" >
+        <TextView
+            android:layout_margin="@dimen/dp_10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="图文评论："/>
+        <cn.edu.hebtu.software.test.View.InnerScrollListView
+            android:id="@+id/lv_mycomment"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:background="@drawable/card"
+            android:divider="@drawable/list_divider"
+            android:dividerHeight="1dp"
+            android:scrollbars="none"/>
+        <TextView
+            android:layout_margin="@dimen/dp_10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="视频评论："/>
+        <cn.edu.hebtu.software.test.View.InnerScrollListView
+            android:id="@+id/lv_myvideocomment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/card"
+            android:divider="@drawable/list_divider"
+            android:dividerHeight="1dp"
+            android:scrollbars="none"/>
+    </LinearLayout>
+</ScrollView>

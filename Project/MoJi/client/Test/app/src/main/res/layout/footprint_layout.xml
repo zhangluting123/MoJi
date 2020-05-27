@@ -3,21 +3,39 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-    <TextView
-        android:id="@+id/text_num_place"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="您一共去过0个地方"
-        android:textSize="20dp"
-        android:gravity="center_horizontal"
-        android:textColor="#DB7093"
-        android:background="#20B2AA"
-        />
-    <com.baidu.mapapi.map.TextureMapView
-        android:id="@+id/bMapView"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:focusable="true"
-        android:clickable="true"/>
+        android:layout_height="match_parent">
+        <com.baidu.mapapi.map.TextureMapView
+            android:id="@+id/bMapView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:focusable="true"
+            android:clickable="true">
+        </com.baidu.mapapi.map.TextureMapView>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp">
+            <ImageView
+                android:id="@+id/iv_img_place"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentRight="true"
+                android:src="@mipmap/address"/>
+            <TextView
+                android:visibility="gone"
+                android:id="@+id/text_num_place"
+                android:layout_marginTop="6dp"
+                android:layout_width="220dp"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@id/iv_img_place"
+                android:text="您一共去过0个地方"
+                android:textSize="20dp"
+                android:gravity="center_horizontal"
+                android:textColor="@color/MyTheam_color"
+                android:background="@android:color/white" />
+        </RelativeLayout>
+    </FrameLayout>
 
 </LinearLayout>

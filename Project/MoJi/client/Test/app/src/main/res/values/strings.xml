@@ -5,8 +5,8 @@
     <!--lcb本地测试ip-->
     <!--        <string name="internet_ip">192.168.16.104</string>-->
     <!--dzc本地测试ip-->
-    <string name="internet_ip" translatable="false">192.168.0.8</string>
+<!--    <string name="internet_ip" translatable="false">192.168.0.8</string>-->
 <!--    <string name="internet_ip" translatable="false">192.168.43.126</string>-->
     <!--zlt本地测试ip-->
-<!--    <string name="internet_ip" translatable="false">192.168.2.167</string>-->
+    <string name="internet_ip" translatable="false">192.168.2.167</string>
 </resources>

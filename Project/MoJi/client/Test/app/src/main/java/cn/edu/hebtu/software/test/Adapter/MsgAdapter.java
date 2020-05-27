@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
@@ -150,7 +151,7 @@ public class MsgAdapter extends BaseAdapter {
         private TextView tvTime;
         private TextView tvKilo;
         private TextView tvDate;
-        private LinearLayout userMsg;
+        private RelativeLayout userMsg;
     }
 
     public  String getDistance(double longitude1, double latitude1, double longitude2, double latitude2) {

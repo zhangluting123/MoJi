@@ -76,16 +76,19 @@ public class MyMailCommentFragment extends Fragment {
                 case 1003:
                     myComments.get(pos).setReadFlag(1);
                     adapter.refresh(myComments);
+                    myComments2.get(pos).setReadFlag(1);
+                    adapter2.refresh(myComments2);
                     break;
                 case 1004:
                     Toast.makeText(getActivity().getApplicationContext(), "删除成功", Toast.LENGTH_SHORT).show();
                     myComments.remove(pos);
                     adapter.refresh(myComments);
+                    myComments2.remove(pos);
+                    adapter2.refresh(myComments2);
                     break;
                 case 1005:
                     myComments2 = (List<MailMyComment>)msg.obj;
                     init();
-                    break;
             }
         }
     };

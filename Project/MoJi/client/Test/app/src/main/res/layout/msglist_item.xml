@@ -4,27 +4,28 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/ll_headmsg"
-        android:orientation="vertical"
-        android:gravity="center"
         android:layout_margin="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/iv_headphoto"
+            android:layout_marginLeft="5dp"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginTop="20dp"
             android:src="@drawable/headportrait"/>
         <TextView
             android:id="@+id/tv_personalmsg"
-            android:layout_alignBottom="@+id/iv_headphoto"
+            android:gravity="center_horizontal"
+            android:layout_below="@id/iv_headphoto"
             android:layout_width="60dp"
+            android:text="IM"
             android:layout_height="wrap_content"/>
 
-    </LinearLayout>
+    </RelativeLayout>
 
 
     <ImageView
