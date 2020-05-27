@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,6 +25,7 @@ import com.moji.mailmycomment.service.MailMyCommentService;
 import com.moji.replycomment.service.ReplyCommentService;
 import com.moji.user.service.UserService;
 import com.moji.util.JPushUtil;
+import com.moji.video.service.VideoService;
 
 import sun.tools.jar.resources.jar;
 
@@ -43,6 +45,8 @@ public class ReplyCommentController {
 	private CommentService commentService; 
 	@Resource
 	private UserService userService;
+	@Autowired
+	private VideoService videoService;
 	@Resource
 	private MailMyCommentService mailMyCommentService;
 	@Resource
@@ -63,7 +67,12 @@ public class ReplyCommentController {
 		User user = this.userService.queryUser(replyUserId);//发送消息的人
 		Comment comment = this.commentService.findComment(commentId);//comment.getUser()接收消息的人
 		if(!user.getUserId().equals(comment.getUser().getUserId())) {
-			this.mailMyCommentService.addMailMyCommentService(comment.getUserId(),null,replyId,'R');
+			if(this.videoService.findVideoById(comment.getNoteId())!=null) {
+				this.mailMyCommentService.addMailMyCommentServiceVideo(comment.getUserId(),null,replyId,'R');
+			}else {
+				this.mailMyCommentService.addMailMyCommentService(comment.getUserId(),null,replyId,'R');
+			}
+			
 			msgId = JPushUtil.sendToBieMing(comment.getUserId(),"叮咚~","新消息",user.getUserName()+"评论你啦,快去看看吧！",null);
 			if(msgId.equals("")) {
 				addJpushCache(comment,null,user);
@@ -76,16 +85,15 @@ public class ReplyCommentController {
 			return "OK";
 		}
 		return"ERROR";
-	
 	}
-	
 
 	
 	@RequestMapping(value="/addReplyToReply",method=RequestMethod.GET,produces="application/json;charset=utf-8")
 	public String addReplyToReply(@RequestParam(value="replyContent",required=true)String replyContent,
 			@RequestParam(value="replyUserId",required=true)String replyUserId,
 			@RequestParam(value="commentId",required=true)String commentId,
-			@RequestParam(value="parentId",required=true)String parentId) {
+			@RequestParam(value="parentId",required=true)String parentId,
+			@RequestParam(value="ifVideo",required=true)String ifVideo) {
 		
 		Date date = new Date();
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("ddmmss");
@@ -98,7 +106,14 @@ public class ReplyCommentController {
 		ReplyComment replyComment = this.replyCommentService.findReplyComment(parentId);//replyComment.getReplyUser()接受消息的人
 		
 		if(!user.getUserId().equals(replyComment.getReplyUser().getUserId())) {
-			this.mailMyCommentService.addMailMyCommentService(replyComment.getReplyUser().getUserId(),null,replyId,'R');
+			
+			if(ifVideo.equals("1")) {
+				this.mailMyCommentService.addMailMyCommentServiceVideo(replyComment.getReplyUser().getUserId(),null,replyId,'R');
+			}else {
+				this.mailMyCommentService.addMailMyCommentService(replyComment.getReplyUser().getUserId(),null,replyId,'R');
+			}
+			
+			//this.mailMyCommentService.addMailMyCommentService(replyComment.getReplyUser().getUserId(),null,replyId,'R');
 			msgId = JPushUtil.sendToBieMing(replyComment.getReplyUser().getUserId(),"叮咚~","新消息",user.getUserName()+"评论你啦,快去看看吧！",null);
 			if(msgId.equals("")) {//发送失败暂存数据，登录时重新发送
 				addJpushCache(null, replyComment, user);
