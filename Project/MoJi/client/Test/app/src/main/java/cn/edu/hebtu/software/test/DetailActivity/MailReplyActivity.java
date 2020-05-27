@@ -45,6 +45,7 @@ public class MailReplyActivity extends AppCompatActivity {
     private TextView userName;
     private Button btnSubmit;
     private EditText insertComment ;
+    private int noteType;
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -84,6 +85,7 @@ public class MailReplyActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         MailMyComment mailMyComment = intent.getParcelableExtra("mailMyComment");
+        noteType = intent.getIntExtra("tag",1)-1;
         userName = findViewById(R.id.tv_reply_userName);
         btnSubmit = findViewById(R.id.btnSubmit);
         insertComment = findViewById(R.id.edt_insertComment);
@@ -154,7 +156,7 @@ public class MailReplyActivity extends AppCompatActivity {
             public void run() {
                 if(DetermineConnServer.isConnByHttp(getApplicationContext())){
                     try {
-                        URL url = new URL("http://"+ip+":8080/MoJi/replyComment/addReplyToReply?replyContent="+insertComment.getText().toString()+"&commentId="+replyComment.getComment().getId()+"&replyUserId="+data.getUser().getUserId()+"&parentId="+replyComment.getReplyId());
+                        URL url = new URL("http://"+ip+":8080/MoJi/replyComment/addReplyToReply?replyContent="+insertComment.getText().toString()+"&commentId="+replyComment.getComment().getId()+"&replyUserId="+data.getUser().getUserId()+"&parentId="+replyComment.getReplyId()+"&ifVideo="+noteType);
                         URLConnection conn = url.openConnection();
                         InputStream in = conn.getInputStream();
                         BufferedReader reader = new BufferedReader(new InputStreamReader(in,"utf-8"));

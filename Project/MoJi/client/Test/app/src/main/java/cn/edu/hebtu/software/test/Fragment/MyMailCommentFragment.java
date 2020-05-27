@@ -202,6 +202,7 @@ public class MyMailCommentFragment extends Fragment {
                 case R.id.reply:
                     Intent intent = new Intent(getActivity().getApplicationContext(), MailReplyActivity.class);
                     intent.putExtra("mailMyComment", mailMyComment);
+                    intent.putExtra("tag", tag);
                     startActivity(intent);
                     break;
                 case R.id.delete:
