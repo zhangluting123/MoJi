@@ -186,7 +186,7 @@ public class MailCommentDetailActivity extends AppCompatActivity {
 
     private void allComment(){
         ListView listView = findViewById(R.id.lv_replyList);
-        CommentAdapter commentAdapter = new CommentAdapter(commentList, R.layout.item_comment, getApplicationContext());
+        CommentAdapter commentAdapter = new CommentAdapter(0,commentList, R.layout.item_comment, getApplicationContext());
         listView.setAdapter(commentAdapter);
     }
 

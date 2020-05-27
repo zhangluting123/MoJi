@@ -89,6 +89,7 @@ import cn.edu.hebtu.software.test.Util.SoftKeyBoardListener;
  */
 
 public class DropsDetailActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener{
+    private int noteType=0;
     private RelativeLayout rlhead;
     private TextView userName;
     private TextView noteTime;
@@ -301,7 +302,7 @@ public class DropsDetailActivity extends AppCompatActivity implements ViewPager.
      */
     private void showCommentList(){
         ListView listView = findViewById(R.id.comment_list);
-        commentAdapter = new CommentAdapter(commentList, R.layout.item_comment, getApplicationContext());
+        commentAdapter = new CommentAdapter(noteType,commentList, R.layout.item_comment, getApplicationContext());
         listView.setAdapter(commentAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

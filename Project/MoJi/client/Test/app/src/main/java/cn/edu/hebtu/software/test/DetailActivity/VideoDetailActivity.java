@@ -296,7 +296,7 @@ public class VideoDetailActivity extends AppCompatActivity{
      */
     private void showCommentList(){
         ListView listView = findViewById(R.id.comment_list);
-        commentAdapter = new CommentAdapter(commentList, R.layout.item_comment, getApplicationContext());
+        commentAdapter = new CommentAdapter(1,commentList, R.layout.item_comment, getApplicationContext());
         listView.setAdapter(commentAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

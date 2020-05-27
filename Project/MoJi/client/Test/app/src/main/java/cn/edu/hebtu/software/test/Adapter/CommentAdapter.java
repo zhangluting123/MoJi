@@ -35,13 +35,15 @@ public class CommentAdapter extends BaseAdapter {
     private int itemLayoutId;
     private Context context;
     private String ip;
+    private int noteType;
 
     private ViewHolder viewHolder;
 
-    public CommentAdapter(List<Comment> commentList,int itemLayoutId,Context context){
+    public CommentAdapter(int noteType,List<Comment> commentList,int itemLayoutId,Context context){
         this.commentList = commentList;
         this.itemLayoutId = itemLayoutId;
         this.context = context;
+        this.noteType = noteType;
     }
 
     @Override
@@ -133,6 +135,7 @@ public class CommentAdapter extends BaseAdapter {
                 case R.id.ll_reply_comment:
                     intent = new Intent(context, ReplyCommentActivity.class);
                     intent.putExtra("comment",commentList.get(position));
+                    intent.putExtra("noteType",noteType);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent);
                     break;

@@ -76,6 +76,7 @@ public class ReplyCommentActivity extends AppCompatActivity {
     private MyApplication data;
     private String ip;
     private User user;
+    private int noteType;
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -130,6 +131,7 @@ public class ReplyCommentActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         comment = intent.getParcelableExtra("comment");
+        noteType = intent.getIntExtra("noteType",0);
         RequestOptions options = new RequestOptions().circleCrop();
         Glide.with(this).load("http://" + ip + ":8080/MoJi/" + comment.getUser().getUserHeadImg()).apply(options).into(commentHead);
         commentContent.setText(comment.getCommentContent());
@@ -352,12 +354,13 @@ public class ReplyCommentActivity extends AppCompatActivity {
      *  @Description: 回复的回复
      */
     private void insertReplyComment(){
+
         new Thread(){
             @Override
             public void run() {
                 if(DetermineConnServer.isConnByHttp(getApplicationContext())){
                     try {
-                        URL url = new URL("http://"+ip+":8080/MoJi/replyComment/addReplyToReply?replyContent="+edtInsertComment.getText().toString()+"&commentId="+comment.getId()+"&replyUserId="+data.getUser().getUserId()+"&parentId="+parentId);
+                        URL url = new URL("http://"+ip+":8080/MoJi/replyComment/addReplyToReply?replyContent="+edtInsertComment.getText().toString()+"&commentId="+comment.getId()+"&replyUserId="+data.getUser().getUserId()+"&parentId="+parentId+"&ifVideo="+noteType);
                         URLConnection conn = url.openConnection();
                         InputStream in = conn.getInputStream();
                         BufferedReader reader = new BufferedReader(new InputStreamReader(in,"utf-8"));
