@@ -14,6 +14,21 @@
 		<association property="replyComment" column="{replyId=reply_id}"
 			select="com.moji.replycomment.dao.ReplyCommentMapper.queryReplyCommentById1">
 		</association>
+	</resultMap>
+	
+	<resultMap type="com.moji.entity.MailMyComment" id="mailMap2">
+		<id property="id" column="mycomment_id"/>
+		<result property="crFlag" column="cr_flag"/>
+		<result property="readFlag" column="read_flag"/> 
+		<association property="user" column="{userId=user_id}"
+			select="com.moji.user.dao.UserMapper.queryUser">
+		</association>
+		<association property="comment" column="{commentId=comment_id}"
+			select="com.moji.comment.dao.CommentMapper.findCommentAndVideo">
+		</association>
+		<association property="replyComment" column="{replyId=reply_id}"
+			select="com.moji.replycomment.dao.ReplyCommentMapper.queryReplyCommentById10">
+		</association>
 		
 	</resultMap>
 	
@@ -21,10 +36,21 @@
 	<insert id="insertMailMyComment">
 		insert into mail_mycomment_detail(user_id,
 		<if test="crflag == 'C'">
-			comment_id,cr_flag)values(#{userId},#{commentId},#{crflag})
+			comment_id,cr_flag,if_video)values(#{userId},#{commentId},#{crflag},0)
 		</if>
 		<if test="crflag == 'R'">
-			reply_id,cr_flag)values(#{userId},#{replyId},#{crflag})
+			reply_id,cr_flag,if_video)values(#{userId},#{replyId},#{crflag},0)
+		</if>
+	</insert>
+	
+	<!-- 插入评论消息 -->
+	<insert id="insertMailMyCommentVideo">
+		insert into mail_mycomment_detail(user_id,
+		<if test="crflag == 'C'">
+			comment_id,cr_flag,if_video)values(#{userId},#{commentId},#{crflag},1)
+		</if>
+		<if test="crflag == 'R'">
+			reply_id,cr_flag,if_video)values(#{userId},#{replyId},#{crflag},1)
 		</if>
 	</insert>
 	
@@ -32,7 +58,14 @@
 		select * 
 		from mail_mycomment_detail m 
 		left join user_detail u on u.user_id = m.user_id
-		where m.user_id = #{userId} 
+		where m.user_id = #{userId} and m.if_video = 0
+	</select>
+	
+	<select id="queryMailMyCommentVideo" resultMap="mailMap2">
+		select * 
+		from mail_mycomment_detail m 
+		left join user_detail u on u.user_id = m.user_id
+		where m.user_id = #{userId} and m.if_video = 1
 	</select>
 	
 	<!-- 设置信息为已读 -->

@@ -115,7 +115,7 @@ public class CommentController {
 			video = this.videoService.findVideoById(noteId);
 			if(video != null) {
 				if(!video.getUser().getUserId().equals(user.getUserId())) {
-					int b = this.mailMyCommentService.addMailMyCommentService(video.getUser().getUserId(), commentId, null, 'C');
+					int b = this.mailMyCommentService.addMailMyCommentServiceVideo(video.getUser().getUserId(), commentId, null, 'C');
 					if(b > 0) {
 						System.out.println("通知消息写入成功！");
 					}
@@ -173,8 +173,8 @@ public class CommentController {
 	/**
 	 * @Title: test
 	 * @Description: 测试通知是否发送成功
-	 * @author: 张璐婷 
-	 * @date: 2020年4月26日 下午6:38:11
+	 * @author: ming
+	 * @date: 2020年4月26日 
 	 */
 	private void testForVideo(String msgId,Video video,User user) {
 		new Thread() {

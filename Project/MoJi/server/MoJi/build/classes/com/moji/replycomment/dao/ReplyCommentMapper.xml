@@ -31,6 +31,23 @@
 			select="com.moji.replycomment.dao.ReplyCommentMapper.queryReplyCommentById2">
 		</association>
 	</resultMap>
+	
+	<resultMap type="com.moji.entity.ReplyComment" id="replyMap20">
+		<id property="replyId" column="reply_id"/>
+		<result property="replyContent" column="reply_content"/>
+		<result property="replyTime" column="reply_time"/>
+		<association property="comment" column="{commentId=comment_id}"
+			select="com.moji.comment.dao.CommentMapper.findCommentAndVideo">
+		</association>
+		<association property="replyUser" column="{userId=user_id}"
+			select="com.moji.user.dao.UserMapper.queryUser">
+		</association>
+		<!-- 自身参照 -->
+		<association property="replyComment" column="{replyId=parent_id}" 
+			select="com.moji.replycomment.dao.ReplyCommentMapper.queryReplyCommentById2">
+		</association>
+	</resultMap>
+	
 	<resultMap type="com.moji.entity.ReplyComment" id="replyMap3">
 		<id property="replyId" column="reply_id"/>
 		<result property="replyContent" column="reply_content"/>
@@ -61,6 +78,15 @@
 	</select>
 	<!-- 查询回复评论及其父元素-->
 	<select id="queryReplyCommentById1" resultMap="replyMap2">
+		select *
+		from reply_comment_detail r
+		left join user_detail u on r.reply_user_id = u.user_id
+		left join comment_detail c on r.comment_id = c.comment_id
+		where reply_id = #{replyId}
+	</select>
+	
+	<!-- 查询回复评论及其父元素-->
+	<select id="queryReplyCommentById10" resultMap="replyMap20">
 		select *
 		from reply_comment_detail r
 		left join user_detail u on r.reply_user_id = u.user_id

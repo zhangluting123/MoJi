@@ -32,6 +32,16 @@ public class MailMyCommentService {
 	}
 	
 	/**
+	 * @Title: addMailMyCommentService
+	 * @Description: 添加评论消息
+	 * @author: ming 
+	 * @date: 2020年4月24日 上午9:39:34
+	 */
+	public int addMailMyCommentServiceVideo(String userId,String commentId,String replyId,Character crflag) {
+		return this.mailMyCommentMapper.insertMailMyCommentVideo(userId, commentId, replyId, crflag);
+	}
+	
+	/**
 	 * @Title: findMailMyComment
 	 * @Description: 查询所有通知消息
 	 * @author: 张璐婷 
@@ -39,6 +49,16 @@ public class MailMyCommentService {
 	 */
 	public List<MailMyComment> findMailMyComment(String userId){
 		return this.mailMyCommentMapper.queryMailMyComment(userId);
+	}
+	
+	/**
+	 * @Title: findMailMyComment
+	 * @Description: 查询所有video通知消息
+	 * @author: ming 
+	 * @date: 2020年4月24日 下午4:12:21
+	 */
+	public List<MailMyComment> findMailMyCommentVideo(String userId){
+		return this.mailMyCommentMapper.queryMailMyCommentVideo(userId);
 	}
 	
 	/**

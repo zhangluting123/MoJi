@@ -26,7 +26,9 @@ public class Comment {
 	private User user;
 	private Integer replyCount;
 	private Note dbNote;
+	private Video dbVideo;
 	private ReturnNote note = new ReturnNote();
+	private ReturnVideo video  = new ReturnVideo();
 	
 	public Comment() {
 		// TODO Auto-generated constructor stub
@@ -34,7 +36,7 @@ public class Comment {
 
 	
 	public Comment(String id, String noteId, String userId, String commentContent, String commentTime, User user,
-			Integer replyCount, Note dbNote, ReturnNote note) {
+			Integer replyCount, Note dbNote, Video dbVideo,ReturnNote note,ReturnVideo video) {
 		super();
 		this.id = id;
 		this.noteId = noteId;
@@ -44,7 +46,20 @@ public class Comment {
 		this.user = user;
 		this.replyCount = replyCount;
 		this.dbNote = dbNote;
+		this.dbVideo = dbVideo;
 		this.note = note;
+		this.video=video;
+	}
+
+	
+	
+	public Video getDbVideo() {
+		return dbVideo;
+	}
+
+
+	public void setDbVideo(Video dbVideo) {
+		this.dbVideo = dbVideo;
 	}
 
 
@@ -124,5 +139,16 @@ public class Comment {
 		this.note = note;
 	}
 
+
+	public ReturnVideo getVideo() {
+		return video;
+	}
+
+
+	public void setVideo(ReturnVideo video) {
+		this.video = video;
+	}
+
+	
 	
 }

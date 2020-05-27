@@ -13,6 +13,8 @@ import com.google.gson.Gson;
 import com.moji.entity.MailMyComment;
 import com.moji.entity.Note;
 import com.moji.entity.ReturnNote;
+import com.moji.entity.ReturnVideo;
+import com.moji.entity.Video;
 import com.moji.mailmycomment.service.MailMyCommentService;
 
 /**   
@@ -39,7 +41,6 @@ public class MailMyCommentController {
 			if(list.get(i).getCrFlag() == 'C') {
 				note = list.get(i).getComment().getDbNote();
 				returnNote = list.get(i).getComment().getNote();
-				
 			}else if(list.get(i).getCrFlag() == 'R'){
 				note = list.get(i).getReplyComment().getComment().getDbNote();
 				returnNote = list.get(i).getReplyComment().getComment().getNote();
@@ -58,6 +59,39 @@ public class MailMyCommentController {
 				returnNote.getImgList().add(note.getImgList().get(j).getImgPath());
 			}
 		}
+		
+		Gson gson = new Gson();
+		String str = gson.toJson(list);
+		System.out.println(str);
+		return str;
+	}
+	
+	@RequestMapping(value="/listVideo",method=RequestMethod.GET, produces="application/json;charset=utf-8")
+	public String listVideo(@RequestParam("userId")String userId) {
+		List<MailMyComment> list = this.mailMyCommentService.findMailMyCommentVideo(userId);
+		
+		//转换Video
+		Video video = null;
+		ReturnVideo returnVideo = null;
+		for (int i = 0; i < list.size(); i++) {
+			if(list.get(i).getCrFlag() == 'C') {
+				video = list.get(i).getComment().getDbVideo();
+				returnVideo = list.get(i).getComment().getVideo();
+			}else if(list.get(i).getCrFlag() == 'R'){
+				video = list.get(i).getReplyComment().getComment().getDbVideo();
+				returnVideo = list.get(i).getReplyComment().getComment().getVideo();
+			}
+			returnVideo.setVideoId(video.getVideoId());
+			returnVideo.setPath(video.getPath());
+			returnVideo.setTitle(video.getTitle());
+			returnVideo.setContent(video.getContent());
+			returnVideo.setDuration(video.getDuration());
+			returnVideo.setSize(video.getSize());
+			returnVideo.setUploadTime(video.getUploadTime());
+			returnVideo.setTag(video.getTag());
+			returnVideo.setLike(video.getLike());
+			returnVideo.setUser(video.getUser());
+		}				
 		
 		Gson gson = new Gson();
 		String str = gson.toJson(list);

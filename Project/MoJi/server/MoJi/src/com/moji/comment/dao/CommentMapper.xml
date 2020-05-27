@@ -33,6 +33,21 @@
 			select="com.moji.note.dao.NoteMapper.queryNoteById">
 		</association>
 	</resultMap>
+	<resultMap type="com.moji.entity.Comment" id="commentMap3">
+		<id property="id" column="comment_id"/>
+		<result property="noteId" column="note_id"/>
+		<result property="userId" column="comment_user_id"/>
+		<result property="commentContent" column="comment_content"/>
+		<result property="commentTime" column="comment_time"/>
+		<association property="user" column="{userId=user_id}"
+			select="com.moji.user.dao.UserMapper.queryUser">
+		</association>
+		<!-- 查询Note -->
+		<association property="dbVideo" column="{videoId=note_id}" 
+			select="com.moji.video.dao.VideoMapper.findVideoById">
+		</association>
+	</resultMap>
+	
 	
 	<!-- 对数据库comment_detail表进行操作 -->
 	<select id="showComment" resultMap="commentMap">
@@ -65,6 +80,15 @@
 		from comment_detail c
 		left join user_detail u on c.comment_user_id=u.user_id
 		left join note_detail n on n.note_id = c.note_id
+		where c.comment_id=#{commentId}
+	</select>
+	
+	<!-- 查找评论和video -->
+	<select id="findCommentAndVideo" resultMap="commentMap3">
+		select * 
+		from comment_detail c
+		left join user_detail u on c.comment_user_id=u.user_id
+		left join video_detail n on n.video_id = c.note_id
 		where c.comment_id=#{commentId}
 	</select>
 	
