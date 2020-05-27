@@ -19,12 +19,13 @@ public class Comment implements Parcelable {
     private String commentTime;
     private Integer replyCount;
     private Note note;
+    private Video video;
 
     public Comment(){
 
     }
 
-    public Comment(User user, String id, String noteId, String commentContent, String commentTime, Integer replyCount, Note note) {
+    public Comment(User user, String id, String noteId, String commentContent, String commentTime, Integer replyCount, Note note ,Video video) {
         this.user = user;
         this.id = id;
         this.noteId = noteId;
@@ -32,6 +33,7 @@ public class Comment implements Parcelable {
         this.commentTime = commentTime;
         this.replyCount = replyCount;
         this.note = note;
+        this.video=video;
     }
 
 
@@ -47,6 +49,7 @@ public class Comment implements Parcelable {
             replyCount = in.readInt();
         }
         note = in.readParcelable(Note.class.getClassLoader());
+        video = in.readParcelable(Video.class.getClassLoader());
     }
 
     @Override
@@ -63,6 +66,7 @@ public class Comment implements Parcelable {
             dest.writeInt(replyCount);
         }
         dest.writeParcelable(note, flags);
+        dest.writeParcelable(video, flags);
     }
 
     @Override
@@ -138,6 +142,14 @@ public class Comment implements Parcelable {
         this.note = note;
     }
 
+    public Video getVideo() {
+        return video;
+    }
+
+    public void setVideo(Video video) {
+        this.video = video;
+    }
+
     @Override
     public String toString() {
         return "Comment{" +
@@ -148,6 +160,7 @@ public class Comment implements Parcelable {
                 ", commentTime='" + commentTime + '\'' +
                 ", replyCount=" + replyCount +
                 ", note=" + note +
+                ", video=" + video +
                 '}';
     }
 

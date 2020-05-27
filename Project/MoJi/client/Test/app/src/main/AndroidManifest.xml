@@ -51,6 +51,7 @@
         <activity android:name=".ChatIM.ChatActivity" />
         <activity android:name=".DetailActivity.OtherMsgActivity" />
         <activity android:name=".DetailActivity.MailCommentDetailActivity" />
+        <activity android:name=".DetailActivity.VideoMailCommentDetailActivity" />
         <activity android:name=".DetailActivity.MailReplyActivity" />
         <activity android:name=".DetailActivity.UploadVideoActivity" />
         <activity android:name=".DetailActivity.ShowNoteActivity" />

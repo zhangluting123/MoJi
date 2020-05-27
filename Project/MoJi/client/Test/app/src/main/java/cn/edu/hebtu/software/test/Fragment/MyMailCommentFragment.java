@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,8 +36,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import cn.edu.hebtu.software.test.Adapter.MyCommentAdapter;
 import cn.edu.hebtu.software.test.Data.MailMyComment;
+import cn.edu.hebtu.software.test.Data.Video;
 import cn.edu.hebtu.software.test.DetailActivity.MailCommentDetailActivity;
 import cn.edu.hebtu.software.test.DetailActivity.MailReplyActivity;
+import cn.edu.hebtu.software.test.DetailActivity.VideoMailCommentDetailActivity;
 import cn.edu.hebtu.software.test.R;
 import cn.edu.hebtu.software.test.Setting.MyApplication;
 import cn.edu.hebtu.software.test.Util.DetermineConnServer;
@@ -50,11 +53,14 @@ import cn.edu.hebtu.software.test.Util.DetermineConnServer;
 public class MyMailCommentFragment extends Fragment {
     private View view;
     private List<MailMyComment> myComments;
+    private List<MailMyComment> myComments2;
     private PopupWindow popupWindow;
     private MyCommentAdapter adapter;
+    private MyCommentAdapter adapter2;
     private int pos;
     private MyApplication data;
     private String ip;
+    int tag;
 
     private Handler handler = new Handler(){
         @Override
@@ -76,6 +82,10 @@ public class MyMailCommentFragment extends Fragment {
                     myComments.remove(pos);
                     adapter.refresh(myComments);
                     break;
+                case 1005:
+                    myComments2 = (List<MailMyComment>)msg.obj;
+                    init();
+                    break;
             }
         }
     };
@@ -89,22 +99,38 @@ public class MyMailCommentFragment extends Fragment {
         ip = data.getIp();
 
         getMailList();
+        getMailListVideo();
 
         return view;
     }
 
     private void init(){
         ListView listView = view.findViewById(R.id.lv_mycomment);
+        ListView listView2 = view.findViewById(R.id.lv_myvideocomment);
         adapter = new MyCommentAdapter(myComments,R.layout.item_mycomment,getActivity().getApplicationContext());
+        adapter2 = new MyCommentAdapter(myComments2,R.layout.item_mycomment,getActivity().getApplicationContext());
         listView.setAdapter(adapter);
+        listView2.setAdapter(adapter2);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                tag=1;
                 if(myComments.get(position).getReadFlag() == 0) {
                     setRead(myComments.get(position).getId());
                 }
                 pos = position;
                 showPopupWindow(parent,myComments.get(position));
+            }
+        });
+        listView2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                tag=2;
+                if(myComments2.get(position).getReadFlag() == 0) {
+                    setRead(myComments2.get(position).getId());
+                }
+                pos = position;
+                showPopupWindow(parent,myComments2.get(position));
             }
         });
     }
@@ -182,9 +208,17 @@ public class MyMailCommentFragment extends Fragment {
                     delete(mailMyComment.getId());
                     break;
                 case R.id.detail:
-                    Intent intent1 = new Intent(getActivity().getApplicationContext(), MailCommentDetailActivity.class);
-                    intent1.putExtra("mailMyComment", mailMyComment);
-                    startActivity(intent1);
+                    if(tag==1){
+                        Log.e("************note:","MailCommentDetailActivity");
+                        Intent intent1 = new Intent(getActivity().getApplicationContext(), MailCommentDetailActivity.class);
+                        intent1.putExtra("mailMyComment", mailMyComment);
+                        startActivity(intent1);
+                    }else {
+                        Log.e("************video:","VideoMailCommentDetailActivity");
+                        Intent intent1 = new Intent(getActivity().getApplicationContext(), VideoMailCommentDetailActivity.class);
+                        intent1.putExtra("mailMyComment", mailMyComment);
+                        startActivity(intent1);
+                    }
                     break;
             }
             popupWindow.dismiss();
@@ -212,6 +246,46 @@ public class MyMailCommentFragment extends Fragment {
                             Message msg = Message.obtain();
                             msg.what = 1002;
                             msg.obj = mails;
+                            handler.sendMessage(msg);
+                        }
+
+                        reader.close();
+                        in.close();
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                    Message msg = Message.obtain();
+                    msg.what = 1001;
+                    msg.obj = "未连接到服务器";
+                    handler.sendMessage(msg);
+                }
+            }
+        }.start();
+    }
+
+    private void getMailListVideo(){
+        new Thread(){
+            @Override
+            public void run() {
+                if(DetermineConnServer.isConnByHttp(getActivity().getApplicationContext())){
+                    List<MailMyComment> videoMails = new ArrayList<>();
+                    try {
+                        URL url = new URL("http://"+ ip +":8080/MoJi/mailmycomment/listVideo?userId=" + data.getUser().getUserId() );
+                        URLConnection conn = url.openConnection();
+                        InputStream in = conn.getInputStream();
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(in,"utf-8"));
+                        String str = null;
+                        if((str = reader.readLine()) != null){
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<List<MailMyComment>>(){}.getType();
+                            videoMails = gson.fromJson(str, type);
+                            Collections.reverse(videoMails);
+                            Message msg = Message.obtain();
+                            msg.what = 1005;
+                            msg.obj = videoMails;
                             handler.sendMessage(msg);
                         }
 

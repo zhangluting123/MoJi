@@ -189,7 +189,7 @@ public class UserController {
 	 */
 	@RequestMapping(value="/queryFollowed", method=RequestMethod.GET, produces="application/json;charset=utf-8")
 	public String queryFollowed(HttpServletRequest request, @RequestParam(value="oneId",required=true)String oneId) {
-		String str = "";
+		String str = null;
 		//从数据库查询的数据
 		List<User> list = this.userService.queryFollowed(oneId);
 		if(list.size() > 0) {
