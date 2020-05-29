@@ -182,7 +182,7 @@ public class MultipleItemAdapter extends BaseMultiItemQuickAdapter<MyMultipleIte
                                 .error(R.drawable.fail)
                                 .placeholder(R.drawable.fail)
                 )
-                .load(videoPath)
+                .load(path)
                 .into(jcVideoPlayerStandard.thumbImageView);
     }
 

@@ -217,7 +217,7 @@ public class VideoDetailActivity extends AppCompatActivity{
                                 .error(R.drawable.fail)
                                 .placeholder(R.drawable.fail)
                 )
-                .load(video.getPath())
+                .load(path)
                 .into(jcVideoPlayerStandard.thumbImageView);
 
         //获得评论
