@@ -1,16 +1,20 @@
 package com.hyphenate.easeui.ui;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Gravity;
@@ -1014,11 +1018,14 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
             Toast.makeText(getActivity(), R.string.sd_card_does_not_exist, Toast.LENGTH_SHORT).show();
             return;
         }
+        File fileDir = new File(Environment.getExternalStorageDirectory() + File.separator + "photoTest" + File.separator);
+        if (!fileDir.exists()) {
+            fileDir.mkdirs();
+        }
 
-        cameraFile = new File(PathUtil.getInstance().getImagePath(), EMClient.getInstance().getCurrentUser()
-                + System.currentTimeMillis() + ".jpg");
+        cameraFile = new File(fileDir, EMClient.getInstance().getCurrentUser() +System.currentTimeMillis()+ ".jpg");
         //noinspection ResultOfMethodCallIgnored
-        cameraFile.getParentFile().mkdirs();
+//        cameraFile.getParentFile().mkdirs();
         startActivityForResult(
                 new Intent(MediaStore.ACTION_IMAGE_CAPTURE).putExtra(MediaStore.EXTRA_OUTPUT, EaseCompat.getUriForFile(getContext(), cameraFile)),
                 REQUEST_CODE_CAMERA);
@@ -1294,5 +1301,6 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
          */
         EaseCustomChatRowProvider onSetCustomChatRowProvider();
     }
+
     
 }

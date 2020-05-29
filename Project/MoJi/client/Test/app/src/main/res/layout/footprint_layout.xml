@@ -33,9 +33,8 @@
                 android:text="您一共去过0个地方"
                 android:textSize="20dp"
                 android:gravity="center_horizontal"
-                android:textColor="@color/MyTheam_color"
-                android:background="@android:color/white" />
+                android:textColor="@color/colorActionBarBackground"
+                android:background="@android:color/white"/>
         </RelativeLayout>
     </FrameLayout>
-
 </LinearLayout>

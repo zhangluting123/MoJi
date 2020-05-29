@@ -58,6 +58,7 @@ public class MyMailCommentFragment extends Fragment {
     private MyCommentAdapter adapter;
     private MyCommentAdapter adapter2;
     private int pos;
+    private int pos2;
     private MyApplication data;
     private String ip;
     int tag;
@@ -74,17 +75,25 @@ public class MyMailCommentFragment extends Fragment {
                     init();
                     break;
                 case 1003:
-                    myComments.get(pos).setReadFlag(1);
-                    adapter.refresh(myComments);
-                    myComments2.get(pos).setReadFlag(1);
-                    adapter2.refresh(myComments2);
+                    if(pos < myComments.size()){
+                        myComments.get(pos).setReadFlag(1);
+                        adapter.refresh(myComments);
+                    }
+                    if(pos2 < myComments2.size()){
+                        myComments2.get(pos2).setReadFlag(1);
+                        adapter2.refresh(myComments2);
+                    }
                     break;
                 case 1004:
                     Toast.makeText(getActivity().getApplicationContext(), "删除成功", Toast.LENGTH_SHORT).show();
-                    myComments.remove(pos);
-                    adapter.refresh(myComments);
-                    myComments2.remove(pos);
-                    adapter2.refresh(myComments2);
+                    if(pos < myComments.size()) {
+                        myComments.remove(pos);
+                        adapter.refresh(myComments);
+                    }
+                    if(pos2 < myComments2.size()){
+                        myComments2.remove(pos2);
+                        adapter2.refresh(myComments2);
+                    }
                     break;
                 case 1005:
                     myComments2 = (List<MailMyComment>)msg.obj;
@@ -132,7 +141,7 @@ public class MyMailCommentFragment extends Fragment {
                 if(myComments2.get(position).getReadFlag() == 0) {
                     setRead(myComments2.get(position).getId());
                 }
-                pos = position;
+                pos2 = position;
                 showPopupWindow(parent,myComments2.get(position));
             }
         });

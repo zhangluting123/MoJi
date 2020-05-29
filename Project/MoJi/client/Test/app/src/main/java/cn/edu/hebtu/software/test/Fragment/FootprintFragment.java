@@ -184,7 +184,7 @@ public class FootprintFragment extends Fragment {
         //统计去过的地方数并显示
         countPlace();
 //        Glide.with(getActivity().getApplicationContext())
-//                .asGif()
+//            .asGif()
 //                .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
 //                .load(R.mipmap.address1)
 //                .into(placeImg);
@@ -193,7 +193,12 @@ public class FootprintFragment extends Fragment {
             public void onClick(View v) {
                 if(placeNum.getVisibility() == View.GONE){
                     placeNum.setVisibility(View.VISIBLE);
-                    placeNum.setText("您一共去过"+addrNum+"个地方");
+                    if(null != addrNum ){
+                        placeNum.setText("您一共去过"+addrNum+"个地方");
+                    }else{
+                        placeNum.setText("您一共去过0个地方");
+                    }
+
                 }else{
                     placeNum.setVisibility(View.GONE);
                 }
@@ -471,7 +476,7 @@ public class FootprintFragment extends Fragment {
                 //1、创建标注覆盖物显示位置的LatLng对象
                 final LatLng latLng = new LatLng(note.getLatitude(),note.getLongitude());
                 //2、创建标注覆盖物对象
-                BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.mipmap.activity_baidumap_zj);
+                BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.mipmap.flag);
                 OverlayOptions markerOption = new MarkerOptions()
                         .alpha(0.8f)//透明度
                         .icon(icon)//覆盖物图标

@@ -1,16 +1,17 @@
 package cn.edu.hebtu.software.test.ChatIM;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
-
 import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.easeui.ui.EaseBaseActivity;
 import com.hyphenate.easeui.ui.EaseChatFragment;
 
-import cn.edu.hebtu.software.test.Data.User;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import cn.edu.hebtu.software.test.R;
-import cn.edu.hebtu.software.test.Setting.MyApplication;
 
 public class ChatActivity extends EaseBaseActivity {
     public static ChatActivity activityInstance;
@@ -18,12 +19,16 @@ public class ChatActivity extends EaseBaseActivity {
     private MyUserProvider userProvider;
     private EaseUI easeUI;
     String toChatUsername;
+    protected static final int REQUEST_CODE_CAMERA = 2;
 //    private User user;
 
     @Override
     protected void onCreate(Bundle arg0) {
         super.onCreate(arg0);
         setContentView(R.layout.activity_chat);
+        if (!ActivityCompat.shouldShowRequestPermissionRationale(ChatActivity.this, Manifest.permission.CAMERA)) {
+            ActivityCompat.requestPermissions(ChatActivity.this, new String[]{Manifest.permission.CAMERA}, REQUEST_CODE_CAMERA);
+        }
         activityInstance = this;
         //user or group id
         toChatUsername = getIntent().getExtras().getString(EaseConstant.EXTRA_USER_ID);
@@ -62,5 +67,11 @@ public class ChatActivity extends EaseBaseActivity {
     
     public String getToChatUsername(){
         return toChatUsername;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        chatFragment.onActivityResult(requestCode, resultCode, data);
     }
 }

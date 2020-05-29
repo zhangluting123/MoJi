@@ -1,45 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:layout_width="280dp"
-    android:background="#2B9685"
-    android:layout_height="wrap_content">
+    android:layout_width="250dp"
+    android:background="@mipmap/infowindow"
+    android:layout_height="130dp">
+    <TextView
+        android:id="@+id/ed_item_title"
+        android:layout_marginTop="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_gravity="center"
+        android:textColor="#58C7F9"
+        android:textSize="14dp" />
     <TextView
         android:id="@+id/text_item_time"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:textSize="13dp"
-        />
+        android:layout_marginLeft="4dp"
+        android:layout_height="20dp"
+        android:textColor="@color/MyTheam_color"
+        android:textSize="13dp" />
     <TextView
         android:id="@+id/text_item_latlng"
+        android:layout_marginLeft="4dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#5AB137"
-        android:gravity="center_horizontal"
-        android:textSize="13dp"
-        />
-    <TextView
-        android:id="@+id/ed_item_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#58C7F9"
-        android:gravity="center_horizontal"
-        android:textSize="13dp"
-        />
+        android:layout_height="20dp"
+        android:textColor="@color/colorActionBarBackground"
+        android:textSize="13dp" />
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp">
         <Button
             android:id="@+id/btn_see"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="#BABA66"
+            android:background="#A0BFF2FF"
             android:textSize="17dp"
             android:text="查看"
-            android:layout_weight="1"
-            />
+            android:layout_weight="1" />
         <Button
             android:id="@+id/btn_cancel"
             android:layout_width="0dp"
@@ -47,7 +47,6 @@
             android:background="#BABAFF"
             android:textSize="17dp"
             android:layout_weight="1"
-            android:text="取消"
-            />
+            android:text="取消" />
     </LinearLayout>
 </LinearLayout>

@@ -125,7 +125,7 @@
                     android:id="@+id/rl_love"
                     android:layout_toRightOf="@id/iv_share_scene"
                     android:layout_marginRight="16dp"
-                    android:layout_width="28dp"
+                    android:layout_width="32dp"
                     android:layout_height="wrap_content">
                     <TextView
                         android:id="@+id/tv_love_count"
@@ -134,7 +134,7 @@
                         android:layout_height="wrap_content"
                         android:textColor="@android:color/black"
                         android:textSize="6sp"
-                        android:text="7988"/>
+                        android:text="7898"/>
                     <ImageView
                         android:id="@+id/iv_love"
                         android:layout_width="21dp"

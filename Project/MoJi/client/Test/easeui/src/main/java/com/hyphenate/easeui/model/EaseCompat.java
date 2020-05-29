@@ -14,11 +14,11 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.hyphenate.util.FileUtils;
+import com.zhy.base.fileprovider.FileProvider7;
 
 import java.io.File;
 
 import androidx.annotation.RequiresApi;
-import androidx.core.content.FileProvider;
 
 /**
  * Created by zhangsong on 18-6-6.
@@ -58,7 +58,7 @@ public class EaseCompat {
 
     public static Uri getUriForFile(Context context, File file) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            return FileProvider.getUriForFile(context, context.getPackageName() + ".fileProvider", file);
+            return FileProvider7.getUriForFile(context, file);
         } else {
             return Uri.fromFile(file);
         }

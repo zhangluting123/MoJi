@@ -207,7 +207,7 @@ public class VideoDetailActivity extends AppCompatActivity{
         noteContent.setText(video.getContent());
         userName.setText(video.getUser().getUserName());
         //最终版本应由video.getPath()---》path
-        jcVideoPlayerStandard.setUp(video.getPath(), JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "");
+        jcVideoPlayerStandard.setUp(path, JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "");
         //同上
         Glide.with(this)
                 .setDefaultRequestOptions(
