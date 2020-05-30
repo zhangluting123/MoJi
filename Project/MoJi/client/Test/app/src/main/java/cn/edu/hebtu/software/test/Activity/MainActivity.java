@@ -1,5 +1,6 @@
 package cn.edu.hebtu.software.test.Activity;
 
+import android.Manifest;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
@@ -35,8 +36,10 @@ import java.util.Map;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentTabHost;
+import cn.edu.hebtu.software.test.ChatIM.ChatActivity;
 import cn.edu.hebtu.software.test.Data.User;
 import cn.edu.hebtu.software.test.DetailActivity.AddNoteActivity;
 import cn.edu.hebtu.software.test.DetailActivity.UploadVideoActivity;
@@ -94,6 +97,9 @@ public class MainActivity extends AppCompatActivity  {
             window.setStatusBarColor(Color.TRANSPARENT);
             window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                     | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+        }
+        if (!ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.CAMERA)) {
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.CAMERA}, 0);
         }
 
         //从全局变量中获取数据

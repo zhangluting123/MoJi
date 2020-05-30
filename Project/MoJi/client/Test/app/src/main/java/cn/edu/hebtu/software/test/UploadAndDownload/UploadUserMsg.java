@@ -15,6 +15,7 @@ import cn.edu.hebtu.software.test.LeftNavigation.UserInfoActivity;
 import cn.edu.hebtu.software.test.R;
 import cn.edu.hebtu.software.test.Setting.MyApplication;
 import cn.edu.hebtu.software.test.Util.DetermineConnServer;
+import cn.edu.hebtu.software.test.Util.SQLiteUtil;
 import okhttp3.Call;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -86,7 +87,9 @@ public class UploadUserMsg extends AsyncTask<String, Void, String> {
             } catch (IOException e) {
                 e.printStackTrace();
             }finally {
-                response.close();
+                if(null != response){
+                    response.close();
+                }
             }
             return null;
         }else{
@@ -111,12 +114,12 @@ public class UploadUserMsg extends AsyncTask<String, Void, String> {
             data.getUser().setOccupation(user.getOccupation());
             data.getUser().setUserId(user.getUserId());
 
+            SQLiteUtil sqLiteUtil = new SQLiteUtil(getApplication().getApplicationContext());
+            sqLiteUtil.update(user);
+
             Toast.makeText(context, "修改成功！", Toast.LENGTH_SHORT).show();
             Activity activity = UserInfoActivity.getUserInfoActivity();
-            Intent request =activity.getIntent();
-            int tabId = request.getIntExtra("tab", 0);
             Intent response = new Intent(activity.getApplicationContext(), MineActivity.class);
-            response.putExtra("tab",tabId);
             activity.startActivity(response);
             activity.overridePendingTransition(R.animator.in_from_left, R.animator.out_to_right);
             activity.finish();

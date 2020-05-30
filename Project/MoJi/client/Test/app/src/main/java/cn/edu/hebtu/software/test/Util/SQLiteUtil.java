@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import cn.edu.hebtu.software.test.Data.User;
 
@@ -49,14 +50,14 @@ public class SQLiteUtil {
         cv.put("signature",user.getSignature());
         cv.put("occupation",user.getOccupation());
         cv.put("phone",user.getPhone());
-        String whereU = "user_id = " +user.getUserId();
+        String whereU = "user_id ='" +user.getUserId()+"'";
         db.update("user_detail", cv, whereU, null);
         close();
     }
 
     public void delete(String userId){
         openDB(context);
-        String where = "user_id = " + userId;
+        String where = "user_id ='" + userId+"'";
         db.delete("user_detail", where, null);
         close();
     }

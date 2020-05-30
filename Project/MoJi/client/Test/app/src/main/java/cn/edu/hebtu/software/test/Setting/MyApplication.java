@@ -1,6 +1,5 @@
 package cn.edu.hebtu.software.test.Setting;
 
-import android.app.Activity;
 import android.app.Application;
 
 import com.baidu.mapapi.SDKInitializer;
@@ -8,8 +7,6 @@ import com.hyphenate.chat.EMOptions;
 import com.hyphenate.easeui.EaseUI;
 import com.mob.MobSDK;
 
-import java.util.LinkedList;
-import java.util.List;
 
 import androidx.multidex.MultiDex;
 import cn.edu.hebtu.software.test.Data.User;

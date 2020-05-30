@@ -2,6 +2,7 @@ package com.hyphenate.easeui.adapter;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ import com.hyphenate.chat.EMConversation.EMConversationType;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseUI;
+import com.hyphenate.easeui.GetTestClass;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.domain.EaseAvatarOptions;
 import com.hyphenate.easeui.domain.EaseUser;
@@ -30,6 +32,7 @@ import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.easeui.widget.EaseConversationList.EaseConversationListHelper;
 import com.hyphenate.easeui.widget.EaseImageView;
 import com.hyphenate.util.DateUtils;
+import com.hyphenate.util.EMLog;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -121,8 +124,12 @@ public class EaseConversationAdapter extends ArrayAdapter<EMConversation> {
             holder.name.setText(room != null && !TextUtils.isEmpty(room.getName()) ? room.getName() : username);
             holder.motioned.setVisibility(View.GONE);
         }else {
-            EaseUserUtils.setUserAvatar(getContext(), username, holder.avatar);
-            EaseUserUtils.setUserNick(username, holder.name);
+            //-----------zlt-----单聊----------
+            String str = GetTestClass.avatarAndName(getContext(), username);
+            String[] arr = str.split(";");
+            String ip = GetTestClass.getIp();
+            EaseUserUtils.setCustomUserAvatar(getContext(), "http://" + ip + ":8080/MoJi/"+arr[0], holder.avatar);
+            EaseUserUtils.setUserNick(arr[1], holder.name);
             holder.motioned.setVisibility(View.GONE);
         }
 

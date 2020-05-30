@@ -75,24 +75,28 @@ public class MyMailCommentFragment extends Fragment {
                     init();
                     break;
                 case 1003:
-                    if(pos < myComments.size()){
+                    if(pos < myComments.size() && pos > -1){
                         myComments.get(pos).setReadFlag(1);
                         adapter.refresh(myComments);
+                        pos = -1;
                     }
-                    if(pos2 < myComments2.size()){
+                    if(pos2 < myComments2.size() && pos2 > -1){
                         myComments2.get(pos2).setReadFlag(1);
                         adapter2.refresh(myComments2);
+                        pos2 = -1;
                     }
                     break;
                 case 1004:
                     Toast.makeText(getActivity().getApplicationContext(), "删除成功", Toast.LENGTH_SHORT).show();
-                    if(pos < myComments.size()) {
+                    if(pos < myComments.size() && pos > -1) {
                         myComments.remove(pos);
                         adapter.refresh(myComments);
+                        pos = -1;
                     }
-                    if(pos2 < myComments2.size()){
+                    if(pos2 < myComments2.size() && pos2 > -1){
                         myComments2.remove(pos2);
                         adapter2.refresh(myComments2);
+                        pos2 = -1;
                     }
                     break;
                 case 1005:
@@ -123,6 +127,8 @@ public class MyMailCommentFragment extends Fragment {
         adapter2 = new MyCommentAdapter(myComments2,R.layout.item_mycomment,getActivity().getApplicationContext());
         listView.setAdapter(adapter);
         listView2.setAdapter(adapter2);
+        pos = -1;
+        pos2 = -1;
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

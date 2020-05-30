@@ -158,6 +158,12 @@
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
+
+        <!-- ContentProvider -->
+        <provider
+            android:authorities="onest.zlt.user.provider"
+            android:name=".Util.ContentProvider.ProvideDatabase"
+            android:exported="true"/>
     </application>
 
 </manifest>

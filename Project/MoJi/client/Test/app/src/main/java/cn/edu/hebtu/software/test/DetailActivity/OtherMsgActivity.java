@@ -161,7 +161,7 @@ public class OtherMsgActivity extends AppCompatActivity {
             Intent intent = null;
             switch (v.getId()){
                 case R.id.btn_add_attention:
-                    //TODO 添加关注 @author ming
+                    //@author ming
                     if(data.getUser().getUserId()!=null){
                         if(!data.getUser().getUserId().equals(user.getUserId())){
                             if(tag==0){

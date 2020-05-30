@@ -53,6 +53,16 @@ public class EaseUserUtils {
             Glide.with(context).load(R.drawable.ease_default_avatar).into(imageView);
         }
     }
+
+    /**
+     *  @author: 张璐婷
+     *  @time: 2020/5/29  20:23
+     *  @Description: 显示网络图片
+     */
+    public static  void setCustomUserAvatar(Context context, String avatar, ImageView imageView){
+        RequestOptions options = new RequestOptions().circleCrop();
+        Glide.with(context).load(avatar).apply(options).into(imageView);
+    }
     
     /**
      * set user's nickname

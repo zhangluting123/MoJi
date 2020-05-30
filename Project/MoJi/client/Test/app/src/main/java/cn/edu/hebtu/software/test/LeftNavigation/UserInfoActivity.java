@@ -12,6 +12,7 @@ import cn.edu.hebtu.software.test.Setting.MyApplication;
 import cn.edu.hebtu.software.test.UploadAndDownload.UploadUserMsg;
 import cn.edu.hebtu.software.test.Util.ActivityManager;
 import cn.edu.hebtu.software.test.Util.FileUtil;
+import cn.edu.hebtu.software.test.Util.SQLiteUtil;
 
 import android.Manifest;
 import android.app.Activity;

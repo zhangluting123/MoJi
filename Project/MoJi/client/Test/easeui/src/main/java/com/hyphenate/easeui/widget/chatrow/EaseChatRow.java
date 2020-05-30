@@ -2,6 +2,7 @@ package com.hyphenate.easeui.widget.chatrow;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.BaseAdapter;
@@ -14,6 +15,7 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMMessage.Direct;
 import com.hyphenate.easeui.EaseUI;
+import com.hyphenate.easeui.GetTestClass;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.adapter.EaseMessageAdapter;
 import com.hyphenate.easeui.domain.EaseAvatarOptions;
@@ -144,11 +146,17 @@ public abstract class EaseChatRow extends LinearLayout {
         }
         if(userAvatarView != null) {
             //set nickname and avatar
+            String ip = GetTestClass.getIp();
             if (message.direct() == Direct.SEND) {
-                EaseUserUtils.setUserAvatar(context, EMClient.getInstance().getCurrentUser(), userAvatarView);
+                String str = GetTestClass.avatarAndName(context, EMClient.getInstance().getCurrentUser());
+                String arr[] = str.split(";");
+                EaseUserUtils.setCustomUserAvatar(context, "http://" + ip + ":8080/MoJi/"+arr[0], userAvatarView);
             } else {
-                EaseUserUtils.setUserAvatar(context, message.getFrom(), userAvatarView);
-                EaseUserUtils.setUserNick(message.getFrom(), usernickView);
+                String str = GetTestClass.avatarAndName(context, message.getFrom());
+                String arr[] = str.split(";");
+                EaseUserUtils.setCustomUserAvatar(context, "http://" + ip + ":8080/MoJi/"+arr[0], userAvatarView);
+                EaseUserUtils.setUserNick(arr[1], usernickView);
+                usernickView.setVisibility(VISIBLE);
             }
         }
         if (EMClient.getInstance().getOptions().getRequireDeliveryAck()) {
