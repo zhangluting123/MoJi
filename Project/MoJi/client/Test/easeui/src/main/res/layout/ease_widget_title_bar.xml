@@ -3,8 +3,7 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="@dimen/height_top_bar"
-    android:background="@color/top_bar_normal_bg"
-    android:gravity="center_vertical" >
+    android:background="@color/top_bar_normal_bg">
 
     <RelativeLayout
         android:id="@+id/left_layout"
@@ -24,22 +23,22 @@
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="24dp"
         android:layout_centerInParent="true"
         android:textColor="#ffffff"
-        android:textSize="20sp" />
+        android:textSize="16sp" />
 
     <RelativeLayout
         android:id="@+id/right_layout"
-        android:layout_width="50dp"
+        android:layout_width="40dp"
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
         android:background="@drawable/ease_common_tab_bg" >
 
         <ImageView
             android:id="@+id/right_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_centerInParent="true"
             android:scaleType="centerInside" />
     </RelativeLayout>

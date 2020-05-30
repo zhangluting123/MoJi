@@ -1,15 +1,17 @@
 package cn.edu.hebtu.software.test.ChatIM;
 
-import android.Manifest;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.hyphenate.easeui.EaseConstant;
-import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.easeui.ui.EaseBaseActivity;
 
 import androidx.annotation.Nullable;
-import cn.edu.hebtu.software.test.Data.User;
 import cn.edu.hebtu.software.test.R;
 
 
@@ -22,6 +24,13 @@ public class ChatActivity extends EaseBaseActivity {
     protected void onCreate(Bundle arg0) {
         super.onCreate(arg0);
         setContentView(R.layout.activity_chat);
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.setStatusBarColor(getResources().getColor(R.color.top_bar_normal_bg));
+        }
+
         activityInstance = this;
         //user or group id
         toChatUsername = getIntent().getExtras().getString(EaseConstant.EXTRA_USER_ID);
