@@ -60,7 +60,7 @@ public class StartActivity extends AppCompatActivity {
                     user.setPhone(sharedPreferencesUtils.getString("phoneInfo"));
                     data.setUser(user);
 
-                    intent = new Intent(StartActivity.this, MainActivity.class );//WelcomeActivity.class
+                    intent = new Intent(StartActivity.this, WelcomeActivity.class );
                     startActivity(intent);
                     finish();
                 }

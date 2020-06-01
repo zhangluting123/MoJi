@@ -32,6 +32,7 @@ public class MyChatFragment extends EaseChatFragment implements EaseChatFragment
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         data = (MyApplication)getActivity().getApplication();
+        sqLiteUtil = new SQLiteUtil(getActivity().getApplicationContext());
     }
 
     @Override
