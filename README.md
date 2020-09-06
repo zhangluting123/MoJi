@@ -4,7 +4,9 @@
 * 墨迹 —— 笔墨书写足迹 
 * 墨迹是一款灵活简约的记录型APP，用户可以记录生活中的点点滴滴，记录旅程，记录心情，可公开分享，可私密珍藏。墨迹提供的是一个安静、温暖、有力量的空间，给予你前进的力量。
 ### 项目地址
-* Github: https://github.com/zhangluting123/MoJi/
+* Github: 
+  + https://github.com/zhangluting123/MoJi/   
+  + https://github.com/zhangluting123/MoJiSubstore/
 ### 项目成员
 * 张璐婷
 * 李晓萌
